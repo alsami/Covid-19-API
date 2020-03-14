@@ -1,8 +1,9 @@
 using System;
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
-namespace Covid19Api.Services.Models
+namespace Covid19Api.Presentation
 {
-    public class LatestStats
+    public class LatestStatsDto
     {
         public int Total { get; }
 
@@ -12,7 +13,7 @@ namespace Covid19Api.Services.Models
         
         public DateTime FetchedAt { get; }
 
-        public LatestStats(int total, int recovered, int deaths, DateTime fetchedAt)
+        public LatestStatsDto(int total, int recovered, int deaths, DateTime fetchedAt)
         {
             this.Total = total;
             this.Recovered = recovered;

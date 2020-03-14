@@ -1,7 +1,7 @@
 using System;
 using System.Globalization;
 using System.Linq;
-using Covid19Api.Services.Models;
+using Covid19Api.Domain;
 using HtmlAgilityPack;
 
 namespace Covid19Api.Services
@@ -17,7 +17,7 @@ namespace Covid19Api.Services
                 .ToArray();
 
             // total, recovered, deaths
-            return new LatestStats(GetIntegerValue(mainCounterNodes[0]),
+            return new LatestStats(Guid.NewGuid(), GetIntegerValue(mainCounterNodes[0]),
                 GetIntegerValue(mainCounterNodes[2]),
                 GetIntegerValue(mainCounterNodes[1]), fetchedAt);
         }

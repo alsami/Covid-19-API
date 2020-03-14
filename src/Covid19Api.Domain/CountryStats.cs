@@ -1,30 +1,37 @@
 using System;
 
-namespace Covid19Api.Services.Models
+// ReSharper disable UnusedAutoPropertyAccessor.Local
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Local
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+
+namespace Covid19Api.Domain
 {
     public class CountryStats
     {
-        public string Country { get; }
+        public Guid Id { get; private set; }
+        
+        public string Country { get; private set; }
 
-        public int TotalCases { get; }
+        public int TotalCases { get; private set; }
 
-        public int NewCases { get; }
+        public int NewCases { get; private set; }
 
-        public int TotalDeaths { get; }
+        public int TotalDeaths { get; private set; }
 
-        public int NewDeaths { get; }
+        public int NewDeaths { get; private set; }
 
-        public int RecoveredCases { get; }
+        public int RecoveredCases { get; private set; }
 
-        public int ActiveCases { get; }
+        public int ActiveCases { get; private set; }
 
-        public int SeriousCases { get; }
+        public int SeriousCases { get; private set; }
 
-        public DateTime FetchedAt { get; }
+        public DateTime FetchedAt { get; private set; }
 
-        public CountryStats(string country, int totalCases, int newCases, int totalDeaths, int newDeaths,
+        public CountryStats(Guid id, string country, int totalCases, int newCases, int totalDeaths, int newDeaths,
             int recoveredCases, int activeCases, int seriousCases, DateTime fetchedAt)
         {
+            this.Id = id;
             this.Country = country;
             this.TotalCases = totalCases;
             this.NewCases = newCases;

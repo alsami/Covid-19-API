@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Covid19Api.Services.Models;
+using Covid19Api.Domain;
 using HtmlAgilityPack;
 
 namespace Covid19Api.Services
@@ -37,7 +37,7 @@ namespace Covid19Api.Services
         private static CountryStats Parse(HtmlNode htmlNode, DateTime fetchedAt)
         {
             var tableDataNodes = GetTableData(htmlNode).ToArray();
-            
+
             var country = ParseCountry(tableDataNodes[0]);
             var totalCases = ParseIntegerValue(tableDataNodes[1]);
             var newCases = ParseIntegerValue(tableDataNodes[2]);
@@ -46,8 +46,9 @@ namespace Covid19Api.Services
             var recovered = ParseIntegerValue(tableDataNodes[5]);
             var active = ParseIntegerValue(tableDataNodes[6]);
             var serious = ParseIntegerValue(tableDataNodes[7]);
-            
-            return new CountryStats(country, totalCases, newCases, totalDeaths, newDeaths, recovered, active, serious, fetchedAt);
+
+            return new CountryStats(Guid.NewGuid(), country, totalCases, newCases, totalDeaths, newDeaths, recovered,
+                active, serious, fetchedAt);
         }
 
         private static string ParseCountry(HtmlNode htmlNode)

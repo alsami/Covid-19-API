@@ -1,14 +1,14 @@
 using System;
 using System.Globalization;
 using System.Linq;
-using Covid19Api.Services.Models;
+using Covid19Api.Domain;
 using HtmlAgilityPack;
 
 namespace Covid19Api.Services
 {
     public static class ActiveCasesParser
     {
-        public static ActiveCases Parse(HtmlDocument document, DateTime fetchedAt)
+        public static ActiveCaseStats Parse(HtmlDocument document, DateTime fetchedAt)
         {
             // active cases [0], closed cases [1]
             var activeCases = document
@@ -27,7 +27,7 @@ namespace Covid19Api.Services
                     .Take(2)
                     .ToArray();
             
-            return new ActiveCases(GetIntegerValue(activeCases), GetIntegerValue(numbersConditions[0]), GetIntegerValue(numbersConditions[1]), fetchedAt);
+            return new ActiveCaseStats(Guid.NewGuid(), GetIntegerValue(activeCases), GetIntegerValue(numbersConditions[0]), GetIntegerValue(numbersConditions[1]), fetchedAt);
         }
         
         private static int GetIntegerValue(HtmlNode htmlNode) =>

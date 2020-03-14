@@ -1,20 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Autofac;
-using Covid19Api.Modules;
+using Covid19Api.Autofac;
 using Covid19Api.Repositories;
 using Covid19Api.Repositories.Mongo;
 using Covid19Api.Worker;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace Covid19Api
 {
@@ -45,11 +37,25 @@ namespace Covid19Api
                 this.configuration.GetSection(nameof(DocumentDbContextOptions)).Bind(options));
         }
 
+        // ReSharper disable once UnusedMember.Global
         public void ConfigureContainer(ContainerBuilder containerBuilder)
         {
+            containerBuilder.RegisterType<LatestStatsRepository>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
+            containerBuilder.RegisterType<ActiveCasesRepository>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
+            containerBuilder.RegisterType<ClosedCasesRepository>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
+            containerBuilder.RegisterType<CountryStatsRepository>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
             containerBuilder.RegisterModule(new DocumentDbContextModule(this.webHostEnvironment));
         }
 
+        // ReSharper disable once UnusedMember.Global
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseHttpsRedirection();

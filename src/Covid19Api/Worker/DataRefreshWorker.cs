@@ -1,62 +1,84 @@
 using System;
-using System.Diagnostics;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Covid19Api.Repositories.Mongo;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Covid19Api.Repositories;
 using Covid19Api.Services;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Covid19Api.Worker
 {
+    // ReSharper disable once ClassNeverInstantiated.Global
     public class DataRefreshWorker : BackgroundService
     {
         private readonly IHttpClientFactory httpClientFactory;
         private readonly IServiceProvider serviceProvider;
+        private readonly ILogger<DataRefreshWorker> logger;
 
-        public DataRefreshWorker(IHttpClientFactory httpClientFactory, IServiceProvider serviceProvider)
+        public DataRefreshWorker(IHttpClientFactory httpClientFactory, IServiceProvider serviceProvider, ILogger<DataRefreshWorker> logger)
         {
             this.httpClientFactory = httpClientFactory;
             this.serviceProvider = serviceProvider;
+            this.logger = logger;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                try
+                {
+                    await this.DoStuffAsync();
+
+                    await Task.Delay(TimeSpan.FromMinutes(30), stoppingToken);
+                }
+                catch (Exception e)
+                {
+                    this.logger.LogCritical(e, e.Message);
+                }
+            }
+        }
+
+        private async Task DoStuffAsync()
+        {
+            this.logger.LogInformation("Start fetching html document");
+
             var fetchedAt = DateTime.UtcNow;
 
             var client = this.httpClientFactory.CreateClient();
 
             var document = await HtmlDocumentFetcher.FetchAsync(client);
 
-            var mainKpis = LatestStatsParser.Parse(document, fetchedAt);
+            var latestStats = LatestStatsParser.Parse(document, fetchedAt);
 
-            Console.WriteLine("Total {0}", mainKpis.Total);
-            Console.WriteLine("Recovered {0}", mainKpis.Recovered);
-            Console.WriteLine("Deaths {0}", mainKpis.Deaths);
+            var activeCaseStats = ActiveCasesParser.Parse(document, fetchedAt);
 
-            var activeCases = ActiveCasesParser.Parse(document, fetchedAt);
+            var closedCasesStats = ClosedCasesParser.Parse(document, fetchedAt);
 
-            Console.WriteLine("TotalActive {0}", activeCases.Total);
-            Console.WriteLine("MildActive {0}", activeCases.Mild);
-            Console.WriteLine("SeriousActive {0}", activeCases.Serious);
+            var countryStats = CountryStatsParser.Parse(document, fetchedAt);
 
-            var closedCases = ClosedCasesParser.Parse(document, fetchedAt);
+            this.logger.LogInformation("Storing fetched data");
+            
+            await using var scope = this.serviceProvider.GetAutofacRoot().BeginLifetimeScope();
 
-            Console.WriteLine("TotalClosed {0}", closedCases.Total);
-            Console.WriteLine("TotalRecovered {0}", closedCases.Recovered);
-            Console.WriteLine("TotalDeaths {0}", closedCases.Deaths);
+            var latestStatsRepo = scope.Resolve<LatestStatsRepository>();
 
-            foreach (var countryStats in CountryStatsParser.Parse(document, fetchedAt))
-            {
-                Console.WriteLine(countryStats);
-            }
+            await latestStatsRepo.AddAsync(latestStats);
 
-            Debugger.Break();
+            var activeCasesStatsRepo = scope.Resolve<ActiveCasesRepository>();
 
-            using var scope = this.serviceProvider.CreateScope();
+            await activeCasesStatsRepo.AddAsync(activeCaseStats);
 
-            var context = scope.ServiceProvider.GetRequiredService<Covid19DbContext>();
+            var closedCasesStatsRepo = scope.Resolve<ClosedCasesRepository>();
+
+            await closedCasesStatsRepo.AddAsync(closedCasesStats);
+
+            var countryStatsRepository = scope.Resolve<CountryStatsRepository>();
+
+            await countryStatsRepository.AddManyAsync(countryStats);
         }
     }
 }
