@@ -32,13 +32,13 @@ namespace Covid19Api.Worker
                 try
                 {
                     await this.DoStuffAsync();
-
-                    await Task.Delay(TimeSpan.FromMinutes(30), stoppingToken);
                 }
                 catch (Exception e)
                 {
                     this.logger.LogCritical(e, e.Message);
                 }
+                
+                await Task.Delay(TimeSpan.FromMinutes(30), stoppingToken);
             }
         }
 
