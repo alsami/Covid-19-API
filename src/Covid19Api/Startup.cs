@@ -1,6 +1,7 @@
 using Autofac;
 using AutoMapper.Contrib.Autofac.DependencyInjection;
 using Covid19Api.Autofac;
+using Covid19Api.ExceptionFilter;
 using Covid19Api.Repositories;
 using Covid19Api.Repositories.Mongo;
 using Covid19Api.Worker;
@@ -25,7 +26,7 @@ namespace Covid19Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers(options => { options.Filters.Add<UnhandledExceptionFilter>(); });
 
             services.AddHttpClient();
 
