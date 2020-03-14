@@ -32,7 +32,7 @@ namespace Covid19Api
             services.AddCors(options => options.AddPolicy("DefaultCorsPolicy",
                 builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
-            services.AddHostedService<DataRefreshWorker>();
+            // services.AddHostedService<DataRefreshWorker>();
 
             services.Configure<DocumentDbContextOptions>(options =>
                 this.configuration.GetSection(nameof(DocumentDbContextOptions)).Bind(options));
