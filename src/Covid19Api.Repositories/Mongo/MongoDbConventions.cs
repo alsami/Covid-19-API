@@ -30,8 +30,8 @@ namespace Covid19Api.Repositories.Mongo
 
         public static void UseIgnoreNullValuesConvention()
         {
-            ConventionRegistry.Register(nameof(IgnoreIfDefaultConvention),
-                new ConventionPack {new IgnoreIfDefaultConvention(true)}, _ => true);
+            ConventionRegistry.Register(nameof(IgnoreIfNullConvention),
+                new ConventionPack {new IgnoreIfNullConvention(true)}, _ => true);
         }
 
         public static void UseEnumStringRepresentation()
