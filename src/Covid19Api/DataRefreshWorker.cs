@@ -1,15 +1,18 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Covid19Api.Domain;
 using Covid19Api.Repositories;
 using Covid19Api.Services;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Covid19Api.Worker
+namespace Covid19Api
 {
     // ReSharper disable once ClassNeverInstantiated.Global
     public class DataRefreshWorker : BackgroundService
@@ -31,7 +34,7 @@ namespace Covid19Api.Worker
             {
                 try
                 {
-                    await this.DoStuffAsync();
+                    await this.ProcessAsync();
                 }
                 catch (Exception e)
                 {
@@ -42,7 +45,7 @@ namespace Covid19Api.Worker
             }
         }
 
-        private async Task DoStuffAsync()
+        private async Task ProcessAsync()
         {
             this.logger.LogInformation("Start fetching html document");
 
@@ -78,7 +81,19 @@ namespace Covid19Api.Worker
 
             var countryStatsRepository = scope.Resolve<CountryStatsRepository>();
 
-            await countryStatsRepository.AddManyAsync(countryStats);
+            foreach (var chunkedStats in CreateChunks(countryStats.ToList()))
+            {
+                await countryStatsRepository.AddManyAsync(chunkedStats);
+                await Task.Delay(1000);
+            }
         }
+        
+        private static IEnumerable<List<CountryStats>> CreateChunks(List<CountryStats> countryStats, int chunkSize = 50)  
+        {        
+            for (var i = 0; i < countryStats.Count; i += chunkSize) 
+            { 
+                yield return countryStats.GetRange(i, Math.Min(chunkSize, countryStats.Count - i)); 
+            }  
+        } 
     }
 }

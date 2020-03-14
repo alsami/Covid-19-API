@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <RootNamespace>Covid19Api.AutoMapper</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Covid19Api.Repositories\Covid19Api.Repositories.csproj" />
+      <ProjectReference Include="..\Covid19Api.Services\Covid19Api.Services.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="6.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.1.2" />
+      <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.2" />
+    </ItemGroup>
+
+</Project>

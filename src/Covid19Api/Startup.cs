@@ -1,10 +1,9 @@
 using Autofac;
 using AutoMapper.Contrib.Autofac.DependencyInjection;
-using Covid19Api.Autofac;
+using Covid19Api.AutoMapper.Modules;
 using Covid19Api.ExceptionFilter;
 using Covid19Api.Repositories;
 using Covid19Api.Repositories.Mongo;
-using Covid19Api.Worker;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -33,7 +32,7 @@ namespace Covid19Api
             services.AddCors(options => options.AddPolicy("DefaultCorsPolicy",
                 builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
-            // services.AddHostedService<DataRefreshWorker>();
+            services.AddHostedService<DataRefreshWorker>();
 
             services.Configure<DocumentDbContextOptions>(options =>
                 this.configuration.GetSection(nameof(DocumentDbContextOptions)).Bind(options));

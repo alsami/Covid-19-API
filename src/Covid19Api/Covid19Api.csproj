@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Covid19Api.Autofac\Covid19Api.Autofac.csproj" />
     <ProjectReference Include="..\Covid19Api.Repositories\Covid19Api.Repositories.csproj" />
     <ProjectReference Include="..\Covid19Api.Services\Covid19Api.Services.csproj" />
   </ItemGroup>

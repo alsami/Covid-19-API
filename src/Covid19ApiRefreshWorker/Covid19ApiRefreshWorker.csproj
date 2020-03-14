@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <UserSecretsId>Covid19ApiRefreshWorker</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.2" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.2" />
+        <PackageReference Include="Serilog.Extensions.Hosting" Version="3.0.0" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Covid19Api.Autofac\Covid19Api.Autofac.csproj" />
+      <ProjectReference Include="..\Covid19Api.Domain\Covid19Api.Domain.csproj" />
+      <ProjectReference Include="..\Covid19Api.Repositories\Covid19Api.Repositories.csproj" />
+      <ProjectReference Include="..\Covid19Api.Services\Covid19Api.Services.csproj" />
+    </ItemGroup>
+</Project>

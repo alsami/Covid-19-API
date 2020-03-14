@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "Covid19ApiRefreshWorker": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Azure"
+      }
+    }
+  }
+}

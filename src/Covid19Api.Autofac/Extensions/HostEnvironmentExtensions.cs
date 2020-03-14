@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Hosting;
 
-namespace Covid19Api.Extensions
+namespace Covid19Api.AutoMapper.Extensions
 {
     public static class HostEnvironmentExtensions
     {

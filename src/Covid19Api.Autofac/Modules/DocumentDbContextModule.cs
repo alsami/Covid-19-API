@@ -1,13 +1,14 @@
 using System;
 using System.Security.Authentication;
 using Autofac;
-using Covid19Api.Extensions;
+using Covid19Api.AutoMapper.Extensions;
 using Covid19Api.Repositories.Mongo;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using Module = Autofac.Module;
 
-namespace Covid19Api.Autofac
+namespace Covid19Api.AutoMapper.Modules
 {
     public class DocumentDbContextModule : Module
     {
