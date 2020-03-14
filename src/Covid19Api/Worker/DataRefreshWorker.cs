@@ -3,7 +3,9 @@ using System.Diagnostics;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Covid19Api.Repositories.Mongo;
 using Covid19Api.Services;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace Covid19Api.Worker
@@ -11,10 +13,12 @@ namespace Covid19Api.Worker
     public class DataRefreshWorker : BackgroundService
     {
         private readonly IHttpClientFactory httpClientFactory;
+        private readonly IServiceProvider serviceProvider;
 
-        public DataRefreshWorker(IHttpClientFactory httpClientFactory)
+        public DataRefreshWorker(IHttpClientFactory httpClientFactory, IServiceProvider serviceProvider)
         {
             this.httpClientFactory = httpClientFactory;
+            this.serviceProvider = serviceProvider;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -49,6 +53,10 @@ namespace Covid19Api.Worker
             }
 
             Debugger.Break();
+
+            using var scope = this.serviceProvider.CreateScope();
+
+            var context = scope.ServiceProvider.GetRequiredService<Covid19DbContext>();
         }
     }
 }

@@ -10,6 +10,12 @@
         <e p="Covid19Api" t="IncludeRecursive">
           <e p="Controllers" t="Include" />
           <e p="Covid19Api.csproj" t="IncludeRecursive" />
+          <e p="Extensions" t="Include">
+            <e p="HostEnvironmentExtensions.cs" t="Include" />
+          </e>
+          <e p="Modules" t="Include">
+            <e p="DocumentDbContextModule.cs" t="Include" />
+          </e>
           <e p="Program.cs" t="Include" />
           <e p="Properties" t="Include">
             <e p="launchSettings.json" t="Include" />
@@ -30,8 +36,13 @@
           </e>
         </e>
         <e p="Covid19Api.Repositories" t="IncludeRecursive">
-          <e p="Class1.cs" t="Include" />
           <e p="Covid19Api.Repositories.csproj" t="IncludeRecursive" />
+          <e p="Mongo" t="Include">
+            <e p="Covid19DbContext.cs" t="Include" />
+            <e p="DocumentDbContextOptions.cs" t="Include" />
+            <e p="GuidIdConvention.cs" t="Include" />
+            <e p="MongoDbConventions.cs" t="Include" />
+          </e>
           <e p="bin" t="ExcludeRecursive" />
           <e p="obj" t="ExcludeRecursive">
             <e p="Debug" t="Include">

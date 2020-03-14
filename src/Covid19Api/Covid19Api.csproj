@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Covid19Api.Repositories\Covid19Api.Repositories.csproj" />
     <ProjectReference Include="..\Covid19Api.Services\Covid19Api.Services.csproj" />
   </ItemGroup>
 
