@@ -68,7 +68,7 @@ namespace Covid19Api.Worker
 
             await latestStatsRepo.AddAsync(latestStats);
 
-            var activeCasesStatsRepo = scope.Resolve<ActiveCasesRepository>();
+            var activeCasesStatsRepo = scope.Resolve<ActiveCasesStatsRepository>();
 
             await activeCasesStatsRepo.AddAsync(activeCaseStats);
 

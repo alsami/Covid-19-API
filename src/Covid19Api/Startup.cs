@@ -1,4 +1,5 @@
 using Autofac;
+using AutoMapper.Contrib.Autofac.DependencyInjection;
 using Covid19Api.Autofac;
 using Covid19Api.Repositories;
 using Covid19Api.Repositories.Mongo;
@@ -40,10 +41,12 @@ namespace Covid19Api
         // ReSharper disable once UnusedMember.Global
         public void ConfigureContainer(ContainerBuilder containerBuilder)
         {
+            containerBuilder.AddAutoMapper(typeof(Startup).Assembly);
+
             containerBuilder.RegisterType<LatestStatsRepository>()
                 .AsSelf()
                 .InstancePerLifetimeScope();
-            containerBuilder.RegisterType<ActiveCasesRepository>()
+            containerBuilder.RegisterType<ActiveCasesStatsRepository>()
                 .AsSelf()
                 .InstancePerLifetimeScope();
             containerBuilder.RegisterType<ClosedCasesRepository>()

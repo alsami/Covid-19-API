@@ -1,6 +1,10 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Covid19Api.Domain;
 using Covid19Api.Repositories.Mongo;
+using MongoDB.Bson;
+using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 
 namespace Covid19Api.Repositories
 {
@@ -19,6 +23,21 @@ namespace Covid19Api.Repositories
             var collection = this.context.Database.GetCollection<LatestStats>(CollectionName);
 
             return collection.InsertOneAsync(latestStats);
+        }
+
+        public async Task<LatestStats> MostRecentAsync()
+        {
+            var collection = this.context.Database.GetCollection<LatestStats>(CollectionName);
+
+            var filter = Builders<LatestStats>.Filter.Empty;
+            var sort = Builders<LatestStats>.Sort.Descending("FetchedAt");
+
+            var cursor = await collection.FindAsync(filter, new FindOptions<LatestStats>
+            {
+                Sort = sort
+            });
+
+            return await cursor.FirstOrDefaultAsync();
         }
     }
 }

@@ -1,6 +1,8 @@
 using System;
 using System.Threading.Tasks;
+using AutoMapper;
 using Covid19Api.Presentation;
+using Covid19Api.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Covid19Api.Controllers
@@ -9,7 +11,21 @@ namespace Covid19Api.Controllers
     [Route("api/v1/stats")]
     public class StatsController : ControllerBase
     {
-        [HttpGet("latest")]
-        public Task<LatestStatsDto> Load() => Task.FromResult(new LatestStatsDto(0, 0, 0, DateTime.UtcNow));
+        private readonly LatestStatsRepository latestStatsRepository;
+        private readonly IMapper mapper;
+
+        public StatsController(LatestStatsRepository latestStatsRepository, IMapper mapper)
+        {
+            this.latestStatsRepository = latestStatsRepository;
+            this.mapper = mapper;
+        }
+
+        [HttpGet]
+        public async Task<LatestStatsDto> LoadLatestAsync()
+        {
+            var last = await this.latestStatsRepository.MostRecentAsync();
+
+            return this.mapper.Map<LatestStatsDto>(last);
+        }
     }
 }
