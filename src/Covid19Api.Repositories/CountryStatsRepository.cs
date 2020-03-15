@@ -39,7 +39,7 @@ namespace Covid19Api.Repositories
             return onlyLatestEntries;
         }
 
-        public async Task<IEnumerable<CountryStats>> MostRecentAsync(string country)
+        public async Task<CountryStats> MostRecentAsync(string country)
         {
             var collection = this.context.Database.GetCollection<CountryStats>(CollectionName);
 
@@ -56,7 +56,7 @@ namespace Covid19Api.Repositories
                     Sort = sort,
                 });
 
-            return await cursor.ToListAsync();
+            return await cursor.FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<CountryStats>> HistoricalAsync(DateTime minFetchedAt)
@@ -70,6 +70,25 @@ namespace Covid19Api.Repositories
 
             var cursor = await collection.FindAsync(
                 existingCountryStats => existingCountryStats.FetchedAt >= minFetchedAt, new FindOptions<CountryStats>
+                {
+                    Sort = sort,
+                });
+
+            return await cursor.ToListAsync();
+        }
+        
+        public async Task<IEnumerable<CountryStats>> HistoricalAsync(DateTime minFetchedAt, string country)
+        {
+            var collection = this.context.Database.GetCollection<CountryStats>(CollectionName);
+
+            var sort = Builders<CountryStats>.Sort
+                .Descending("TotalCases")
+                .Descending("FetchedAt")
+                .Ascending("Country");
+
+            var cursor = await collection.FindAsync(
+                // ReSharper disable once SpecifyStringComparison
+                existingCountryStats => existingCountryStats.FetchedAt >= minFetchedAt && existingCountryStats.Country.ToLower() == country.ToLower(), new FindOptions<CountryStats>
                 {
                     Sort = sort,
                 });

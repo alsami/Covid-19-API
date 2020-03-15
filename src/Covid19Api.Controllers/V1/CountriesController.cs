@@ -40,9 +40,19 @@ namespace Covid19Api.Controllers.V1
         }
         
         [HttpGet("{country}")]
-        public async Task<IEnumerable<CountryStatsDto>> LoadLatestForCountryAsync(string country)
+        public async Task<CountryStatsDto> LoadLatestForCountryAsync(string country)
         {
             var statsForCountry = await this.countryStatsRepository.MostRecentAsync(country);
+
+            return this.mapper.Map<CountryStatsDto>(statsForCountry);
+        }
+        
+        [HttpGet("{country}/history")]
+        public async Task<IEnumerable<CountryStatsDto>> LoadHistoryForCountryAsync(string country)
+        {
+            var minFetchedAt = DateTime.UtcNow.Date.AddDays(-7);
+            
+            var statsForCountry = await this.countryStatsRepository.HistoricalAsync(minFetchedAt, country);
 
             return this.mapper.Map<IEnumerable<CountryStatsDto>>(statsForCountry);
         }
