@@ -4,6 +4,8 @@ using Covid19Api.AutoMapper.Modules;
 using Covid19Api.ExceptionFilter;
 using Covid19Api.Repositories;
 using Covid19Api.Repositories.Mongo;
+using Covid19Api.Services;
+using Covid19Api.Services.Worker;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;

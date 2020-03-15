@@ -4,7 +4,7 @@ using System.Linq;
 using Covid19Api.Domain;
 using HtmlAgilityPack;
 
-namespace Covid19Api.Services
+namespace Covid19Api.Services.Parser
 {
     public static class ActiveCasesParser
     {

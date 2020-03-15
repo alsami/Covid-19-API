@@ -1,11 +1,10 @@
-using System;
 using System.Threading.Tasks;
 using AutoMapper;
-using Covid19Api.Presentation;
+using Covid19Api.Controllers.Presentation;
 using Covid19Api.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Covid19Api.Controllers
+namespace Covid19Api.Controllers.V1
 {
     [ApiController]
     [Route("api/v1/stats")]

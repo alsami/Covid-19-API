@@ -1,7 +1,10 @@
 using System;
+
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
-namespace Covid19Api.Presentation
+namespace Covid19Api.Controllers.Presentation
 {
     public class LatestStatsDto
     {

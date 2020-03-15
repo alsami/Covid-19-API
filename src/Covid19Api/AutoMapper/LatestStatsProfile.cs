@@ -1,6 +1,6 @@
 using AutoMapper;
+using Covid19Api.Controllers.Presentation;
 using Covid19Api.Domain;
-using Covid19Api.Presentation;
 
 namespace Covid19Api.AutoMapper
 {

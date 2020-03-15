@@ -8,11 +8,11 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Covid19Api.Domain;
 using Covid19Api.Repositories;
-using Covid19Api.Services;
+using Covid19Api.Services.Parser;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Covid19Api
+namespace Covid19Api.Services.Worker
 {
     // ReSharper disable once ClassNeverInstantiated.Global
     public class DataRefreshWorker : BackgroundService
