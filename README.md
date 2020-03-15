@@ -4,7 +4,7 @@
 
 Covid19Api serving most recent data related to corona virus based on the data available on [worldometers](https://www.worldometers.info/coronavirus/).
 
-While `worldometers` is only displaying recent data, this API is providing historical data starting from today (2020-03-15, 06:30 GMT+1).
+While `worldometers` is only displaying recent data, this API is providing historical data starting from today (2020-03-15, 06:30 AM, GMT+1).
 
 ## Available endpoints
 
