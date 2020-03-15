@@ -9,22 +9,19 @@ using Microsoft.AspNetCore.Mvc;
 namespace Covid19Api.Controllers.V1
 {
     [ApiController]
-    [Route("api/v1/cases")]
-    public class CasesController : ControllerBase
+    [Route("api/v1/stats/activecases")]
+    public class ActiveCasesController : ControllerBase
     {
         private readonly ActiveCasesStatsRepository activeCasesStatsRepository;
-        private readonly ClosedCasesRepository closedCasesRepository;
         private readonly IMapper mapper;
 
-        public CasesController(IMapper mapper, ActiveCasesStatsRepository activeCasesStatsRepository,
-            ClosedCasesRepository closedCasesRepository)
+        public ActiveCasesController(IMapper mapper, ActiveCasesStatsRepository activeCasesStatsRepository)
         {
             this.mapper = mapper;
             this.activeCasesStatsRepository = activeCasesStatsRepository;
-            this.closedCasesRepository = closedCasesRepository;
         }
 
-        [HttpGet("active")]
+        [HttpGet]
         public async Task<ActiveCaseStatsDto> LoadLatestActiveAsync()
         {
             var latestActiveCaseStats = await this.activeCasesStatsRepository.MostRecentAsync();
@@ -32,7 +29,7 @@ namespace Covid19Api.Controllers.V1
             return this.mapper.Map<ActiveCaseStatsDto>(latestActiveCaseStats);
         }
 
-        [HttpGet("active/history")]
+        [HttpGet("history")]
         public async Task<IEnumerable<ActiveCaseStatsDto>> LoadActiveCasesHistoryAsync()
         {
             var minFetchedAt = DateTime.UtcNow.Date.AddDays(-7);
@@ -40,24 +37,6 @@ namespace Covid19Api.Controllers.V1
             var latestActiveCaseStats = await this.activeCasesStatsRepository.HistoricalAsync(minFetchedAt);
 
             return this.mapper.Map<IEnumerable<ActiveCaseStatsDto>>(latestActiveCaseStats);
-        }
-
-        [HttpGet("closed")]
-        public async Task<ClosedCaseStatsDto> LoadLatestInactiveAsync()
-        {
-            var last = await this.closedCasesRepository.MostRecentAsync();
-
-            return this.mapper.Map<ClosedCaseStatsDto>(last);
-        }
-        
-        [HttpGet("closed/history")]
-        public async Task<IEnumerable<ClosedCaseStatsDto>> LoadClosedCasesHistoryAsync()
-        {
-            var minFetchedAt = DateTime.UtcNow.Date.AddDays(-7);
-
-            var latestActiveCaseStats = await this.closedCasesRepository.HistoricalAsync(minFetchedAt);
-
-            return this.mapper.Map<IEnumerable<ClosedCaseStatsDto>>(latestActiveCaseStats);
         }
     }
 }
