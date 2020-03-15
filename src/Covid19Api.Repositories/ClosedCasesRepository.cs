@@ -15,11 +15,14 @@ namespace Covid19Api.Repositories
             this.context = context;
         }
 
-        public Task AddAsync(ClosedCaseStats closedCaseStats)
+        public async Task AddAsync(ClosedCaseStats closedCaseStats)
         {
             var collection = this.context.Database.GetCollection<ClosedCaseStats>(CollectionName);
+            
+            var cursor = await collection.FindAsync(existingClosedCaseStats => existingClosedCaseStats.Id == closedCaseStats.Id);
 
-            return collection.InsertOneAsync(closedCaseStats);
+            if (await cursor.FirstOrDefaultAsync() is null)
+                await collection.InsertOneAsync(closedCaseStats);
         }
         
         public async Task<ClosedCaseStats> MostRecentAsync()

@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Covid19Api.AutoMapper.Modules;
 using Covid19Api.Repositories;
 using Covid19Api.Repositories.Mongo;
+using Covid19Api.Services.Worker;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -15,7 +12,7 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 
-namespace Covid19ApiRefreshWorker
+namespace Covid19Api.RefreshWorker
 {
     public class Program
     {
@@ -32,7 +29,7 @@ namespace Covid19ApiRefreshWorker
                 .ConfigureContainer<ContainerBuilder>(ConfigureContainer)
                 .ConfigureServices((hostContext, services) =>
                 {
-                    // services.AddHostedService<DataRefreshWorker>();
+                    services.AddHostedService<DataRefreshWorker>();
                     services.AddHttpClient();
                     services.Configure<DocumentDbContextOptions>(options =>
                         hostContext.Configuration.GetSection(nameof(DocumentDbContextOptions)).Bind(options));
@@ -54,7 +51,7 @@ namespace Covid19ApiRefreshWorker
                 .InstancePerLifetimeScope();
             containerBuilder.RegisterModule(new DocumentDbContextModule(new HostingEnvironment()
             {
-                EnvironmentName = "Azure"
+                EnvironmentName = "Development"
             }));
         }
         

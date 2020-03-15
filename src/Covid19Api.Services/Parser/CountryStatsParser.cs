@@ -17,6 +17,23 @@ namespace Covid19Api.Services.Parser
                 yield return Parse(tableRow, fetchedAt);
         }
 
+        private static CountryStats Parse(HtmlNode htmlNode, DateTime fetchedAt)
+        {
+            var tableDataNodes = GetTableDataNodes(htmlNode).ToArray();
+
+            var country = ParseCountry(tableDataNodes[0]);
+            var totalCases = ParseIntegerValue(tableDataNodes[1]);
+            var newCases = ParseIntegerValue(tableDataNodes[2]);
+            var totalDeaths = ParseIntegerValue(tableDataNodes[3]);
+            var newDeaths = ParseIntegerValue(tableDataNodes[4]);
+            var recovered = ParseIntegerValue(tableDataNodes[5]);
+            var active = ParseIntegerValue(tableDataNodes[6]);
+            var serious = ParseIntegerValue(tableDataNodes[7]);
+
+            return new CountryStats(country, totalCases, newCases, totalDeaths, newDeaths, recovered,
+                active, serious, fetchedAt);
+        }
+
         private static IEnumerable<HtmlNode> GetTableRows(HtmlDocument document)
             => document
                 .DocumentNode
@@ -28,28 +45,12 @@ namespace Covid19Api.Services.Parser
                 .Where(node => node.GetType() != typeof(HtmlTextNode))
                 .ToArray();
 
-        private static IEnumerable<HtmlNode> GetTableData(HtmlNode htmlNode)
+        private static IEnumerable<HtmlNode> GetTableDataNodes(HtmlNode htmlNode)
             => htmlNode
                 .ChildNodes
                 .Where(node => node.Name == "td")
                 .ToArray();
 
-        private static CountryStats Parse(HtmlNode htmlNode, DateTime fetchedAt)
-        {
-            var tableDataNodes = GetTableData(htmlNode).ToArray();
-
-            var country = ParseCountry(tableDataNodes[0]);
-            var totalCases = ParseIntegerValue(tableDataNodes[1]);
-            var newCases = ParseIntegerValue(tableDataNodes[2]);
-            var totalDeaths = ParseIntegerValue(tableDataNodes[3]);
-            var newDeaths = ParseIntegerValue(tableDataNodes[4]);
-            var recovered = ParseIntegerValue(tableDataNodes[5]);
-            var active = ParseIntegerValue(tableDataNodes[6]);
-            var serious = ParseIntegerValue(tableDataNodes[7]);
-
-            return new CountryStats(Guid.NewGuid(), country, totalCases, newCases, totalDeaths, newDeaths, recovered,
-                active, serious, fetchedAt);
-        }
 
         private static string ParseCountry(HtmlNode htmlNode)
         {

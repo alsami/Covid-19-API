@@ -18,11 +18,15 @@ namespace Covid19Api.Repositories
             this.context = context;
         }
 
-        public Task AddAsync(LatestStats latestStats)
+        public async Task AddAsync(LatestStats latestStats)
         {
             var collection = this.context.Database.GetCollection<LatestStats>(CollectionName);
 
-            return collection.InsertOneAsync(latestStats);
+            var cursor =
+                await collection.FindAsync(existingClosedCaseStats => existingClosedCaseStats.Id == latestStats.Id);
+
+            if (await cursor.FirstOrDefaultAsync() is null)
+                await collection.InsertOneAsync(latestStats);
         }
 
         public async Task<LatestStats> MostRecentAsync()

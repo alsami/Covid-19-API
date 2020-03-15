@@ -23,7 +23,7 @@ ProjectSection(SolutionItems) = preProject
 	.gitignore = .gitignore
 EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Covid19ApiRefreshWorker", "src\Covid19ApiRefreshWorker\Covid19ApiRefreshWorker.csproj", "{716581CD-7FDD-4846-AC7C-47F0704AEECE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Covid19Api.RefreshWorker", "src\Covid19Api.RefreshWorker\Covid19Api.RefreshWorker.csproj", "{716581CD-7FDD-4846-AC7C-47F0704AEECE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Covid19Api.Autofac", "src\Covid19Api.Autofac\Covid19Api.Autofac.csproj", "{783AD7D5-5C4D-4A63-86DE-543B972F3F46}"
 EndProject

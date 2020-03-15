@@ -17,7 +17,7 @@ namespace Covid19Api.Services.Parser
                 .ToArray();
 
             // total, recovered, deaths
-            return new LatestStats(Guid.NewGuid(), GetIntegerValue(mainCounterNodes[0]),
+            return new LatestStats(GetIntegerValue(mainCounterNodes[0]),
                 GetIntegerValue(mainCounterNodes[2]),
                 GetIntegerValue(mainCounterNodes[1]), fetchedAt);
         }

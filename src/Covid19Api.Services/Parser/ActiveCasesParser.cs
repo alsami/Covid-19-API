@@ -27,7 +27,7 @@ namespace Covid19Api.Services.Parser
                     .Take(2)
                     .ToArray();
             
-            return new ActiveCaseStats(Guid.NewGuid(), GetIntegerValue(activeCases), GetIntegerValue(numbersConditions[0]), GetIntegerValue(numbersConditions[1]), fetchedAt);
+            return new ActiveCaseStats(GetIntegerValue(activeCases), GetIntegerValue(numbersConditions[0]), GetIntegerValue(numbersConditions[1]), fetchedAt);
         }
         
         private static int GetIntegerValue(HtmlNode htmlNode) =>

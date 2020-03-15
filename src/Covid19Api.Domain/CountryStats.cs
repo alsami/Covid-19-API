@@ -1,4 +1,6 @@
 using System;
+using System.Security.Cryptography;
+using System.Text;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Local
@@ -9,7 +11,7 @@ namespace Covid19Api.Domain
     public class CountryStats
     {
         public Guid Id { get; private set; }
-        
+
         public string Country { get; private set; }
 
         public int TotalCases { get; private set; }
@@ -28,10 +30,10 @@ namespace Covid19Api.Domain
 
         public DateTime FetchedAt { get; private set; }
 
-        public CountryStats(Guid id, string country, int totalCases, int newCases, int totalDeaths, int newDeaths,
+
+        public CountryStats(string country, int totalCases, int newCases, int totalDeaths, int newDeaths,
             int recoveredCases, int activeCases, int seriousCases, DateTime fetchedAt)
         {
-            this.Id = id;
             this.Country = country;
             this.TotalCases = totalCases;
             this.NewCases = newCases;
@@ -41,12 +43,19 @@ namespace Covid19Api.Domain
             this.ActiveCases = activeCases;
             this.SeriousCases = seriousCases;
             this.FetchedAt = fetchedAt;
+            this.Id = this.Generate();
         }
 
-        public override string ToString()
+        private Guid Generate()
         {
-            return
-                $"Country: {this.Country}, Total: {this.TotalCases}, New: {this.NewCases}, Total-Deaths: {this.TotalDeaths}, New-Deaths: {this.NewDeaths}, Recovered: {this.RecoveredCases}, Active: {this.ActiveCases}, Serious: {this.SeriousCases}";
+            using var hasher = MD5.Create();
+
+            var unhashed =
+                $"{this.TotalCases}{this.NewCases}{this.TotalDeaths}{this.NewDeaths}{this.RecoveredCases}{this.ActiveCases}{this.SeriousCases}";
+
+            var hashed = hasher.ComputeHash(Encoding.UTF8.GetBytes(unhashed));
+
+            return new Guid(hashed);
         }
     }
 }

@@ -28,7 +28,7 @@ namespace Covid19Api.Services.Parser
                     .Take(2)
                     .ToArray();
 
-            return new ClosedCaseStats(Guid.NewGuid(), GetIntegerValue(activeCases), GetIntegerValue(numbersConditions[0]),
+            return new ClosedCaseStats(GetIntegerValue(activeCases), GetIntegerValue(numbersConditions[0]),
                 GetIntegerValue(numbersConditions[1]), fetchedAt);
         }
 
