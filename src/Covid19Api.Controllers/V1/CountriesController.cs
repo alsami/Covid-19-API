@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -26,6 +27,24 @@ namespace Covid19Api.Controllers.V1
             var latestCountryStats = await this.countryStatsRepository.MostRecentAsync();
 
             return this.mapper.Map<IEnumerable<CountryStatsDto>>(latestCountryStats);
+        }
+        
+        [HttpGet("history")]
+        public async Task<IEnumerable<CountryStatsDto>> LoadHistoryAsync()
+        {
+            var minFetchedAt = DateTime.UtcNow.Date.AddDays(-7);
+            
+            var countryHistories = await this.countryStatsRepository.HistoricalAsync(minFetchedAt);
+
+            return this.mapper.Map<IEnumerable<CountryStatsDto>>(countryHistories);
+        }
+        
+        [HttpGet("{country}")]
+        public async Task<IEnumerable<CountryStatsDto>> LoadLatestForCountryAsync(string country)
+        {
+            var statsForCountry = await this.countryStatsRepository.MostRecentAsync(country);
+
+            return this.mapper.Map<IEnumerable<CountryStatsDto>>(statsForCountry);
         }
     }
 }

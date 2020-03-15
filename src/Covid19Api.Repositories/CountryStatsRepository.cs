@@ -24,10 +24,12 @@ namespace Covid19Api.Repositories
 
             var sort = Builders<CountryStats>.Sort.Descending("TotalCases");
 
-            var cursor = await collection.FindAsync(existingCountryStats => existingCountryStats.FetchedAt >= DateTime.UtcNow.Date.AddDays(-1), new FindOptions<CountryStats>
-            {
-                Sort = sort,
-            });
+            var cursor = await collection.FindAsync(
+                existingCountryStats => existingCountryStats.FetchedAt >= DateTime.UtcNow.Date.AddDays(-1),
+                new FindOptions<CountryStats>
+                {
+                    Sort = sort,
+                });
 
             var all = await cursor.ToListAsync();
 
@@ -35,6 +37,44 @@ namespace Covid19Api.Repositories
                 .SelectMany(grouping => grouping.Take(1));
 
             return onlyLatestEntries;
+        }
+
+        public async Task<IEnumerable<CountryStats>> MostRecentAsync(string country)
+        {
+            var collection = this.context.Database.GetCollection<CountryStats>(CollectionName);
+
+            var sort = Builders<CountryStats>.Sort
+                .Descending("TotalCases")
+                .Descending("FetchedAt");
+
+            // ReSharper disable once SpecifyStringComparison
+            var cursor = await collection.FindAsync(existingCountryStats =>
+                    existingCountryStats.FetchedAt >= DateTime.UtcNow.Date.AddDays(-1) &&
+                    existingCountryStats.Country.ToLower() == country.ToLower(),
+                new FindOptions<CountryStats>
+                {
+                    Sort = sort,
+                });
+
+            return await cursor.ToListAsync();
+        }
+
+        public async Task<IEnumerable<CountryStats>> HistoricalAsync(DateTime minFetchedAt)
+        {
+            var collection = this.context.Database.GetCollection<CountryStats>(CollectionName);
+
+            var sort = Builders<CountryStats>.Sort
+                .Descending("TotalCases")
+                .Descending("FetchedAt")
+                .Ascending("Country");
+
+            var cursor = await collection.FindAsync(
+                existingCountryStats => existingCountryStats.FetchedAt >= minFetchedAt, new FindOptions<CountryStats>
+                {
+                    Sort = sort,
+                });
+
+            return await cursor.ToListAsync();
         }
 
         public Task AddManyAsync(IEnumerable<CountryStats> countryStats)
