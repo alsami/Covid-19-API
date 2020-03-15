@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Covid19Api.Domain;
 using Covid19Api.Repositories.Mongo;
@@ -38,6 +40,19 @@ namespace Covid19Api.Repositories
             });
 
             return await cursor.FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<ActiveCaseStats>> HistoricalAsync(DateTime minFetchedAt)
+        {
+            var collection = this.context.Database.GetCollection<ActiveCaseStats>(CollectionName);
+            var sort = Builders<ActiveCaseStats>.Sort.Descending("FetchedAt");
+            
+            var cursor = await collection.FindAsync(existingActiveCaseStats => existingActiveCaseStats.FetchedAt >= minFetchedAt, new FindOptions<ActiveCaseStats>
+            {
+                Sort = sort
+            });
+
+            return await cursor.ToListAsync();
         }
     }
 }
