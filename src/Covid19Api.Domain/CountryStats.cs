@@ -52,7 +52,7 @@ namespace Covid19Api.Domain
             using var hasher = MD5.Create();
 
             var unhashed =
-                $"{this.TotalCases}{this.NewCases}{this.TotalDeaths}{this.NewDeaths}{this.RecoveredCases}{this.ActiveCases}{this.SeriousCases}";
+                $"{this.Country}{this.TotalCases}{this.NewCases}{this.TotalDeaths}{this.NewDeaths}{this.RecoveredCases}{this.ActiveCases}{this.SeriousCases}";
 
             var hashed = hasher.ComputeHash(Encoding.UTF8.GetBytes(unhashed));
 

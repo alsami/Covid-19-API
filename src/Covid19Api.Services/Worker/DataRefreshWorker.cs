@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
@@ -83,7 +84,15 @@ namespace Covid19Api.Services.Worker
 
             foreach (var chunkedStats in CreateChunks(countryStats.ToList()))
             {
-                await countryStatsRepository.AddManyAsync(chunkedStats);
+                try
+                {
+                    await countryStatsRepository.AddManyAsync(chunkedStats);
+                }
+                catch (Exception e)
+                {
+                    this.logger.LogCritical(e, e.Message);
+                }
+                
                 await Task.Delay(1000);
             }
         }
