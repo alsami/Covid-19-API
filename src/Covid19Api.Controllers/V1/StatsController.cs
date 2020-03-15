@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Covid19Api.Controllers.Presentation;
@@ -25,6 +27,16 @@ namespace Covid19Api.Controllers.V1
             var last = await this.latestStatsRepository.MostRecentAsync();
 
             return this.mapper.Map<LatestStatsDto>(last);
+        }
+        
+        [HttpGet("history")]
+        public async Task<IEnumerable<LatestStatsDto>> LoadLatestHistorical()
+        {
+            var minFetchedAt = DateTime.UtcNow.Date.AddDays(-7);
+
+            var latestActiveCaseStats = await this.latestStatsRepository.HistoricalAsync(minFetchedAt);
+
+            return this.mapper.Map<IEnumerable<LatestStatsDto>>(latestActiveCaseStats);
         }
     }
 }
