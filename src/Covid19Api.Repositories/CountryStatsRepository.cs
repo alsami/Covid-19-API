@@ -24,7 +24,7 @@ namespace Covid19Api.Repositories
 
             var sort = Builders<CountryStats>.Sort.Descending("TotalCases");
 
-            var cursor = await collection.FindAsync(existingCountryStats => existingCountryStats.FetchedAt >= DateTime.UtcNow.Date, new FindOptions<CountryStats>
+            var cursor = await collection.FindAsync(existingCountryStats => existingCountryStats.FetchedAt >= DateTime.UtcNow.Date.AddDays(-1), new FindOptions<CountryStats>
             {
                 Sort = sort,
             });
@@ -46,18 +46,5 @@ namespace Covid19Api.Repositories
                 IsOrdered = false
             });
         }
-    }
-
-    internal class CountryStatsMaxEqual : IEqualityComparer<CountryStats>
-    {
-        public bool Equals(CountryStats left, CountryStats right)
-        {
-            if (left is null) return false;
-            if (right is null) return false;
-
-            return left.Country == right.Country && left.FetchedAt > right.FetchedAt;
-        }
-
-        public int GetHashCode(CountryStats obj) => HashCode.Combine(obj.FetchedAt, obj.Country);
     }
 }
