@@ -2,9 +2,10 @@ using AutoMapper;
 using Covid19Api.Controllers.Presentation;
 using Covid19Api.Domain;
 
+// ReSharper disable UnusedMember.Global
+
 namespace Covid19Api.AutoMapper
 {
-    // ReSharper disable once UnusedType.Global
     public class ActiveCasesProfile : Profile
     {
         public ActiveCasesProfile()

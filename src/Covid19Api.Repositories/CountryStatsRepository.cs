@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Covid19Api.Domain;
 using Covid19Api.Repositories.Mongo;
@@ -16,6 +18,25 @@ namespace Covid19Api.Repositories
             this.context = context;
         }
 
+        public async Task<IEnumerable<CountryStats>> MostRecentAsync()
+        {
+            var collection = this.context.Database.GetCollection<CountryStats>(CollectionName);
+
+            var sort = Builders<CountryStats>.Sort.Descending("TotalCases");
+
+            var cursor = await collection.FindAsync(existingCountryStats => existingCountryStats.FetchedAt >= DateTime.UtcNow.Date, new FindOptions<CountryStats>
+            {
+                Sort = sort,
+            });
+
+            var all = await cursor.ToListAsync();
+
+            var onlyLatestEntries = all.GroupBy(countryStats => countryStats.Country)
+                .SelectMany(grouping => grouping.Take(1));
+
+            return onlyLatestEntries;
+        }
+
         public Task AddManyAsync(IEnumerable<CountryStats> countryStats)
         {
             var collection = this.context.Database.GetCollection<CountryStats>(CollectionName);
@@ -25,5 +46,18 @@ namespace Covid19Api.Repositories
                 IsOrdered = false
             });
         }
+    }
+
+    internal class CountryStatsMaxEqual : IEqualityComparer<CountryStats>
+    {
+        public bool Equals(CountryStats left, CountryStats right)
+        {
+            if (left is null) return false;
+            if (right is null) return false;
+
+            return left.Country == right.Country && left.FetchedAt > right.FetchedAt;
+        }
+
+        public int GetHashCode(CountryStats obj) => HashCode.Combine(obj.FetchedAt, obj.Country);
     }
 }
