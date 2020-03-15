@@ -96,7 +96,7 @@ namespace Covid19Api.Repositories
             return await cursor.ToListAsync();
         }
 
-        public Task AddManyAsync(IEnumerable<CountryStats> countryStats)
+        public Task StoreAsync(IEnumerable<CountryStats> countryStats)
         {
             var collection = this.context.Database.GetCollection<CountryStats>(CollectionName);
 

@@ -20,7 +20,7 @@ namespace Covid19Api.Repositories
             this.context = context;
         }
 
-        public async Task AddAsync(LatestStats latestStats)
+        public async Task StoreAsync(LatestStats latestStats)
         {
             var collection = this.context.Database.GetCollection<LatestStats>(CollectionName);
 
@@ -28,7 +28,12 @@ namespace Covid19Api.Repositories
                 await collection.FindAsync(existingClosedCaseStats => existingClosedCaseStats.Id == latestStats.Id);
 
             if (await cursor.FirstOrDefaultAsync() is null)
+            {
                 await collection.InsertOneAsync(latestStats);
+                return;
+            }
+
+            await collection.ReplaceOneAsync(stat => stat.Id == latestStats.Id, latestStats);
         }
 
         public async Task<LatestStats> MostRecentAsync()

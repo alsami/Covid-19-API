@@ -70,15 +70,15 @@ namespace Covid19Api.Services.Worker
 
             var latestStatsRepo = scope.Resolve<LatestStatsRepository>();
 
-            await latestStatsRepo.AddAsync(latestStats);
+            await latestStatsRepo.StoreAsync(latestStats);
 
             var activeCasesStatsRepo = scope.Resolve<ActiveCasesStatsRepository>();
 
-            await activeCasesStatsRepo.AddAsync(activeCaseStats);
+            await activeCasesStatsRepo.StoreAsync(activeCaseStats);
 
             var closedCasesStatsRepo = scope.Resolve<ClosedCasesRepository>();
 
-            await closedCasesStatsRepo.AddAsync(closedCasesStats);
+            await closedCasesStatsRepo.StoreAsync(closedCasesStats);
 
             var countryStatsRepository = scope.Resolve<CountryStatsRepository>();
 
@@ -86,7 +86,7 @@ namespace Covid19Api.Services.Worker
             {
                 try
                 {
-                    await countryStatsRepository.AddManyAsync(chunkedStats);
+                    await countryStatsRepository.StoreAsync(chunkedStats);
                 }
                 catch (Exception e)
                 {
