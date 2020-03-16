@@ -6,6 +6,10 @@ Covid19Api serving most recent data related to corona virus based on the data av
 
 While `worldometers` is only displaying recent data, this API is providing historical data starting from today (2020-03-15, 06:30 AM, GMT+1).
 
+## Sample App
+
+There is an app available [here](https://covid19web.z6.web.core.windows.net/). The code is located [here](https://github.com/alsami/Covid19Web).
+
 ## Available endpoints
 
 The API is hosted on azure using an app-service. All times returned from the server are in UTC.
