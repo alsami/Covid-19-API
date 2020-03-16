@@ -42,7 +42,7 @@ namespace Covid19Api.Services.Worker
                     this.logger.LogCritical(e, e.Message);
                 }
                 
-                await Task.Delay(TimeSpan.FromMinutes(2), stoppingToken);
+                await Task.Delay(TimeSpan.FromMinutes(15), stoppingToken);
             }
         }
 
