@@ -51,7 +51,7 @@ namespace Covid19Api.RefreshWorker
                 .InstancePerLifetimeScope();
             containerBuilder.RegisterModule(new DocumentDbContextModule(new HostingEnvironment()
             {
-                EnvironmentName = "Development"
+                EnvironmentName = "Azure"
             }));
         }
         
