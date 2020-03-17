@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Covid19Api.Domain
 {
-    public class LatestStats
+    public class GlobalStats
     {
         public Guid Id { get; private set; }
         
@@ -19,7 +19,7 @@ namespace Covid19Api.Domain
         
         public DateTime FetchedAt { get; private set; }
 
-        public LatestStats(int total, int recovered, int deaths, DateTime fetchedAt)
+        public GlobalStats(int total, int recovered, int deaths, DateTime fetchedAt)
         {
             this.Total = total;
             this.Recovered = recovered;

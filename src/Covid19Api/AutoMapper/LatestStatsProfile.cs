@@ -9,7 +9,7 @@ namespace Covid19Api.AutoMapper
     {
         public LatestStatsProfile()
         {
-            this.CreateMap<LatestStats, LatestStatsDto>()
+            this.CreateMap<GlobalStats, LatestStatsDto>()
                 .ConvertUsing(src => new LatestStatsDto(src.Total, src.Recovered, src.Deaths, src.FetchedAt));
         }
     }

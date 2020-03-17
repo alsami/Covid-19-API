@@ -56,7 +56,7 @@ namespace Covid19Api.Services.Worker
 
             var document = await HtmlDocumentFetcher.FetchAsync(client);
 
-            var latestStats = LatestStatsParser.Parse(document, fetchedAt);
+            var latestStats = GlobalStatsParser.Parse(document, fetchedAt);
 
             var activeCaseStats = ActiveCasesParser.Parse(document, fetchedAt);
 
@@ -68,7 +68,7 @@ namespace Covid19Api.Services.Worker
             
             await using var scope = this.serviceProvider.GetAutofacRoot().BeginLifetimeScope();
 
-            var latestStatsRepo = scope.Resolve<LatestStatsRepository>();
+            var latestStatsRepo = scope.Resolve<GlobalStatsRepository>();
 
             await latestStatsRepo.StoreAsync(latestStats);
 

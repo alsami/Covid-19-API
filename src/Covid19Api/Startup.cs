@@ -45,7 +45,7 @@ namespace Covid19Api
         {
             containerBuilder.AddAutoMapper(typeof(Startup).Assembly);
 
-            containerBuilder.RegisterType<LatestStatsRepository>()
+            containerBuilder.RegisterType<GlobalStatsRepository>()
                 .AsSelf()
                 .InstancePerLifetimeScope();
             containerBuilder.RegisterType<ActiveCasesStatsRepository>()

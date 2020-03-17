@@ -12,19 +12,19 @@ namespace Covid19Api.Controllers.V1
     [Route("api/v1/stats")]
     public class StatsController : ControllerBase
     {
-        private readonly LatestStatsRepository latestStatsRepository;
+        private readonly GlobalStatsRepository globalStatsRepository;
         private readonly IMapper mapper;
 
-        public StatsController(LatestStatsRepository latestStatsRepository, IMapper mapper)
+        public StatsController(GlobalStatsRepository globalStatsRepository, IMapper mapper)
         {
-            this.latestStatsRepository = latestStatsRepository;
+            this.globalStatsRepository = globalStatsRepository;
             this.mapper = mapper;
         }
 
         [HttpGet]
         public async Task<LatestStatsDto> LoadLatestAsync()
         {
-            var last = await this.latestStatsRepository.MostRecentAsync();
+            var last = await this.globalStatsRepository.MostRecentAsync();
 
             return this.mapper.Map<LatestStatsDto>(last);
         }
@@ -34,7 +34,7 @@ namespace Covid19Api.Controllers.V1
         {
             var minFetchedAt = DateTime.UtcNow.Date.AddDays(-7);
 
-            var latestActiveCaseStats = await this.latestStatsRepository.HistoricalAsync(minFetchedAt);
+            var latestActiveCaseStats = await this.globalStatsRepository.HistoricalAsync(minFetchedAt);
 
             return this.mapper.Map<IEnumerable<LatestStatsDto>>(latestActiveCaseStats);
         }

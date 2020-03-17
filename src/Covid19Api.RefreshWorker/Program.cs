@@ -37,7 +37,7 @@ namespace Covid19Api.RefreshWorker
 
         private static void ConfigureContainer(ContainerBuilder containerBuilder)
         {
-            containerBuilder.RegisterType<LatestStatsRepository>()
+            containerBuilder.RegisterType<GlobalStatsRepository>()
                 .AsSelf()
                 .InstancePerLifetimeScope();
             containerBuilder.RegisterType<ActiveCasesStatsRepository>()

@@ -6,9 +6,9 @@ using HtmlAgilityPack;
 
 namespace Covid19Api.Services.Parser
 {
-    public static class LatestStatsParser
+    public static class GlobalStatsParser
     {
-        public static LatestStats Parse(HtmlDocument document, DateTime fetchedAt)
+        public static GlobalStats Parse(HtmlDocument document, DateTime fetchedAt)
         {
             var mainCounterNodes = document
                 .DocumentNode
@@ -17,7 +17,7 @@ namespace Covid19Api.Services.Parser
                 .ToArray();
 
             // total, recovered, deaths
-            return new LatestStats(GetIntegerValue(mainCounterNodes[0]),
+            return new GlobalStats(GetIntegerValue(mainCounterNodes[0]),
                 GetIntegerValue(mainCounterNodes[2]),
                 GetIntegerValue(mainCounterNodes[1]), fetchedAt);
         }
