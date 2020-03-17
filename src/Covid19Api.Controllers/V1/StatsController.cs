@@ -22,21 +22,21 @@ namespace Covid19Api.Controllers.V1
         }
 
         [HttpGet]
-        public async Task<LatestStatsDto> LoadLatestAsync()
+        public async Task<GlobalStatsDto> LoadLatestAsync()
         {
             var last = await this.globalStatsRepository.MostRecentAsync();
 
-            return this.mapper.Map<LatestStatsDto>(last);
+            return this.mapper.Map<GlobalStatsDto>(last);
         }
         
         [HttpGet("history")]
-        public async Task<IEnumerable<LatestStatsDto>> LoadLatestHistorical()
+        public async Task<IEnumerable<GlobalStatsDto>> LoadLatestHistorical()
         {
             var minFetchedAt = DateTime.UtcNow.Date.AddDays(-7);
 
             var latestActiveCaseStats = await this.globalStatsRepository.HistoricalAsync(minFetchedAt);
 
-            return this.mapper.Map<IEnumerable<LatestStatsDto>>(latestActiveCaseStats);
+            return this.mapper.Map<IEnumerable<GlobalStatsDto>>(latestActiveCaseStats);
         }
     }
 }
