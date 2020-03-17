@@ -8,7 +8,7 @@ While `worldometers` is only displaying recent data, this API is providing histo
 
 ## Sample App
 
-There is an app available [here](https://covid19web.z6.web.core.windows.net/). The code is located [here](https://github.com/alsami/Covid19Web).
+There is an app available [here](https://covid19-statistics.azurewebsites.net/). The code is located [here](https://github.com/alsami/Covid19-Statistics).
 
 ## Available endpoints
 
