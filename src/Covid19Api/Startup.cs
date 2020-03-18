@@ -1,11 +1,14 @@
+using System.IO.Compression;
 using Autofac;
 using AutoMapper.Contrib.Autofac.DependencyInjection;
 using Covid19Api.AutoMapper.Modules;
 using Covid19Api.ExceptionFilter;
 using Covid19Api.Repositories;
 using Covid19Api.Repositories.Mongo;
+using Covid19Api.Services.Worker;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -34,6 +37,12 @@ namespace Covid19Api
 
             // services.AddHostedService<DataRefreshWorker>();
 
+            services.AddResponseCompression(options =>  options.MimeTypes = new[] {"application/json"});
+
+            services.Configure<BrotliCompressionProviderOptions>(options => options.Level = CompressionLevel.Optimal);
+
+            services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Optimal);
+
             services.Configure<DocumentDbContextOptions>(options =>
                 this.configuration.GetSection(nameof(DocumentDbContextOptions)).Bind(options));
         }
@@ -61,6 +70,8 @@ namespace Covid19Api
         // ReSharper disable once UnusedMember.Global
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseResponseCompression();
+            
             app.UseHttpsRedirection();
 
             app.UseRouting();
