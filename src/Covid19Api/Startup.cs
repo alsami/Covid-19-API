@@ -39,9 +39,9 @@ namespace Covid19Api
 
             services.AddResponseCompression(options =>  options.MimeTypes = new[] {"application/json"});
 
-            services.Configure<BrotliCompressionProviderOptions>(options => options.Level = CompressionLevel.Optimal);
+            services.Configure<BrotliCompressionProviderOptions>(options => options.Level = CompressionLevel.Fastest);
 
-            services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Optimal);
+            services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Fastest);
 
             services.Configure<DocumentDbContextOptions>(options =>
                 this.configuration.GetSection(nameof(DocumentDbContextOptions)).Bind(options));
