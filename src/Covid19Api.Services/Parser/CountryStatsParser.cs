@@ -38,7 +38,7 @@ namespace Covid19Api.Services.Parser
             => document
                 .DocumentNode
                 .Descendants()
-                .First(node => node.Id == "main_table_countries")
+                .First(node => node.Id == "main_table_countries_today")
                 .ChildNodes
                 .First(node => node.Name == "tbody")
                 .ChildNodes
