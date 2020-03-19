@@ -38,5 +38,15 @@ namespace Covid19Api.Controllers.V1
 
             return this.mapper.Map<IEnumerable<ActiveCaseStatsDto>>(latestActiveCaseStats);
         }
+        
+        [HttpGet("dayhistory")]
+        public async Task<IEnumerable<ActiveCaseStatsDto>> LoadActiveCasesDayHistoryAsync()
+        {
+            var minFetchedAt = DateTime.UtcNow.Date.AddDays(-7);
+
+            var latestActiveCaseStats = await this.activeCasesStatsRepository.HistoricalForDayAsync(minFetchedAt);
+
+            return this.mapper.Map<IEnumerable<ActiveCaseStatsDto>>(latestActiveCaseStats);
+        }
     }
 }

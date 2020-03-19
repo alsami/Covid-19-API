@@ -25,9 +25,9 @@ namespace Covid19Api.Controllers.V1
         [HttpGet]
         public async Task<ClosedCaseStatsDto> LoadLatestInactiveAsync()
         {
-            var last = await this.closedCasesRepository.MostRecentAsync();
+            var mostRecent = await this.closedCasesRepository.MostRecentAsync();
 
-            return this.mapper.Map<ClosedCaseStatsDto>(last);
+            return this.mapper.Map<ClosedCaseStatsDto>(mostRecent);
         }
 
         [HttpGet("history")]
@@ -35,9 +35,19 @@ namespace Covid19Api.Controllers.V1
         {
             var minFetchedAt = DateTime.UtcNow.Date.AddDays(-7);
 
-            var latestActiveCaseStats = await this.closedCasesRepository.HistoricalAsync(minFetchedAt);
+            var closdedCasesHistory = await this.closedCasesRepository.HistoricalAsync(minFetchedAt);
 
-            return this.mapper.Map<IEnumerable<ClosedCaseStatsDto>>(latestActiveCaseStats);
+            return this.mapper.Map<IEnumerable<ClosedCaseStatsDto>>(closdedCasesHistory);
+        }
+        
+        [HttpGet("dayhistory")]
+        public async Task<IEnumerable<ClosedCaseStatsDto>> LoadClosedCasesDayHistoryAsync()
+        {
+            var minFetchedAt = DateTime.UtcNow.Date.AddDays(-7);
+
+            var closedCasesDayHistory = await this.closedCasesRepository.HistoricalForDayAsync(minFetchedAt);
+
+            return this.mapper.Map<IEnumerable<ClosedCaseStatsDto>>(closedCasesDayHistory);
         }
     }
 }
