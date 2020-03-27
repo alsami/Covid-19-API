@@ -11,6 +11,7 @@ using Covid19Api.Repositories;
 using Covid19Api.Services.Parser;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using MongoDB.Driver;
 
 namespace Covid19Api.Services.Worker
 {
@@ -21,7 +22,8 @@ namespace Covid19Api.Services.Worker
         private readonly IServiceProvider serviceProvider;
         private readonly ILogger<DataRefreshWorker> logger;
 
-        public DataRefreshWorker(IHttpClientFactory httpClientFactory, IServiceProvider serviceProvider, ILogger<DataRefreshWorker> logger)
+        public DataRefreshWorker(IHttpClientFactory httpClientFactory, IServiceProvider serviceProvider,
+            ILogger<DataRefreshWorker> logger)
         {
             this.httpClientFactory = httpClientFactory;
             this.serviceProvider = serviceProvider;
@@ -40,8 +42,12 @@ namespace Covid19Api.Services.Worker
                 {
                     this.logger.LogCritical(e, e.Message);
                 }
-                
-                await Task.Delay(TimeSpan.FromMinutes(15), stoppingToken);
+
+                var nextRun = DateTime.UtcNow.AddMinutes(30);
+
+                this.logger.LogInformation("Next run {nextRun}", nextRun.ToString("O"));
+
+                await Task.Delay(TimeSpan.FromMinutes(30), stoppingToken);
             }
         }
 
@@ -64,7 +70,7 @@ namespace Covid19Api.Services.Worker
             var countryStats = CountryStatsParser.Parse(document, fetchedAt);
 
             this.logger.LogInformation("Storing fetched data");
-            
+
             await using var scope = this.serviceProvider.GetAutofacRoot().BeginLifetimeScope();
 
             var latestStatsRepo = scope.Resolve<GlobalStatsRepository>();
@@ -81,27 +87,26 @@ namespace Covid19Api.Services.Worker
 
             var countryStatsRepository = scope.Resolve<CountryStatsRepository>();
 
-            foreach (var chunkedStats in CreateChunks(countryStats.Where(countryStat => !string.IsNullOrWhiteSpace(countryStat.Country)).ToList()))
+            foreach (var chunkedStats in CreateChunks(countryStats
+                .Where(countryStat => !string.IsNullOrWhiteSpace(countryStat.Country)).ToList()))
             {
                 try
                 {
                     await countryStatsRepository.StoreAsync(chunkedStats);
+
                 }
-                catch (Exception e)
-                {
-                    this.logger.LogCritical(e, e.Message);
-                }
+                catch (Exception e) when (e is MongoBulkWriteException) { }
                 
                 await Task.Delay(1000);
             }
         }
-        
-        private static IEnumerable<List<CountryStats>> CreateChunks(List<CountryStats> countryStats, int chunkSize = 50)  
-        {        
-            for (var i = 0; i < countryStats.Count; i += chunkSize) 
-            { 
-                yield return countryStats.GetRange(i, Math.Min(chunkSize, countryStats.Count - i)); 
-            }  
-        } 
+
+        private static IEnumerable<List<CountryStats>> CreateChunks(List<CountryStats> countryStats, int chunkSize = 50)
+        {
+            for (var i = 0; i < countryStats.Count; i += chunkSize)
+            {
+                yield return countryStats.GetRange(i, Math.Min(chunkSize, countryStats.Count - i));
+            }
+        }
     }
 }

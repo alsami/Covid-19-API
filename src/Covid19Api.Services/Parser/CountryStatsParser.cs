@@ -72,9 +72,17 @@ namespace Covid19Api.Services.Parser
 
         private static int ParseIntegerValue(HtmlNode htmlNode)
         {
-            var value = htmlNode.InnerHtml;
+            var value = ClearValue(htmlNode.InnerHtml);
 
-            return string.IsNullOrWhiteSpace(value) ? 0 : int.Parse(htmlNode.InnerHtml, NumberStyles.Any);
+            return int.Parse(value, NumberStyles.Any);
+        }
+
+        private static string ClearValue(string value)
+        {
+            if (value.StartsWith("+-") || value.StartsWith("-+"))
+                return "0";
+
+            return string.IsNullOrWhiteSpace(value) ? "0" : value;
         }
     }
 }
