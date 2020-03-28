@@ -12,11 +12,7 @@ namespace Covid19Api.Controllers.Presentation
 
         public int Recovered { get; }
         
-        public decimal RecoveredPercentage { get; }
-
         public int Deaths { get; }
-        
-        public decimal DeathsPercentage { get; }
         
         public DateTime FetchedAt { get; }
 
@@ -26,8 +22,6 @@ namespace Covid19Api.Controllers.Presentation
             this.Recovered = recovered;
             this.Deaths = deaths;
             this.FetchedAt = fetchedAt;
-            this.RecoveredPercentage = (decimal) this.Recovered / this.Total * 100;
-            this.DeathsPercentage = (decimal) this.Deaths / this.Total * 100;
         }
     }
 }

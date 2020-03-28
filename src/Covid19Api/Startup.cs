@@ -68,7 +68,7 @@ namespace Covid19Api
         }
 
         // ReSharper disable once UnusedMember.Global
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
             app.UseResponseCompression();
             
