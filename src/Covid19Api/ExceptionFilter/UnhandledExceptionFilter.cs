@@ -1,4 +1,5 @@
 using System.Net;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -8,12 +9,11 @@ namespace Covid19Api.ExceptionFilter
     {
         public void OnException(ExceptionContext context)
         {
-            context.Result = new OkObjectResult(new
+            context.HttpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
+            context.Result = new ObjectResult(new
             {
-                Error = context.Exception.Message
+                Message = context.Exception.Message
             });
-
-            context.HttpContext.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
         }
     }
 }
