@@ -32,7 +32,7 @@ namespace Covid19Api.Controllers.V1
         [HttpGet("history")]
         public async Task<IEnumerable<ActiveCaseStatsDto>> LoadActiveCasesHistoryAsync()
         {
-            var minFetchedAt = DateTime.UtcNow.Date.AddDays(-7);
+            var minFetchedAt = DateTime.UtcNow.Date.AddDays(-6);
 
             var latestActiveCaseStats = await this.activeCasesStatsRepository.HistoricalAsync(minFetchedAt);
 
@@ -42,7 +42,7 @@ namespace Covid19Api.Controllers.V1
         [HttpGet("dayhistory")]
         public async Task<IEnumerable<ActiveCaseStatsDto>> LoadActiveCasesDayHistoryAsync()
         {
-            var minFetchedAt = DateTime.UtcNow.Date.AddDays(-7);
+            var minFetchedAt = DateTime.UtcNow.Date.AddDays(-6);
 
             var latestActiveCaseStats = await this.activeCasesStatsRepository.HistoricalForDayAsync(minFetchedAt);
 

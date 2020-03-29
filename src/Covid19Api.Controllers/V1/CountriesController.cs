@@ -32,7 +32,7 @@ namespace Covid19Api.Controllers.V1
         [HttpGet("history")]
         public async Task<IEnumerable<CountryStatsDto>> LoadHistoryAsync()
         {
-            var minFetchedAt = DateTime.UtcNow.Date.AddDays(-7);
+            var minFetchedAt = DateTime.UtcNow.Date.AddDays(-6);
             
             var countryHistories = await this.countryStatsRepository.HistoricalAsync(minFetchedAt);
 
@@ -50,7 +50,7 @@ namespace Covid19Api.Controllers.V1
         [HttpGet("{country}/history")]
         public async Task<IEnumerable<CountryStatsDto>> LoadHistoryForCountryAsync(string country)
         {
-            var minFetchedAt = DateTime.UtcNow.Date.AddDays(-7);
+            var minFetchedAt = DateTime.UtcNow.Date.AddDays(-6);
             
             var statsForCountry = await this.countryStatsRepository.HistoricalAsync(minFetchedAt, country);
 
@@ -60,7 +60,7 @@ namespace Covid19Api.Controllers.V1
         [HttpGet("{country}/dayhistory")]
         public async Task<IEnumerable<CountryStatsDto>> LoadDayHistoryForCountryAsync(string country)
         {
-            var minFetchedAt = DateTime.UtcNow.Date.AddDays(-7);
+            var minFetchedAt = DateTime.UtcNow.Date.AddDays(-6);
             
             var statsForCountry = await this.countryStatsRepository.HistoricalForDayAsync(minFetchedAt, country);
 
