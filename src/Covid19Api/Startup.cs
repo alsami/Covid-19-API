@@ -28,7 +28,11 @@ namespace Covid19Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers(options => { options.Filters.Add<UnhandledExceptionFilter>(); });
+            services.AddControllers(options =>
+            {
+                options.Filters.Add<UnhandledExceptionFilter>();
+                options.Filters.Add<AzureCosmosDbThrottleExceptionFilter>();
+            });
 
             services.AddHttpClient();
 
