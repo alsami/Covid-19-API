@@ -88,7 +88,7 @@ namespace Covid19Api.Services.Worker
             var countryStatsRepository = scope.Resolve<CountryStatsRepository>();
 
             foreach (var chunkedStats in CreateChunks(countryStats
-                .Where(countryStat => !string.IsNullOrWhiteSpace(countryStat.Country)).ToList()))
+                .Where(countryStat => !string.IsNullOrWhiteSpace(countryStat.Country) && !countryStat.Empty()).ToList()))
             {
                 try
                 {

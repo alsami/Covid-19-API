@@ -46,6 +46,14 @@ namespace Covid19Api.Domain
             this.Id = this.Generate();
         }
 
+        public bool Empty()
+        {
+            return this.TotalCases == 0 && this.NewCases == 0 &&
+                   this.TotalDeaths == 0 && this.NewDeaths == 0 &&
+                   this.RecoveredCases == 0 && this.ActiveCases == 0 &&
+                   this.SeriousCases == 0;
+        }
+
         private Guid Generate()
         {
             using var hasher = MD5.Create();
