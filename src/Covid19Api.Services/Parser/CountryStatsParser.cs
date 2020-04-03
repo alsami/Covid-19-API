@@ -58,14 +58,14 @@ namespace Covid19Api.Services.Parser
 
             if (anchorNode is null)
             {
-                var regularNode = htmlNode.InnerHtml.Trim().Replace("&ccedil;", "ç");
+                var regularNode = htmlNode.InnerHtml.Trim().Replace("&ccedil;", "ç").Replace("&eacute;", "é");
 
                 return regularNode.Contains("<span", StringComparison.InvariantCulture)
                     ? null
                     : regularNode;
             }
 
-            var anchorValue = anchorNode.InnerHtml.Trim().Replace("&ccedil;", "ç");
+            var anchorValue = anchorNode.InnerHtml.Trim().Replace("&ccedil;", "ç").Replace("&eacute", "é");
 
             return anchorValue.Contains("<span", StringComparison.InvariantCulture) ? null : anchorValue;
         }
