@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
@@ -67,7 +68,7 @@ namespace Covid19Api.Services.Worker
 
             var closedCasesStats = ClosedCasesParser.Parse(document, fetchedAt);
 
-            var countryStats = CountryStatsParser.Parse(document, fetchedAt);
+            var countryStats = CountryStatsParser.Parse(document, fetchedAt).ToList();
 
             this.logger.LogInformation("Storing fetched data");
 
@@ -87,17 +88,26 @@ namespace Covid19Api.Services.Worker
 
             var countryStatsRepository = scope.Resolve<CountryStatsRepository>();
 
-            static bool Filter(CountryStats countryStat) => !string.IsNullOrWhiteSpace(countryStat.Country) && !countryStat.Empty() && !countryStat.Country.Equals("World", StringComparison.InvariantCultureIgnoreCase);
+            var filterCountrieStats = countryStats.Where(stats => !string.IsNullOrWhiteSpace(stats.Country) &&
+                                                                  stats.Country != "World" &&
+                                                                  !stats.Empty())
+                .ToList();
 
-            foreach (var chunkedStats in CreateChunks(countryStats.Where(Filter).ToList()))
+            foreach (var chunkedStats in CreateChunks(filterCountrieStats))
             {
                 try
                 {
-                    await countryStatsRepository.StoreAsync(chunkedStats);
+                    if (chunkedStats.Any(stats => stats.Country.Contains("World")))
+                    {
+                        Debugger.Break();
+                    }
 
+                    await countryStatsRepository.StoreAsync(chunkedStats);
                 }
-                catch (Exception e) when (e is MongoBulkWriteException) { }
-                
+                catch (Exception e) when (e is MongoBulkWriteException)
+                {
+                }
+
                 await Task.Delay(1000);
             }
         }
