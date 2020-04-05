@@ -74,8 +74,16 @@ namespace Covid19Api.Repositories
                 {
                     Sort = sort,
                 });
+            
+            var all = await cursor.ToListAsync();
+            
+            var onlyLatestEntries = all.GroupBy(countryStats => new
+                {
+                    countryStats.Country
+                })
+                .SelectMany(grouping => grouping.Take(1));
 
-            return await cursor.ToListAsync();
+            return onlyLatestEntries;
         }
         
         public async Task<IEnumerable<CountryStats>> HistoricalAsync(DateTime minFetchedAt, string country)
