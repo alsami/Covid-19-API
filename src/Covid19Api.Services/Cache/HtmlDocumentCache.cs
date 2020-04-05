@@ -1,3 +1,4 @@
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
@@ -32,13 +33,14 @@ namespace Covid19Api.Services.Cache
                 return document;
             }
 
-            ;
-
             var client = this.httpClientFactory.CreateClient();
 
             var response = client.GetAsync("https://worldometers.info/coronavirus");
 
-            await this.memoryCache.Set(Key, response);
+            await this.memoryCache.Set(Key, response, new MemoryCacheEntryOptions()
+            {
+                AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(30)
+            });
 
             var loadedDocument = new HtmlDocument();
 
