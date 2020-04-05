@@ -26,11 +26,14 @@ namespace Covid19Api.Services.Cache
             {
                 var cached = await cachedTask;
 
-                var document = new HtmlDocument();
+                if (cached.IsSuccessStatusCode)
+                {
+                    var document = new HtmlDocument();
 
-                document.LoadHtml(await cached.Content.ReadAsStringAsync());
+                    document.LoadHtml(await cached.Content.ReadAsStringAsync());
 
-                return document;
+                    return document;
+                }
             }
 
             var client = this.httpClientFactory.CreateClient();
