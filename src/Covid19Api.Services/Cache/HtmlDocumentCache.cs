@@ -38,16 +38,16 @@ namespace Covid19Api.Services.Cache
 
             var client = this.httpClientFactory.CreateClient();
 
-            var response = client.GetAsync("https://worldometers.info/coronavirus");
+            var responseTask = client.GetAsync(Constants.CovidInfoWorldOmetersUrl);
 
-            await this.memoryCache.Set(Key, response, new MemoryCacheEntryOptions()
+            await this.memoryCache.Set(Key, responseTask, new MemoryCacheEntryOptions()
             {
                 AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(30)
             });
 
+            var loaded = await responseTask;
+            
             var loadedDocument = new HtmlDocument();
-
-            var loaded = await response;
 
             loadedDocument.LoadHtml(await loaded.Content.ReadAsStringAsync());
 

@@ -8,7 +8,7 @@ namespace Covid19Api.Services.Parser
     {
         public static async Task<HtmlDocument> FetchAsync(HttpClient client)
         {
-            var response = await client.GetAsync("https://worldometers.info/coronavirus");
+            var response = await client.GetAsync(Constants.CovidInfoWorldOmetersUrl);
 
             var content = await response.Content.ReadAsStringAsync();
 
