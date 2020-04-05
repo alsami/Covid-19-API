@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Covid19Api.Domain;
 using Covid19Api.Repositories.Mongo;
 using MongoDB.Driver;
+
 // ReSharper disable SpecifyStringComparison
 
 namespace Covid19Api.Repositories
@@ -74,18 +75,17 @@ namespace Covid19Api.Repositories
                 {
                     Sort = sort,
                 });
-            
+
             var all = await cursor.ToListAsync();
-            
-            var onlyLatestEntries = all.GroupBy(countryStats => new
+
+            return all.GroupBy(countryStats => new
                 {
+                    countryStats.FetchedAt.Date,
                     countryStats.Country
                 })
                 .SelectMany(grouping => grouping.Take(1));
-
-            return onlyLatestEntries;
         }
-        
+
         public async Task<IEnumerable<CountryStats>> HistoricalAsync(DateTime minFetchedAt, string country)
         {
             var collection = this.context.Database.GetCollection<CountryStats>(CollectionName);
@@ -96,14 +96,16 @@ namespace Covid19Api.Repositories
                 .Ascending("Country");
 
             var cursor = await collection.FindAsync(
-                existingCountryStats => existingCountryStats.FetchedAt >= minFetchedAt && existingCountryStats.Country.ToLower() == country.ToLower(), new FindOptions<CountryStats>
+                existingCountryStats => existingCountryStats.FetchedAt >= minFetchedAt &&
+                                        existingCountryStats.Country.ToLower() == country.ToLower(),
+                new FindOptions<CountryStats>
                 {
                     Sort = sort,
                 });
 
             return await cursor.ToListAsync();
         }
-        
+
         public async Task<IEnumerable<CountryStats>> HistoricalForDayAsync(DateTime minFetchedAt, string country)
         {
             var collection = this.context.Database.GetCollection<CountryStats>(CollectionName);
@@ -114,7 +116,8 @@ namespace Covid19Api.Repositories
                 .Descending("FetchedAt");
 
             var cursor = await collection.FindAsync(
-                existingCountryStats => existingCountryStats.FetchedAt >= minFetchedAt && existingCountryStats.Country.ToLower() == country.ToLower(),
+                existingCountryStats => existingCountryStats.FetchedAt >= minFetchedAt &&
+                                        existingCountryStats.Country.ToLower() == country.ToLower(),
                 new FindOptions<CountryStats>
                 {
                     Sort = sort,
