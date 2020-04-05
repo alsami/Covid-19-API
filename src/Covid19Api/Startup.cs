@@ -5,6 +5,7 @@ using Covid19Api.AutoMapper.Modules;
 using Covid19Api.ExceptionFilter;
 using Covid19Api.Repositories;
 using Covid19Api.Repositories.Mongo;
+using Covid19Api.Services.Cache;
 using Covid19Api.Services.Worker;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -53,6 +54,8 @@ namespace Covid19Api
 
             services.Configure<DocumentDbContextOptions>(options =>
                 this.configuration.GetSection(nameof(DocumentDbContextOptions)).Bind(options));
+
+            services.AddMemoryCache();
         }
 
         // ReSharper disable once UnusedMember.Global
@@ -73,6 +76,10 @@ namespace Covid19Api
                 .AsSelf()
                 .InstancePerLifetimeScope();
             containerBuilder.RegisterModule(new DocumentDbContextModule(this.webHostEnvironment));
+
+            containerBuilder.RegisterType<HtmlDocumentCache>()
+                .AsSelf()
+                .SingleInstance();
         }
 
         // ReSharper disable once UnusedMember.Global

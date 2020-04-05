@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
 using Covid19Api.Controllers.Presentation;
 using Covid19Api.Repositories;
+using Covid19Api.Services.Cache;
+using Covid19Api.Services.Parser;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Covid19Api.Controllers.V1
@@ -14,21 +17,28 @@ namespace Covid19Api.Controllers.V1
     {
         private readonly GlobalStatsRepository globalStatsRepository;
         private readonly IMapper mapper;
+        private readonly HtmlDocumentCache htmlDocumentCache;
 
-        public GlobalStatsController(GlobalStatsRepository globalStatsRepository, IMapper mapper)
+        public GlobalStatsController(GlobalStatsRepository globalStatsRepository, IMapper mapper,
+            HtmlDocumentCache htmlDocumentCache)
         {
             this.globalStatsRepository = globalStatsRepository;
             this.mapper = mapper;
+            this.htmlDocumentCache = htmlDocumentCache;
         }
 
         [HttpGet]
         public async Task<GlobalStatsDto> LoadGlobalAsync()
         {
-            var last = await this.globalStatsRepository.MostRecentAsync();
+            var fetchedAt = DateTime.UtcNow;
 
-            return this.mapper.Map<GlobalStatsDto>(last);
+            var document = await this.htmlDocumentCache.LoadAsync();
+
+            var latest = GlobalStatsParser.Parse(document, fetchedAt);
+
+            return this.mapper.Map<GlobalStatsDto>(latest);
         }
-        
+
         [HttpGet("history")]
         public async Task<IEnumerable<GlobalStatsDto>> LoadGlobalHistorical()
         {
@@ -38,7 +48,7 @@ namespace Covid19Api.Controllers.V1
 
             return this.mapper.Map<IEnumerable<GlobalStatsDto>>(latestActiveCaseStats);
         }
-        
+
         [HttpGet("dayhistory")]
         public async Task<IEnumerable<GlobalStatsDto>> LoadGlobalDayHistorical()
         {

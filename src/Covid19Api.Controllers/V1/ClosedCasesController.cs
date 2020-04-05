@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
 using Covid19Api.Controllers.Presentation;
 using Covid19Api.Repositories;
+using Covid19Api.Services.Cache;
+using Covid19Api.Services.Parser;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Covid19Api.Controllers.V1
@@ -14,20 +17,26 @@ namespace Covid19Api.Controllers.V1
     {
         private readonly ClosedCasesRepository closedCasesRepository;
         private readonly IMapper mapper;
+        private readonly HtmlDocumentCache htmlDocumentCache;
 
         public ClosedCasesController(IMapper mapper,
-            ClosedCasesRepository closedCasesRepository)
+            ClosedCasesRepository closedCasesRepository, HtmlDocumentCache htmlDocumentCache)
         {
             this.mapper = mapper;
             this.closedCasesRepository = closedCasesRepository;
+            this.htmlDocumentCache = htmlDocumentCache;
         }
 
         [HttpGet]
         public async Task<ClosedCaseStatsDto> LoadLatestInactiveAsync()
         {
-            var mostRecent = await this.closedCasesRepository.MostRecentAsync();
+            var fetchedAt = DateTime.UtcNow;
 
-            return this.mapper.Map<ClosedCaseStatsDto>(mostRecent);
+            var document = await this.htmlDocumentCache.LoadAsync();
+
+            var closedCases = ClosedCasesParser.Parse(document, fetchedAt);
+
+            return this.mapper.Map<ClosedCaseStatsDto>(closedCases);
         }
 
         [HttpGet("history")]

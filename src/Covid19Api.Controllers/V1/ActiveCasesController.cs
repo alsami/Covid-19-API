@@ -1,9 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
 using Covid19Api.Controllers.Presentation;
+using Covid19Api.Domain;
 using Covid19Api.Repositories;
+using Covid19Api.Services.Cache;
+using Covid19Api.Services.Parser;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Covid19Api.Controllers.V1
@@ -13,20 +17,26 @@ namespace Covid19Api.Controllers.V1
     public class ActiveCasesController : ControllerBase
     {
         private readonly ActiveCasesStatsRepository activeCasesStatsRepository;
+        private readonly HtmlDocumentCache htmlDocumentCache;
         private readonly IMapper mapper;
 
-        public ActiveCasesController(IMapper mapper, ActiveCasesStatsRepository activeCasesStatsRepository)
+        public ActiveCasesController(IMapper mapper, ActiveCasesStatsRepository activeCasesStatsRepository, HtmlDocumentCache htmlDocumentCache)
         {
             this.mapper = mapper;
             this.activeCasesStatsRepository = activeCasesStatsRepository;
+            this.htmlDocumentCache = htmlDocumentCache;
         }
 
         [HttpGet]
         public async Task<ActiveCaseStatsDto> LoadLatestActiveAsync()
         {
-            var latestActiveCaseStats = await this.activeCasesStatsRepository.MostRecentAsync();
+            var fetchedAt = DateTime.UtcNow;
 
-            return this.mapper.Map<ActiveCaseStatsDto>(latestActiveCaseStats);
+            var document = await this.htmlDocumentCache.LoadAsync();
+
+            var active = ActiveCasesParser.Parse(document, fetchedAt);
+
+            return this.mapper.Map<ActiveCaseStatsDto>(active);
         }
 
         [HttpGet("history")]
