@@ -11,9 +11,9 @@ namespace Covid19Api.Controllers.Presentation
         public int Total { get; }
 
         public int Recovered { get; }
-        
+
         public int Deaths { get; }
-        
+
         public DateTime FetchedAt { get; }
 
         public GlobalStatsDto(int total, int recovered, int deaths, DateTime fetchedAt)

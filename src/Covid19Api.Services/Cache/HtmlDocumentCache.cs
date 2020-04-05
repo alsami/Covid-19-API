@@ -24,20 +24,22 @@ namespace Covid19Api.Services.Cache
             if (cachedTask != null)
             {
                 var cached = await cachedTask;
-                
+
                 var document = new HtmlDocument();
 
                 document.LoadHtml(await cached.Content.ReadAsStringAsync());
 
                 return document;
-            };
+            }
+
+            ;
 
             var client = this.httpClientFactory.CreateClient();
-            
+
             var response = client.GetAsync("https://worldometers.info/coronavirus");
 
             await this.memoryCache.Set(Key, response);
-            
+
             var loadedDocument = new HtmlDocument();
 
             var loaded = await response;

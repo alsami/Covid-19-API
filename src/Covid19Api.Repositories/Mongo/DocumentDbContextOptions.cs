@@ -1,4 +1,5 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
+
 namespace Covid19Api.Repositories.Mongo
 {
     public class DocumentDbContextOptions
@@ -8,4 +9,3 @@ namespace Covid19Api.Repositories.Mongo
         public string DatabaseName { get; set; }
     }
 }
- 

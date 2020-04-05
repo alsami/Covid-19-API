@@ -20,7 +20,8 @@ namespace Covid19Api.Controllers.V1
         private readonly HtmlDocumentCache htmlDocumentCache;
         private readonly IMapper mapper;
 
-        public ActiveCasesController(IMapper mapper, ActiveCasesStatsRepository activeCasesStatsRepository, HtmlDocumentCache htmlDocumentCache)
+        public ActiveCasesController(IMapper mapper, ActiveCasesStatsRepository activeCasesStatsRepository,
+            HtmlDocumentCache htmlDocumentCache)
         {
             this.mapper = mapper;
             this.activeCasesStatsRepository = activeCasesStatsRepository;
@@ -48,7 +49,7 @@ namespace Covid19Api.Controllers.V1
 
             return this.mapper.Map<IEnumerable<ActiveCaseStatsDto>>(latestActiveCaseStats);
         }
-        
+
         [HttpGet("dayhistory")]
         public async Task<IEnumerable<ActiveCaseStatsDto>> LoadActiveCasesDayHistoryAsync()
         {

@@ -46,7 +46,7 @@ namespace Covid19Api
                 services.AddHostedService<DataRefreshWorker>();
             }
 
-            services.AddResponseCompression(options =>  options.MimeTypes = new[] {"application/json"});
+            services.AddResponseCompression(options => options.MimeTypes = new[] {"application/json"});
 
             services.Configure<BrotliCompressionProviderOptions>(options => options.Level = CompressionLevel.Fastest);
 
@@ -86,7 +86,7 @@ namespace Covid19Api
         public void Configure(IApplicationBuilder app)
         {
             app.UseResponseCompression();
-            
+
             app.UseHttpsRedirection();
 
             app.UseRouting();

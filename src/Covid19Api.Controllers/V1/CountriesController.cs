@@ -21,7 +21,8 @@ namespace Covid19Api.Controllers.V1
         private readonly CountryStatsRepository countryStatsRepository;
         private readonly HtmlDocumentCache htmlDocumentCache;
 
-        public CountriesController(IMapper mapper, CountryStatsRepository countryStatsRepository, HtmlDocumentCache htmlDocumentCache)
+        public CountriesController(IMapper mapper, CountryStatsRepository countryStatsRepository,
+            HtmlDocumentCache htmlDocumentCache)
         {
             this.mapper = mapper;
             this.countryStatsRepository = countryStatsRepository;
@@ -62,7 +63,8 @@ namespace Covid19Api.Controllers.V1
 
             var wanted = countries
                 .Where(CountryStatsFilter.ValidOnly.Value)
-                .FirstOrDefault(stats => string.Equals(stats.Country, country, StringComparison.InvariantCultureIgnoreCase));
+                .FirstOrDefault(stats =>
+                    string.Equals(stats.Country, country, StringComparison.InvariantCultureIgnoreCase));
 
             return this.mapper.Map<CountryStatsDto>(wanted);
         }

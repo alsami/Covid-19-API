@@ -1,4 +1,5 @@
 using System;
+
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
@@ -11,7 +12,7 @@ namespace Covid19Api.Controllers.Presentation
         public int Mild { get; }
 
         public int Serious { get; }
-        
+
         public DateTime FetchedAt { get; }
 
         public ActiveCaseStatsDto(int total, int mild, int serious, DateTime fetchedAt)

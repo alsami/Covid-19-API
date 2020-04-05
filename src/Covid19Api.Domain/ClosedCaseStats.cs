@@ -10,7 +10,7 @@ namespace Covid19Api.Domain
     public class ClosedCaseStats
     {
         public Guid Id { get; private set; }
-        
+
         public int Total { get; private set; }
 
         public int Recovered { get; private set; }
@@ -27,7 +27,7 @@ namespace Covid19Api.Domain
             this.FetchedAt = fetchedAt;
             this.Id = this.Generate();
         }
-        
+
         private Guid Generate()
         {
             using var hasher = MD5.Create();
@@ -35,7 +35,7 @@ namespace Covid19Api.Domain
             var unhashed = $"{this.Total}{this.Recovered}{this.Deaths}";
 
             var hashed = hasher.ComputeHash(Encoding.UTF8.GetBytes(unhashed));
-            
+
             return new Guid(hashed);
         }
     }

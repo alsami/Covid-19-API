@@ -52,15 +52,17 @@ namespace Covid19Api.Repositories
         {
             var collection = this.context.Database.GetCollection<ActiveCaseStats>(CollectionName);
             var sort = Builders<ActiveCaseStats>.Sort.Descending("FetchedAt");
-            
-            var cursor = await collection.FindAsync(existingActiveCaseStats => existingActiveCaseStats.FetchedAt >= minFetchedAt, new FindOptions<ActiveCaseStats>
-            {
-                Sort = sort
-            });
+
+            var cursor = await collection.FindAsync(
+                existingActiveCaseStats => existingActiveCaseStats.FetchedAt >= minFetchedAt,
+                new FindOptions<ActiveCaseStats>
+                {
+                    Sort = sort
+                });
 
             return await cursor.ToListAsync();
         }
-        
+
         public async Task<IEnumerable<ActiveCaseStats>> HistoricalForDayAsync(DateTime minFetchedAt)
         {
             var collection = this.context.Database.GetCollection<ActiveCaseStats>(CollectionName);

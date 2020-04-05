@@ -48,7 +48,7 @@ namespace Covid19Api.Controllers.V1
 
             return this.mapper.Map<IEnumerable<ClosedCaseStatsDto>>(closdedCasesHistory);
         }
-        
+
         [HttpGet("dayhistory")]
         public async Task<IEnumerable<ClosedCaseStatsDto>> LoadClosedCasesDayHistoryAsync()
         {

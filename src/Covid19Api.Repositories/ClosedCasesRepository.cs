@@ -63,7 +63,7 @@ namespace Covid19Api.Repositories
 
             return await cursor.ToListAsync();
         }
-        
+
         public async Task<IEnumerable<ClosedCaseStats>> HistoricalForDayAsync(DateTime minFetchedAt)
         {
             var collection = this.context.Database.GetCollection<ClosedCaseStats>(CollectionName);

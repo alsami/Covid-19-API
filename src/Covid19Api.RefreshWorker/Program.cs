@@ -54,7 +54,7 @@ namespace Covid19Api.RefreshWorker
                 EnvironmentName = "Azure"
             }));
         }
-        
+
         private static void ConfigureLogger(HostBuilderContext context, LoggerConfiguration configuration)
         {
             configuration

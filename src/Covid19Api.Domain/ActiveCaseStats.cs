@@ -10,13 +10,13 @@ namespace Covid19Api.Domain
     public class ActiveCaseStats
     {
         public Guid Id { get; private set; }
-        
+
         public int Total { get; private set; }
 
         public int Mild { get; private set; }
 
         public int Serious { get; private set; }
-        
+
         public DateTime FetchedAt { get; private set; }
 
         public ActiveCaseStats(int total, int mild, int serious, DateTime fetchedAt)
@@ -35,7 +35,7 @@ namespace Covid19Api.Domain
             var unhashed = $"{this.Total}{this.Mild}{this.Serious}";
 
             var hashed = hasher.ComputeHash(Encoding.UTF8.GetBytes(unhashed));
-            
+
             return new Guid(hashed);
         }
     }

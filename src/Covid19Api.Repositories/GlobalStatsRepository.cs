@@ -49,7 +49,7 @@ namespace Covid19Api.Repositories
 
             return await cursor.FirstOrDefaultAsync();
         }
-        
+
         public async Task<IEnumerable<GlobalStats>> HistoricalAsync(DateTime minFetchedAt)
         {
             var collection = this.context.Database.GetCollection<GlobalStats>(CollectionName);
@@ -64,7 +64,7 @@ namespace Covid19Api.Repositories
 
             return await cursor.ToListAsync();
         }
-        
+
         public async Task<IEnumerable<GlobalStats>> HistoricalForDayAsync(DateTime minFetchedAt)
         {
             var collection = this.context.Database.GetCollection<GlobalStats>(CollectionName);

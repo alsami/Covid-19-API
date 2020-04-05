@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Azure.Cosmos;
+
 // ReSharper disable ClassNeverInstantiated.Global
 
 namespace Covid19Api.ExceptionFilter
