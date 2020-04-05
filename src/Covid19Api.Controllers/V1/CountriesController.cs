@@ -32,7 +32,7 @@ namespace Covid19Api.Controllers.V1
         [HttpGet("history")]
         public async Task<IEnumerable<CountryStatsDto>> LoadHistoryAsync()
         {
-            var minFetchedAt = DateTime.UtcNow.Date.AddDays(-6);
+            var minFetchedAt = DateTime.UtcNow.Date.AddDays(-9);
             
             var countryHistories = await this.countryStatsRepository.HistoricalAsync(minFetchedAt);
 
