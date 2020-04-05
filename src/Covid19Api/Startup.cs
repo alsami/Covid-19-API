@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Covid19Api
 {
@@ -39,7 +40,10 @@ namespace Covid19Api
             services.AddCors(options => options.AddPolicy("DefaultCorsPolicy",
                 builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
-            // services.AddHostedService<DataRefreshWorker>();
+            if (this.webHostEnvironment.IsDevelopment())
+            {
+                services.AddHostedService<DataRefreshWorker>();
+            }
 
             services.AddResponseCompression(options =>  options.MimeTypes = new[] {"application/json"});
 
