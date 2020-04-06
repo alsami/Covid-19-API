@@ -64,10 +64,6 @@ namespace Covid19Api.Services.Worker
 
             var latestStats = GlobalStatsParser.Parse(document, fetchedAt);
 
-            var activeCaseStats = ActiveCasesParser.Parse(document, fetchedAt);
-
-            var closedCasesStats = ClosedCasesParser.Parse(document, fetchedAt);
-
             var countryStats = CountryStatsParser.Parse(document, fetchedAt).ToList();
 
             this.logger.LogInformation("Storing fetched data");
@@ -77,14 +73,6 @@ namespace Covid19Api.Services.Worker
             var latestStatsRepo = scope.Resolve<GlobalStatsRepository>();
 
             await latestStatsRepo.StoreAsync(latestStats);
-
-            var activeCasesStatsRepo = scope.Resolve<ActiveCasesStatsRepository>();
-
-            await activeCasesStatsRepo.StoreAsync(activeCaseStats);
-
-            var closedCasesStatsRepo = scope.Resolve<ClosedCasesRepository>();
-
-            await closedCasesStatsRepo.StoreAsync(closedCasesStats);
 
             var countryStatsRepository = scope.Resolve<CountryStatsRepository>();
 

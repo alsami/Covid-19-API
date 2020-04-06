@@ -40,15 +40,11 @@ namespace Covid19Api.RefreshWorker
             containerBuilder.RegisterType<GlobalStatsRepository>()
                 .AsSelf()
                 .InstancePerLifetimeScope();
-            containerBuilder.RegisterType<ActiveCasesStatsRepository>()
-                .AsSelf()
-                .InstancePerLifetimeScope();
-            containerBuilder.RegisterType<ClosedCasesRepository>()
-                .AsSelf()
-                .InstancePerLifetimeScope();
+            
             containerBuilder.RegisterType<CountryStatsRepository>()
                 .AsSelf()
                 .InstancePerLifetimeScope();
+            
             containerBuilder.RegisterModule(new DocumentDbContextModule(new HostingEnvironment()
             {
                 EnvironmentName = "Azure"

@@ -66,15 +66,11 @@ namespace Covid19Api
             containerBuilder.RegisterType<GlobalStatsRepository>()
                 .AsSelf()
                 .InstancePerLifetimeScope();
-            containerBuilder.RegisterType<ActiveCasesStatsRepository>()
-                .AsSelf()
-                .InstancePerLifetimeScope();
-            containerBuilder.RegisterType<ClosedCasesRepository>()
-                .AsSelf()
-                .InstancePerLifetimeScope();
+            
             containerBuilder.RegisterType<CountryStatsRepository>()
                 .AsSelf()
                 .InstancePerLifetimeScope();
+            
             containerBuilder.RegisterModule(new DocumentDbContextModule(this.webHostEnvironment));
 
             containerBuilder.RegisterType<HtmlDocumentCache>()
