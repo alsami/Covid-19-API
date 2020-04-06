@@ -1,4 +1,5 @@
 using System;
+using Covid19Api.Domain;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable MemberCanBePrivate.Global
@@ -14,6 +15,8 @@ namespace Covid19Api.Controllers.Presentation
 
         public int Deaths { get; }
 
+        public int Active { get; }
+
         public DateTime FetchedAt { get; }
 
         public GlobalStatsDto(int total, int recovered, int deaths, DateTime fetchedAt)
@@ -21,6 +24,7 @@ namespace Covid19Api.Controllers.Presentation
             this.Total = total;
             this.Recovered = recovered;
             this.Deaths = deaths;
+            this.Active = this.Total - (this.Recovered + this.Deaths);
             this.FetchedAt = fetchedAt;
         }
     }
