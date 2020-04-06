@@ -52,7 +52,7 @@ namespace Covid19Api.Controllers.V1
         [HttpGet("dayhistory")]
         public async Task<IEnumerable<GlobalStatsDto>> LoadGlobalDayHistorical()
         {
-            var minFetchedAt = DateTime.UtcNow.Date.AddDays(-6);
+            var minFetchedAt = DateTime.UtcNow.Date.AddDays(-9);
 
             var latestActiveCaseStats = await this.globalStatsRepository.HistoricalForDayAsync(minFetchedAt);
 
