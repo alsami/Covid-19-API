@@ -81,9 +81,12 @@ namespace Covid19Api.Services.Parser
         private static string ClearValue(string value)
         {
             if (value.StartsWith("+-") || value.StartsWith("-+"))
-                return "0";
+                return 0.ToString();
 
-            return string.IsNullOrWhiteSpace(value) ? "0" : value;
+            if (value == "N/A")
+                return 0.ToString();
+
+            return string.IsNullOrWhiteSpace(value) ? 0.ToString() : value;
         }
     }
 }

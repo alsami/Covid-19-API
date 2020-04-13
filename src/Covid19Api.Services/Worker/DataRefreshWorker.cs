@@ -9,6 +9,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Covid19Api.Domain;
 using Covid19Api.Repositories;
+using Covid19Api.Services.Filter;
 using Covid19Api.Services.Parser;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -76,9 +77,7 @@ namespace Covid19Api.Services.Worker
 
             var countryStatsRepository = scope.Resolve<CountryStatsRepository>();
 
-            var filterCountrieStats = countryStats.Where(stats => !string.IsNullOrWhiteSpace(stats.Country) &&
-                                                                  stats.Country != "World" &&
-                                                                  !stats.Empty())
+            var filterCountrieStats = countryStats.Where(CountryStatsFilter.ValidOnly.Value)
                 .ToList();
 
             foreach (var chunkedStats in CreateChunks(filterCountrieStats))
