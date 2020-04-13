@@ -23,16 +23,10 @@ namespace Covid19Api.Repositories
         {
             var collection = this.context.Database.GetCollection<GlobalStats>(CollectionName);
 
-            var cursor =
-                await collection.FindAsync(existingClosedCaseStats => existingClosedCaseStats.Id == globalStats.Id);
-
-            if (await cursor.FirstOrDefaultAsync() is null)
+            await collection.ReplaceOneAsync(stats => stats.Id == globalStats.Id, globalStats, new ReplaceOptions
             {
-                await collection.InsertOneAsync(globalStats);
-                return;
-            }
-
-            await collection.ReplaceOneAsync(stat => stat.Id == globalStats.Id, globalStats);
+                IsUpsert = true
+            });
         }
 
         public async Task<GlobalStats> MostRecentAsync()
