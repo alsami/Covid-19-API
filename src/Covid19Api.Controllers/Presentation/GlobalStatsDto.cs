@@ -1,5 +1,4 @@
 using System;
-using Covid19Api.Domain;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable MemberCanBePrivate.Global

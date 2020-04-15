@@ -20,27 +20,6 @@ namespace Covid19Api.Repositories
             this.context = context;
         }
 
-        public async Task<IEnumerable<CountryStats>> MostRecentAsync()
-        {
-            var collection = this.context.Database.GetCollection<CountryStats>(CollectionName);
-
-            var sort = Builders<CountryStats>.Sort.Descending("TotalCases");
-
-            var cursor = await collection.FindAsync(
-                existingCountryStats => existingCountryStats.FetchedAt >= DateTime.UtcNow.Date.AddDays(-1),
-                new FindOptions<CountryStats>
-                {
-                    Sort = sort,
-                });
-
-            var all = await cursor.ToListAsync();
-
-            var onlyLatestEntries = all.GroupBy(countryStats => countryStats.Country)
-                .SelectMany(grouping => grouping.Take(1));
-
-            return onlyLatestEntries;
-        }
-
         public async Task<CountryStats> MostRecentAsync(string country)
         {
             var collection = this.context.Database.GetCollection<CountryStats>(CollectionName);
@@ -117,18 +96,9 @@ namespace Covid19Api.Repositories
 
             var cursor = await collection.FindAsync(
                 existingCountryStats => existingCountryStats.FetchedAt >= minFetchedAt &&
-                                        existingCountryStats.Country.ToLower() == country.ToLower(),
-                new FindOptions<CountryStats>
-                {
-                    Sort = sort,
-                });
-
-            var all = await cursor.ToListAsync();
-
-            var onlyLatestEntries = all.GroupBy(countryStats => countryStats.FetchedAt.Date)
-                .SelectMany(grouping => grouping.Take(1));
-
-            return onlyLatestEntries.OrderBy(entry => entry.FetchedAt);
+                                        existingCountryStats.Country.ToLower() == country.ToLower());
+            
+            return await cursor.ToListAsync();
         }
 
         public Task StoreAsync(IEnumerable<CountryStats> countryStats)

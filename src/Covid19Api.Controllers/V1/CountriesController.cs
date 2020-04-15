@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
 using Covid19Api.Controllers.Presentation;
@@ -72,19 +71,9 @@ namespace Covid19Api.Controllers.V1
         [HttpGet("{country}/history")]
         public async Task<IEnumerable<CountryStatsDto>> LoadHistoryForCountryAsync(string country)
         {
-            var minFetchedAt = DateTime.UtcNow.Date.AddDays(-6);
-
-            var statsForCountry = await this.countryStatsRepository.HistoricalAsync(minFetchedAt, country);
-
-            return this.mapper.Map<IEnumerable<CountryStatsDto>>(statsForCountry);
-        }
-
-        [HttpGet("{country}/dayhistory")]
-        public async Task<IEnumerable<CountryStatsDto>> LoadDayHistoryForCountryAsync(string country)
-        {
             var minFetchedAt = DateTime.UtcNow.Date.AddDays(-9);
 
-            var statsForCountry = await this.countryStatsRepository.HistoricalForDayAsync(minFetchedAt, country);
+            var statsForCountry = await this.countryStatsRepository.HistoricalAsync(minFetchedAt, country);
 
             return this.mapper.Map<IEnumerable<CountryStatsDto>>(statsForCountry);
         }

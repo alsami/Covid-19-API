@@ -29,21 +29,6 @@ namespace Covid19Api.Repositories
             });
         }
 
-        public async Task<GlobalStats> MostRecentAsync()
-        {
-            var collection = this.context.Database.GetCollection<GlobalStats>(CollectionName);
-
-            var filter = Builders<GlobalStats>.Filter.Empty;
-            var sort = Builders<GlobalStats>.Sort.Descending("FetchedAt");
-
-            var cursor = await collection.FindAsync(filter, new FindOptions<GlobalStats>
-            {
-                Sort = sort
-            });
-
-            return await cursor.FirstOrDefaultAsync();
-        }
-
         public async Task<IEnumerable<GlobalStats>> HistoricalAsync(DateTime minFetchedAt)
         {
             var collection = this.context.Database.GetCollection<GlobalStats>(CollectionName);
@@ -63,24 +48,13 @@ namespace Covid19Api.Repositories
         {
             var collection = this.context.Database.GetCollection<GlobalStats>(CollectionName);
 
-            var sort = Builders<GlobalStats>
-                .Sort
-                .Descending("FetchedAt")
-                .Descending("Total");
 
             var cursor = await collection.FindAsync(
-                existingCountryStats => existingCountryStats.FetchedAt >= minFetchedAt,
-                new FindOptions<GlobalStats>
-                {
-                    Sort = sort,
-                });
+                existingCountryStats => existingCountryStats.FetchedAt >= minFetchedAt);
 
             var all = await cursor.ToListAsync();
 
-            var onlyLatestEntries = all.GroupBy(countryStats => countryStats.FetchedAt.Date)
-                .SelectMany(grouping => grouping.Take(1));
-
-            return onlyLatestEntries.OrderBy(entry => entry.FetchedAt);
+            return all.OrderBy(entry => entry.FetchedAt);
         }
     }
 }
