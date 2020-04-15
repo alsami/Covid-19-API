@@ -57,9 +57,9 @@ namespace Covid19Api.Domain
         private Guid Generate()
         {
             using var hasher = MD5.Create();
-
+            
             var unhashed =
-                $"{this.Country}{this.TotalCases}{this.NewCases}{this.TotalDeaths}{this.NewDeaths}{this.RecoveredCases}{this.ActiveCases}{this.SeriousCases}";
+                $"{this.Country}{this.FetchedAt.Date:O}";
 
             var hashed = hasher.ComputeHash(Encoding.UTF8.GetBytes(unhashed));
 

@@ -135,9 +135,19 @@ namespace Covid19Api.Repositories
         {
             var collection = this.context.Database.GetCollection<CountryStats>(CollectionName);
 
-            return collection.InsertManyAsync(countryStats, new InsertManyOptions
+            var updates = countryStats.Select(currentStats =>
             {
-                IsOrdered = false
+                var filterDefinition = new FilterDefinitionBuilder<CountryStats>().Where(existingStats => existingStats.Id == currentStats.Id);
+
+                return new ReplaceOneModel<CountryStats>(filterDefinition, currentStats)
+                {
+                    IsUpsert = true
+                };
+            });
+
+            return collection.BulkWriteAsync(updates, new BulkWriteOptions
+            {
+                IsOrdered = false,
             });
         }
     }

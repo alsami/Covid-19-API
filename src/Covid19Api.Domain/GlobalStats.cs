@@ -32,7 +32,7 @@ namespace Covid19Api.Domain
         {
             using var hasher = MD5.Create();
 
-            var unhashed = $"{this.Total}{this.Recovered}{this.Deaths}";
+            var unhashed = $"GlobalStats_{this.FetchedAt.Date}";
 
             var hashed = hasher.ComputeHash(Encoding.UTF8.GetBytes(unhashed));
 
