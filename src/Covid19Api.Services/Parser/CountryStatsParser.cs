@@ -21,14 +21,14 @@ namespace Covid19Api.Services.Parser
         {
             var tableDataNodes = GetTableDataNodes(htmlNode).ToArray();
 
-            var country = ParseCountry(tableDataNodes[0]);
-            var totalCases = ParseIntegerValue(tableDataNodes[1]);
-            var newCases = ParseIntegerValue(tableDataNodes[2]);
-            var totalDeaths = ParseIntegerValue(tableDataNodes[3]);
-            var newDeaths = ParseIntegerValue(tableDataNodes[4]);
-            var recovered = ParseIntegerValue(tableDataNodes[5]);
-            var active = ParseIntegerValue(tableDataNodes[6]);
-            var serious = ParseIntegerValue(tableDataNodes[7]);
+            var country = ParseCountry(tableDataNodes[1]);
+            var totalCases = ParseIntegerValue(tableDataNodes[2]);
+            var newCases = ParseIntegerValue(tableDataNodes[3]);
+            var totalDeaths = ParseIntegerValue(tableDataNodes[4]);
+            var newDeaths = ParseIntegerValue(tableDataNodes[5]);
+            var recovered = ParseIntegerValue(tableDataNodes[6]);
+            var active = ParseIntegerValue(tableDataNodes[7]);
+            var serious = ParseIntegerValue(tableDataNodes[8]);
 
             return new CountryStats(country, totalCases, newCases, totalDeaths, newDeaths, recovered,
                 active, serious, fetchedAt);
@@ -74,7 +74,15 @@ namespace Covid19Api.Services.Parser
         {
             var value = ClearValue(htmlNode.InnerHtml);
 
-            return int.Parse(value, NumberStyles.Any);
+            try
+            {
+                return int.Parse(value, NumberStyles.Any);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         private static string ClearValue(string value)

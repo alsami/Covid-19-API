@@ -45,11 +45,11 @@ namespace Covid19Api.Services.Worker
                     this.logger.LogCritical(e, e.Message);
                 }
 
-                var nextRun = DateTime.UtcNow.AddHours(1);
+                var nextRun = DateTime.UtcNow.AddHours(4);
 
                 this.logger.LogInformation("Next run {nextRun}", nextRun.ToString("O"));
 
-                await Task.Delay(TimeSpan.FromHours(1), stoppingToken);
+                await Task.Delay(TimeSpan.FromHours(4), stoppingToken);
             }
         }
 
