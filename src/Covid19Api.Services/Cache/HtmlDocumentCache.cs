@@ -46,7 +46,7 @@ namespace Covid19Api.Services.Cache
             });
 
             var loaded = await responseTask;
-            
+
             var loadedDocument = new HtmlDocument();
 
             loadedDocument.LoadHtml(await loaded.Content.ReadAsStringAsync());

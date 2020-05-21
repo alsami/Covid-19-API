@@ -97,7 +97,7 @@ namespace Covid19Api.Repositories
             var cursor = await collection.FindAsync(
                 existingCountryStats => existingCountryStats.FetchedAt >= minFetchedAt &&
                                         existingCountryStats.Country.ToLower() == country.ToLower());
-            
+
             return await cursor.ToListAsync();
         }
 
@@ -107,7 +107,9 @@ namespace Covid19Api.Repositories
 
             var updates = countryStats.Select(currentStats =>
             {
-                var filterDefinition = new FilterDefinitionBuilder<CountryStats>().Where(existingStats => existingStats.Id == currentStats.Id);
+                var filterDefinition =
+                    new FilterDefinitionBuilder<CountryStats>().Where(existingStats =>
+                        existingStats.Id == currentStats.Id);
 
                 return new ReplaceOneModel<CountryStats>(filterDefinition, currentStats)
                 {

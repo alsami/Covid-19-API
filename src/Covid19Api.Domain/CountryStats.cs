@@ -57,7 +57,7 @@ namespace Covid19Api.Domain
         private Guid Generate()
         {
             using var hasher = MD5.Create();
-            
+
             var unhashed =
                 $"{this.Country}{this.FetchedAt.Date:O}";
 
