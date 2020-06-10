@@ -27,7 +27,6 @@ namespace Covid19Api
             this.webHostEnvironment = webHostEnvironment;
         }
 
-
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers(options =>
@@ -41,10 +40,7 @@ namespace Covid19Api
             services.AddCors(options => options.AddPolicy("DefaultCorsPolicy",
                 builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
-            if (this.webHostEnvironment.IsDevelopment())
-            {
-                services.AddHostedService<DataRefreshWorker>();
-            }
+            services.AddHostedService<DataRefreshWorker>();
 
             services.AddResponseCompression(options => options.MimeTypes = new[] {"application/json"});
 

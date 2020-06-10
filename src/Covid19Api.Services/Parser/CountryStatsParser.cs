@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using Covid19Api.Domain;
@@ -27,8 +28,11 @@ namespace Covid19Api.Services.Parser
             var totalDeaths = ParseIntegerValue(tableDataNodes[4]);
             var newDeaths = ParseIntegerValue(tableDataNodes[5]);
             var recovered = ParseIntegerValue(tableDataNodes[6]);
-            var active = ParseIntegerValue(tableDataNodes[7]);
-            var serious = ParseIntegerValue(tableDataNodes[8]);
+            var active = ParseIntegerValue(tableDataNodes[8]);
+            var serious = ParseIntegerValue(tableDataNodes[9]);
+
+            if (country.Equals("USA", StringComparison.InvariantCultureIgnoreCase))
+                Debugger.Break();
 
             return new CountryStats(country, totalCases, newCases, totalDeaths, newDeaths, recovered,
                 active, serious, fetchedAt);
