@@ -31,7 +31,7 @@ namespace Covid19Api.Services.Parser
             var active = ParseIntegerValue(tableDataNodes[8]);
             var serious = ParseIntegerValue(tableDataNodes[9]);
 
-            if (country.Equals("USA", StringComparison.InvariantCultureIgnoreCase))
+            if (country?.Equals("USA", StringComparison.InvariantCultureIgnoreCase) ?? false)
                 Debugger.Break();
 
             return new CountryStats(country, totalCases, newCases, totalDeaths, newDeaths, recovered,

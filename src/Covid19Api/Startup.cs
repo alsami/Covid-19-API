@@ -79,8 +79,6 @@ namespace Covid19Api
         {
             app.UseResponseCompression();
 
-            app.UseHttpsRedirection();
-
             app.UseRouting();
 
             app.UseCors("DefaultCorsPolicy");
