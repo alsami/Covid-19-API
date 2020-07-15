@@ -22,7 +22,14 @@ namespace Covid19Api.Services.Parser
                 GetIntegerValue(mainCounterNodes[1]), fetchedAt);
         }
 
-        private static int GetIntegerValue(HtmlNode htmlNode) =>
-            int.Parse(htmlNode.ChildNodes.First(node => node.Name == "span").InnerHtml, NumberStyles.Any);
+        private static int GetIntegerValue(HtmlNode htmlNode)
+        {
+            var cleanedText = htmlNode.InnerText
+                .Replace("\n", "")
+                .Replace(",", "")
+                .Trim();
+
+            return int.Parse(cleanedText, NumberStyles.Any);
+        }
     }
 }
