@@ -19,4 +19,9 @@
       <ProjectReference Include="..\Covid19Api.Repositories\Covid19Api.Repositories.csproj" />
       <ProjectReference Include="..\Covid19Api.Services\Covid19Api.Services.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="publishold\Covid19Api.RefreshWorker.deps.json" />
+      <_ContentIncludedByDefault Remove="publishold\Covid19Api.RefreshWorker.runtimeconfig.json" />
+    </ItemGroup>
 </Project>

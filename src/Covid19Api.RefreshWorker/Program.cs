@@ -2,40 +2,40 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Covid19Api.AutoMapper.Modules;
 using Covid19Api.Repositories;
-using Covid19Api.Repositories.Mongo;
 using Covid19Api.Services.Worker;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Hosting.Internal;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 
 namespace Covid19Api.RefreshWorker
 {
-    public class Program
+    public static class Program
     {
+        private const string UserSecretsId = "Covid19ApiRefreshWorker";
+        private const string Environment = "Azure";
+        
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
+        private static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .UseEnvironment(Environment)
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .UseSerilog(ConfigureLogger)
-                .ConfigureAppConfiguration(builder => builder.AddUserSecrets("Covid19ApiRefreshWorker"))
+                .ConfigureAppConfiguration(builder => builder.AddUserSecrets(UserSecretsId))
                 .ConfigureContainer<ContainerBuilder>(ConfigureContainer)
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddHostedService<DataRefreshWorker>();
                     services.AddHttpClient();
-                    services.Configure<DocumentDbContextOptions>(options =>
-                        hostContext.Configuration.GetSection(nameof(DocumentDbContextOptions)).Bind(options));
                 });
 
-        private static void ConfigureContainer(ContainerBuilder containerBuilder)
+        private static void ConfigureContainer(HostBuilderContext context, ContainerBuilder containerBuilder)
         {
             containerBuilder.RegisterType<GlobalStatsRepository>()
                 .AsSelf()
@@ -45,10 +45,7 @@ namespace Covid19Api.RefreshWorker
                 .AsSelf()
                 .InstancePerLifetimeScope();
 
-            containerBuilder.RegisterModule(new DocumentDbContextModule(new HostingEnvironment()
-            {
-                EnvironmentName = "Azure"
-            }));
+            containerBuilder.RegisterModule(new DocumentDbContextModule(context.HostingEnvironment, context.Configuration));
         }
 
         private static void ConfigureLogger(HostBuilderContext context, LoggerConfiguration configuration)

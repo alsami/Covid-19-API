@@ -4,7 +4,6 @@ using AutoMapper.Contrib.Autofac.DependencyInjection;
 using Covid19Api.AutoMapper.Modules;
 using Covid19Api.ExceptionFilter;
 using Covid19Api.Repositories;
-using Covid19Api.Repositories.Mongo;
 using Covid19Api.Services.Cache;
 using Covid19Api.Services.Worker;
 using Microsoft.AspNetCore.Builder;
@@ -12,7 +11,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace Covid19Api
 {
@@ -48,9 +46,6 @@ namespace Covid19Api
 
             services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Fastest);
 
-            services.Configure<DocumentDbContextOptions>(options =>
-                this.configuration.GetSection(nameof(DocumentDbContextOptions)).Bind(options));
-
             services.AddMemoryCache();
         }
 
@@ -67,7 +62,7 @@ namespace Covid19Api
                 .AsSelf()
                 .InstancePerLifetimeScope();
 
-            containerBuilder.RegisterModule(new DocumentDbContextModule(this.webHostEnvironment));
+            containerBuilder.RegisterModule(new DocumentDbContextModule(this.webHostEnvironment, this.configuration));
 
             containerBuilder.RegisterType<HtmlDocumentCache>()
                 .AsSelf()

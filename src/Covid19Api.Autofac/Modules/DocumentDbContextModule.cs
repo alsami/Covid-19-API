@@ -3,8 +3,8 @@ using System.Security.Authentication;
 using Autofac;
 using Covid19Api.AutoMapper.Extensions;
 using Covid19Api.Repositories.Mongo;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using Module = Autofac.Module;
 
@@ -12,11 +12,15 @@ namespace Covid19Api.AutoMapper.Modules
 {
     public class DocumentDbContextModule : Module
     {
+        private const string DatabaseName = "Covid19Api";
+        
         private readonly IHostEnvironment hostEnvironment;
+        private readonly IConfiguration configuration;
 
-        public DocumentDbContextModule(IHostEnvironment hostEnvironment)
+        public DocumentDbContextModule(IHostEnvironment hostEnvironment, IConfiguration configuration)
         {
             this.hostEnvironment = hostEnvironment;
+            this.configuration = configuration;
         }
 
         protected override void Load(ContainerBuilder builder)
@@ -29,9 +33,11 @@ namespace Covid19Api.AutoMapper.Modules
                 {
                     return () =>
                     {
-                        var options = componentContext.Resolve<IOptions<DocumentDbContextOptions>>();
-
-                        var settings = MongoClientSettings.FromUrl(new MongoUrl(options.Value.ConnectionString));
+                        var connectionString = this.configuration.GetConnectionString("MongoDb");
+                        
+                        if (string.IsNullOrWhiteSpace(connectionString)) throw new InvalidOperationException("Database connection-string is invalid!"); 
+                        
+                        var settings = MongoClientSettings.FromUrl(new MongoUrl(connectionString));
 
                         if (this.hostEnvironment.IsAzure())
                         {
@@ -43,7 +49,7 @@ namespace Covid19Api.AutoMapper.Modules
 
                         var client = new MongoClient(settings);
 
-                        return client.GetDatabase(options.Value.DatabaseName);
+                        return client.GetDatabase(DatabaseName);
                     };
                 })
                 .InstancePerLifetimeScope();
