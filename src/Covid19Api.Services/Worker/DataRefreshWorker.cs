@@ -84,11 +84,6 @@ namespace Covid19Api.Services.Worker
             {
                 try
                 {
-                    if (chunkedStats.Any(stats => stats.Country.Contains("World")))
-                    {
-                        Debugger.Break();
-                    }
-
                     await countryStatsRepository.StoreAsync(chunkedStats);
                 }
                 catch (Exception e) when (e is MongoBulkWriteException)
