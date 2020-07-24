@@ -11,14 +11,18 @@
     <PackageReference Include="HtmlAgilityPack" Version="1.11.24" />
     <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.11.0" />
     <PackageReference Include="Serilog.Extensions.Hosting" Version="3.1.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Covid19Api.Autofac\Covid19Api.Autofac.csproj" />
     <ProjectReference Include="..\Covid19Api.Controllers\Covid19Api.Controllers.csproj" />
+    <ProjectReference Include="..\Covid19Api.IoC\Covid19Api.IoC.csproj" />
     <ProjectReference Include="..\Covid19Api.Repositories\Covid19Api.Repositories.csproj" />
     <ProjectReference Include="..\Covid19Api.Services\Covid19Api.Services.csproj" />
+    <ProjectReference Include="..\Covid19Api.UseCases.Abstractions\Covid19Api.UseCases.Abstractions.csproj" />
+    <ProjectReference Include="..\Covid19Api.UseCases\Covid19Api.UseCases.csproj" />
+    <ProjectReference Include="..\Covid19Api.Worker\Covid19Api.Worker.csproj" />
   </ItemGroup>
 
 

@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AutoMapper;
-using Covid19Api.Controllers.Presentation;
-using Covid19Api.Repositories;
-using Covid19Api.Services.Cache;
-using Covid19Api.Services.Parser;
+using Covid19Api.Presentation.Response;
+using Covid19Api.UseCases.Abstractions.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Covid19Api.Controllers.V1
@@ -14,38 +12,22 @@ namespace Covid19Api.Controllers.V1
     [Route("api/v1/global")]
     public class GlobalStatsController : ControllerBase
     {
-        private readonly GlobalStatsRepository globalStatsRepository;
-        private readonly IMapper mapper;
-        private readonly HtmlDocumentCache htmlDocumentCache;
+        private readonly IMediator mediator;
 
-        public GlobalStatsController(GlobalStatsRepository globalStatsRepository, IMapper mapper,
-            HtmlDocumentCache htmlDocumentCache)
+        public GlobalStatsController(IMediator mediator)
         {
-            this.globalStatsRepository = globalStatsRepository;
-            this.mapper = mapper;
-            this.htmlDocumentCache = htmlDocumentCache;
+            this.mediator = mediator;
         }
 
         [HttpGet]
-        public async Task<GlobalStatsDto> LoadGlobalAsync()
-        {
-            var fetchedAt = DateTime.UtcNow;
-
-            var document = await this.htmlDocumentCache.LoadAsync();
-
-            var latest = GlobalStatsParser.Parse(document, fetchedAt);
-
-            return this.mapper.Map<GlobalStatsDto>(latest);
-        }
+        public Task<GlobalStatsDto> LoadGlobalAsync() => this.mediator.Send(new LoadLatestGlobalStatisticsQuery());
 
         [HttpGet("history")]
-        public async Task<IEnumerable<GlobalStatsDto>> LoadGlobalHistorical()
+        public Task<IEnumerable<GlobalStatsDto>> LoadGlobalHistorical()
         {
-            var minFetchedAt = DateTime.UtcNow.Date.AddDays(-9);
+            var command = new LoadHistoricalGlobalStatisticsQuery(DateTime.UtcNow.Date.AddDays(-9));
 
-            var latestActiveCaseStats = await this.globalStatsRepository.HistoricalAsync(minFetchedAt);
-
-            return this.mapper.Map<IEnumerable<GlobalStatsDto>>(latestActiveCaseStats);
+            return this.mediator.Send(command);
         }
     }
 }

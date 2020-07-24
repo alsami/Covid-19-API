@@ -1,0 +1,13 @@
+<Project>
+    <PropertyGroup>
+        <LangVersion>8.0</LangVersion>
+        <Nullable>Enable</Nullable>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="SonarAnalyzer.CSharp" Version="8.10.0.19839">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+    </ItemGroup>
+</Project>

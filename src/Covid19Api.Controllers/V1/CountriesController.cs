@@ -1,13 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using Covid19Api.Controllers.Presentation;
-using Covid19Api.Repositories;
-using Covid19Api.Services.Cache;
-using Covid19Api.Services.Filter;
-using Covid19Api.Services.Parser;
+using Covid19Api.Presentation.Response;
+using Covid19Api.UseCases.Abstractions.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Covid19Api.Controllers.V1
@@ -16,66 +12,27 @@ namespace Covid19Api.Controllers.V1
     [Route("api/v1/countries")]
     public class CountriesController : ControllerBase
     {
-        private readonly IMapper mapper;
-        private readonly CountryStatsRepository countryStatsRepository;
-        private readonly HtmlDocumentCache htmlDocumentCache;
+        private readonly IMediator mediator;
 
-        public CountriesController(IMapper mapper, CountryStatsRepository countryStatsRepository,
-            HtmlDocumentCache htmlDocumentCache)
+        public CountriesController(IMediator mediator)
         {
-            this.mapper = mapper;
-            this.countryStatsRepository = countryStatsRepository;
-            this.htmlDocumentCache = htmlDocumentCache;
+            this.mediator = mediator;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<CountryStatsDto>> LoadLatestAsync()
-        {
-            var fetchedAt = DateTime.UtcNow;
-
-            var document = await this.htmlDocumentCache.LoadAsync();
-
-            var countries = CountryStatsParser.Parse(document, fetchedAt);
-
-            return this.mapper.Map<IEnumerable<CountryStatsDto>>(countries.Where(CountryStatsFilter.ValidOnly.Value)
-                .OrderByDescending(country => country.TotalCases));
-        }
+        public Task<IEnumerable<CountryStatsDto>> LoadLatestAsync() =>
+            this.mediator.Send(new LoadLatestCountriesStatisticsQuery());
 
         [HttpGet("history")]
-        public async Task<IEnumerable<CountryStatsDto>> LoadHistoryAsync()
-        {
-            var minFetchedAt = DateTime.UtcNow.Date.AddDays(-9);
-
-            var countryHistories = await this.countryStatsRepository.HistoricalAsync(minFetchedAt);
-
-            return this.mapper.Map<IEnumerable<CountryStatsDto>>(countryHistories);
-        }
+        public Task<IEnumerable<CountryStatsDto>> LoadHistoryAsync()
+            => this.mediator.Send(new LoadHistoricalCountriesStatisticsQuery(DateTime.UtcNow.Date.AddDays(-9)));
 
         [HttpGet("{country}")]
-        public async Task<CountryStatsDto> LoadLatestForCountryAsync(string country)
-        {
-            var fetchedAt = DateTime.UtcNow;
-
-            var document = await this.htmlDocumentCache.LoadAsync();
-
-            var countries = CountryStatsParser.Parse(document, fetchedAt);
-
-            var wanted = countries
-                .Where(CountryStatsFilter.ValidOnly.Value)
-                .FirstOrDefault(stats =>
-                    string.Equals(stats.Country, country, StringComparison.InvariantCultureIgnoreCase));
-
-            return this.mapper.Map<CountryStatsDto>(wanted);
-        }
+        public Task<CountryStatsDto> LoadLatestForCountryAsync(string country) =>
+            this.mediator.Send(new LoadLatestStatisticsForCountryQuery(country));
 
         [HttpGet("{country}/history")]
-        public async Task<IEnumerable<CountryStatsDto>> LoadHistoryForCountryAsync(string country)
-        {
-            var minFetchedAt = DateTime.UtcNow.Date.AddDays(-9);
-
-            var statsForCountry = await this.countryStatsRepository.HistoricalAsync(minFetchedAt, country);
-
-            return this.mapper.Map<IEnumerable<CountryStatsDto>>(statsForCountry);
-        }
+        public Task<IEnumerable<CountryStatsDto>> LoadHistoryForCountryAsync(string country) =>
+            this.mediator.Send(new LoadHistoricalStatisticsForCountryQuery(country));
     }
 }
