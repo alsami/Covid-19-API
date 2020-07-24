@@ -1,11 +1,10 @@
 using System.IO.Compression;
 using Autofac;
 using AutoMapper.Contrib.Autofac.DependencyInjection;
-using Covid19Api.AutoMapper.Modules;
 using Covid19Api.ExceptionFilter;
-using Covid19Api.Repositories;
-using Covid19Api.Services.Cache;
-using Covid19Api.Services.Worker;
+using Covid19Api.IoC.Extensions;
+using Covid19Api.UseCases.Queries;
+using MediatR.Extensions.Autofac.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -18,6 +17,13 @@ namespace Covid19Api
     {
         private readonly IConfiguration configuration;
         private readonly IWebHostEnvironment webHostEnvironment;
+
+        private const string CorsPolicyName = "DefaultCorsPolicy";
+
+        private readonly string[] compressionMimeTypes = new[]
+        {
+            "application/json"
+        };
 
         public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
@@ -35,12 +41,12 @@ namespace Covid19Api
 
             services.AddHttpClient();
 
-            services.AddCors(options => options.AddPolicy("DefaultCorsPolicy",
-                builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
+            services.AddCors(options => options.AddPolicy(CorsPolicyName, builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()));
 
-            services.AddHostedService<DataRefreshWorker>();
-
-            services.AddResponseCompression(options => options.MimeTypes = new[] {"application/json"});
+            services.AddResponseCompression(options => options.MimeTypes = this.compressionMimeTypes);
 
             services.Configure<BrotliCompressionProviderOptions>(options => options.Level = CompressionLevel.Fastest);
 
@@ -52,33 +58,22 @@ namespace Covid19Api
         // ReSharper disable once UnusedMember.Global
         public void ConfigureContainer(ContainerBuilder containerBuilder)
         {
-            containerBuilder.AddAutoMapper(typeof(Startup).Assembly);
-
-            containerBuilder.RegisterType<GlobalStatsRepository>()
-                .AsSelf()
-                .InstancePerLifetimeScope();
-
-            containerBuilder.RegisterType<CountryStatsRepository>()
-                .AsSelf()
-                .InstancePerLifetimeScope();
-
-            containerBuilder.RegisterModule(new DocumentDbContextModule(this.webHostEnvironment, this.configuration));
-
-            containerBuilder.RegisterType<HtmlDocumentCache>()
-                .AsSelf()
-                .SingleInstance();
+            containerBuilder
+                .AddAutoMapper(typeof(Startup).Assembly)
+                .AddMediatR(typeof(LoadHtmlDocumentQueryHandler).Assembly)
+                .RegisterWorker()
+                .RegisterParser()
+                .RegisterHtmlDocumentCache()
+                .RegisterDatabaseDependencies(this.webHostEnvironment, this.configuration);
         }
 
         // ReSharper disable once UnusedMember.Global
         public void Configure(IApplicationBuilder app)
         {
-            app.UseResponseCompression();
-
-            app.UseRouting();
-
-            app.UseCors("DefaultCorsPolicy");
-
-            app.UseEndpoints(endpoints => endpoints.MapControllers());
+            app.UseResponseCompression()
+                .UseRouting()
+                .UseCors(CorsPolicyName)
+                .UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
 }

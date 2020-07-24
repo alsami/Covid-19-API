@@ -4,12 +4,10 @@
         <TargetFramework>netcoreapp3.1</TargetFramework>
     </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="MongoDB.Driver" Version="2.10.4" />
-    </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Covid19Api.Domain\Covid19Api.Domain.csproj" />
+      <ProjectReference Include="..\Covid19Api.Mongo\Covid19Api.Mongo.csproj" />
+      <ProjectReference Include="..\Covid19Api.Repositories.Abstractions\Covid19Api.Repositories.Abstractions.csproj" />
     </ItemGroup>
 
 </Project>

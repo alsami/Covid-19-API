@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Covid19Api.Repositories\Covid19Api.Repositories.csproj" />
+      <ProjectReference Include="..\Covid19Api.Services\Covid19Api.Services.csproj" />
+      <ProjectReference Include="..\Covid19Api.UseCases.Abstractions\Covid19Api.UseCases.Abstractions.csproj" />
+      <ProjectReference Include="..\Covid19Api.Worker\Covid19Api.Worker.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="6.0.0" />
+      <PackageReference Include="MediatR.Extensions.Autofac.DependencyInjection" Version="5.2.1" />
+      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.1.6" />
+      <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.6" />
+    </ItemGroup>
+
+</Project>

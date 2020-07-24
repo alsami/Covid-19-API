@@ -1,6 +1,6 @@
 using AutoMapper;
-using Covid19Api.Controllers.Presentation;
 using Covid19Api.Domain;
+using Covid19Api.Presentation.Response;
 
 // ReSharper disable UnusedType.Global
 
@@ -11,9 +11,9 @@ namespace Covid19Api.AutoMapper
     {
         public GlobalStatsProfile()
         {
-            this.CreateMap<GlobalStats, GlobalStatsDto>()
+            this.CreateMap<GlobalStatistics, GlobalStatsDto>()
                 .ConvertUsing(src =>
-                    new Controllers.Presentation.GlobalStatsDto(src.Total, src.Recovered, src.Deaths, src.FetchedAt));
+                    new GlobalStatsDto(src.Total, src.Recovered, src.Deaths, src.FetchedAt));
         }
     }
 }

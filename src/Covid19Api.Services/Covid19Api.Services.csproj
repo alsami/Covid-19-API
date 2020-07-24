@@ -5,16 +5,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="6.0.0" />
-      <PackageReference Include="HtmlAgilityPack" Version="1.11.24" />
       <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="3.1.6" />
       <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.1.6" />
       <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.6" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Covid19Api.Domain\Covid19Api.Domain.csproj" />
-      <ProjectReference Include="..\Covid19Api.Repositories\Covid19Api.Repositories.csproj" />
+      <ProjectReference Include="..\Covid19Api.Constants\Covid19Api.Constants.csproj" />
+      <ProjectReference Include="..\Covid19Api.Services.Abstractions\Covid19Api.Services.Abstractions.csproj" />
     </ItemGroup>
 
 </Project>

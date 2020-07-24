@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using Serilog.Events;
-using Serilog.Sinks.SystemConsole.Themes;
 
 namespace Covid19Api
 {
-    public class Program
+    public static class Program
     {
+        private const string UserSecretsId = "Covid19Api";
+
         public static async Task Main(string[] args)
         {
             using var host = CreateHostBuilder(args);
@@ -22,19 +22,13 @@ namespace Covid19Api
             Host.CreateDefaultBuilder(args)
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .UseSerilog(ConfigureLogger)
-                .ConfigureAppConfiguration(builder => builder.AddUserSecrets("Covid19Api"))
+                .ConfigureAppConfiguration(builder => builder.AddUserSecrets(UserSecretsId))
                 .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>())
                 .Build();
 
-        private static void ConfigureLogger(HostBuilderContext context, LoggerConfiguration configuration)
+        private static void ConfigureLogger(HostBuilderContext context, LoggerConfiguration loggerConfiguration)
         {
-            configuration
-                .MinimumLevel.Is(LogEventLevel.Information)
-                .Enrich.FromLogContext()
-                .WriteTo.Console(
-                    outputTemplate:
-                    "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
-                    theme: AnsiConsoleTheme.Literate);
+            loggerConfiguration.ReadFrom.Configuration(context.Configuration);
         }
     }
 }

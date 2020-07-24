@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Covid19Api.Constants\Covid19Api.Constants.csproj" />
+      <ProjectReference Include="..\Covid19Api.Repositories.Abstractions\Covid19Api.Repositories.Abstractions.csproj" />
+      <ProjectReference Include="..\Covid19Api.Services.Abstractions\Covid19Api.Services.Abstractions.csproj" />
+      <ProjectReference Include="..\Covid19Api.UseCases.Abstractions\Covid19Api.UseCases.Abstractions.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="10.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.6" />
+      <PackageReference Include="MongoDB.Driver" Version="2.10.4" />
+    </ItemGroup>
+
+</Project>

@@ -1,12 +1,14 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Covid19Api.Constants;
+using Covid19Api.Services.Abstractions.Caching;
 using HtmlAgilityPack;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Covid19Api.Services.Cache
 {
-    public class HtmlDocumentCache
+    public class HtmlDocumentCache : IHtmlDocumentCache
     {
         private readonly IMemoryCache memoryCache;
         private readonly IHttpClientFactory httpClientFactory;
@@ -38,7 +40,7 @@ namespace Covid19Api.Services.Cache
 
             var client = this.httpClientFactory.CreateClient();
 
-            var responseTask = client.GetAsync(Constants.CovidInfoWorldOmetersUrl);
+            var responseTask = client.GetAsync(Urls.CovidInfoWorldOmetersUrl);
 
             await this.memoryCache.Set(Key, responseTask, new MemoryCacheEntryOptions()
             {
