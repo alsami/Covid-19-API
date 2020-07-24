@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Covid19Api.Controllers.V1
 {
     [ApiController]
-    [Route("api/v1/stats")]
+    [Route("api/v1/global")]
     public class GlobalStatsController : ControllerBase
     {
         private readonly GlobalStatsRepository globalStatsRepository;

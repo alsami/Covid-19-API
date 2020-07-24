@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Covid19Api.Controllers.V1
 {
     [ApiController]
-    [Route("api/v1/stats/countries")]
+    [Route("api/v1/countries")]
     public class CountriesController : ControllerBase
     {
         private readonly IMapper mapper;
