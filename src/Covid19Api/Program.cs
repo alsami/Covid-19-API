@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
@@ -29,6 +30,7 @@ namespace Covid19Api
         private static void ConfigureLogger(HostBuilderContext context, LoggerConfiguration loggerConfiguration)
         {
             loggerConfiguration.ReadFrom.Configuration(context.Configuration);
+            Console.WriteLine("TEST");
         }
     }
 }
