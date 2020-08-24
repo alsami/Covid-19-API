@@ -2,7 +2,7 @@ using System;
 
 namespace Covid19Api.Presentation.Response
 {
-    public class CountryStatsDto
+    public class CountryStatisticsDto
     {
         public string Country { get; }
 
@@ -22,7 +22,7 @@ namespace Covid19Api.Presentation.Response
 
         public DateTime FetchedAt { get; }
 
-        public CountryStatsDto(string country, int totalCases, int newCases, int totalDeaths, int newDeaths,
+        public CountryStatisticsDto(string country, int totalCases, int newCases, int totalDeaths, int newDeaths,
             int recoveredCases, int activeCases, int seriousCases, DateTime fetchedAt)
         {
             this.Country = country;

@@ -10,20 +10,20 @@ namespace Covid19Api.Controllers.V1
 {
     [ApiController]
     [Route("api/v1/global")]
-    public class GlobalStatsController : ControllerBase
+    public class GlobalStatisticsController : ControllerBase
     {
         private readonly IMediator mediator;
 
-        public GlobalStatsController(IMediator mediator)
+        public GlobalStatisticsController(IMediator mediator)
         {
             this.mediator = mediator;
         }
 
         [HttpGet]
-        public Task<GlobalStatsDto> LoadGlobalAsync() => this.mediator.Send(new LoadLatestGlobalStatisticsQuery());
+        public Task<GlobalStatisticsDto> LoadGlobalAsync() => this.mediator.Send(new LoadLatestGlobalStatisticsQuery());
 
         [HttpGet("history")]
-        public Task<IEnumerable<GlobalStatsDto>> LoadGlobalHistorical()
+        public Task<IEnumerable<GlobalStatisticsDto>> LoadGlobalHistorical()
         {
             var command = new LoadHistoricalGlobalStatisticsQuery(DateTime.UtcNow.Date.AddDays(-9));
 

@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Covid19Api.UseCases.Abstractions.Queries
 {
-    public class LoadHistoricalGlobalStatisticsQuery : IRequest<IEnumerable<GlobalStatsDto>>
+    public class LoadHistoricalGlobalStatisticsQuery : IRequest<IEnumerable<GlobalStatisticsDto>>
     {
         public LoadHistoricalGlobalStatisticsQuery(DateTime minFetchedAt)
         {

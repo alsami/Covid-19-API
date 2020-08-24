@@ -11,7 +11,7 @@ using MediatR;
 namespace Covid19Api.UseCases.Queries
 {
     public class
-        LoadLatestGlobalStatisticsQueryHandler : IRequestHandler<LoadLatestGlobalStatisticsQuery, GlobalStatsDto>
+        LoadLatestGlobalStatisticsQueryHandler : IRequestHandler<LoadLatestGlobalStatisticsQuery, GlobalStatisticsDto>
     {
         private readonly IHtmlDocumentCache htmlDocumentCache;
         private readonly IMapper mapper;
@@ -25,7 +25,7 @@ namespace Covid19Api.UseCases.Queries
             this.globalStatisticsParser = globalStatisticsParser;
         }
 
-        public async Task<GlobalStatsDto> Handle(LoadLatestGlobalStatisticsQuery request,
+        public async Task<GlobalStatisticsDto> Handle(LoadLatestGlobalStatisticsQuery request,
             CancellationToken cancellationToken)
         {
             var fetchedAt = DateTime.UtcNow;
@@ -34,7 +34,7 @@ namespace Covid19Api.UseCases.Queries
 
             var latest = this.globalStatisticsParser.Parse(document, fetchedAt);
 
-            return this.mapper.Map<GlobalStatsDto>(latest);
+            return this.mapper.Map<GlobalStatisticsDto>(latest);
         }
     }
 }

@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Covid19Api.UseCases.Abstractions.Queries
 {
-    public class LoadHistoricalStatisticsForCountryQuery : IRequest<IEnumerable<CountryStatsDto>>
+    public class LoadHistoricalStatisticsForCountryQuery : IRequest<IEnumerable<CountryStatisticsDto>>
     {
         public LoadHistoricalStatisticsForCountryQuery(string country)
         {

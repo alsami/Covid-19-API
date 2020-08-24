@@ -10,29 +10,29 @@ namespace Covid19Api.Controllers.V1
 {
     [ApiController]
     [Route("api/v1/countries")]
-    public class CountriesController : ControllerBase
+    public class CountryStatisticsController : ControllerBase
     {
         private readonly IMediator mediator;
 
-        public CountriesController(IMediator mediator)
+        public CountryStatisticsController(IMediator mediator)
         {
             this.mediator = mediator;
         }
 
         [HttpGet]
-        public Task<IEnumerable<CountryStatsDto>> LoadLatestAsync() =>
+        public Task<IEnumerable<CountryStatisticsDto>> LoadLatestAsync() =>
             this.mediator.Send(new LoadLatestCountriesStatisticsQuery());
 
         [HttpGet("history")]
-        public Task<IEnumerable<CountryStatsDto>> LoadHistoryAsync()
+        public Task<IEnumerable<CountryStatisticsDto>> LoadHistoryAsync()
             => this.mediator.Send(new LoadHistoricalCountriesStatisticsQuery(DateTime.UtcNow.Date.AddDays(-9)));
 
         [HttpGet("{country}")]
-        public Task<CountryStatsDto> LoadLatestForCountryAsync(string country) =>
+        public Task<CountryStatisticsDto> LoadLatestForCountryAsync(string country) =>
             this.mediator.Send(new LoadLatestStatisticsForCountryQuery(country));
 
         [HttpGet("{country}/history")]
-        public Task<IEnumerable<CountryStatsDto>> LoadHistoryForCountryAsync(string country) =>
+        public Task<IEnumerable<CountryStatisticsDto>> LoadHistoryForCountryAsync(string country) =>
             this.mediator.Send(new LoadHistoricalStatisticsForCountryQuery(country));
     }
 }

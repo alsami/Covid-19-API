@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 
 namespace Covid19Api
 {
@@ -17,11 +18,12 @@ namespace Covid19Api
     {
         private readonly IConfiguration configuration;
         private readonly IWebHostEnvironment webHostEnvironment;
+        private const string ApiName = "Covid19-API";
+        private const string ApiVersion = "1.0.0";
 
         private const string CorsPolicyName = "DefaultCorsPolicy";
 
-        private readonly string[] compressionMimeTypes = new[]
-        {
+        private readonly string[] compressionMimeTypes = {
             "application/json"
         };
 
@@ -39,6 +41,12 @@ namespace Covid19Api
                 options.Filters.Add<AzureCosmosDbThrottleExceptionFilter>();
             });
 
+            services.AddSwaggerGen(options => options.SwaggerDoc(ApiVersion, new OpenApiInfo
+            {
+                Title = $"{ApiName} - {ApiVersion}",
+                Version = ApiVersion
+            }));
+
             services.AddHttpClient();
 
             services.AddCors(options => options.AddPolicy(CorsPolicyName, builder => builder
@@ -54,7 +62,7 @@ namespace Covid19Api
 
             services.AddMemoryCache();
         }
-
+    
         // ReSharper disable once UnusedMember.Global
         public void ConfigureContainer(ContainerBuilder containerBuilder)
         {
@@ -70,7 +78,10 @@ namespace Covid19Api
         // ReSharper disable once UnusedMember.Global
         public void Configure(IApplicationBuilder app)
         {
-            app.UseResponseCompression()
+            app
+                .UseResponseCompression()
+                .UseSwagger()
+                .UseSwaggerUI(options => options.SwaggerEndpoint($"/swagger/{ApiVersion}/swagger.json", ApiName))
                 .UseRouting()
                 .UseCors(CorsPolicyName)
                 .UseEndpoints(endpoints => endpoints.MapControllers());

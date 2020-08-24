@@ -10,7 +10,7 @@ using MediatR;
 namespace Covid19Api.UseCases.Queries
 {
     public class LoadHistoricalCountriesStatisticsQueryHandler : IRequestHandler<LoadHistoricalCountriesStatisticsQuery,
-        IEnumerable<CountryStatsDto>>
+        IEnumerable<CountryStatisticsDto>>
     {
         private readonly IMapper mapper;
         private readonly ICountryStatisticsRepository countryStatisticsRepository;
@@ -22,12 +22,12 @@ namespace Covid19Api.UseCases.Queries
             this.countryStatisticsRepository = countryStatisticsRepository;
         }
 
-        public async Task<IEnumerable<CountryStatsDto>> Handle(LoadHistoricalCountriesStatisticsQuery request,
+        public async Task<IEnumerable<CountryStatisticsDto>> Handle(LoadHistoricalCountriesStatisticsQuery request,
             CancellationToken cancellationToken)
         {
             var countryHistories = await this.countryStatisticsRepository.HistoricalAsync(request.MinFetchedAt);
 
-            return this.mapper.Map<IEnumerable<CountryStatsDto>>(countryHistories);
+            return this.mapper.Map<IEnumerable<CountryStatisticsDto>>(countryHistories);
         }
     }
 }

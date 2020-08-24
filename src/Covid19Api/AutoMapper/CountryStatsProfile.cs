@@ -10,8 +10,8 @@ namespace Covid19Api.AutoMapper
     {
         public CountryStatsProfile()
         {
-            this.CreateMap<CountryStatistics, CountryStatsDto>()
-                .ConvertUsing(src => new CountryStatsDto(src.Country, src.TotalCases, src.NewCases, src.TotalDeaths,
+            this.CreateMap<CountryStatistics, CountryStatisticsDto>()
+                .ConvertUsing(src => new CountryStatisticsDto(src.Country, src.TotalCases, src.NewCases, src.TotalDeaths,
                     src.NewDeaths, src.RecoveredCases, src.ActiveCases, src.SeriousCases, src.FetchedAt));
         }
     }

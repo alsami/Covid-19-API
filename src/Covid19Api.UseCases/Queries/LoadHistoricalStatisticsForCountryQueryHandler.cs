@@ -12,7 +12,7 @@ namespace Covid19Api.UseCases.Queries
 {
     public class
         LoadHistoricalStatisticsForCountryQueryHandler : IRequestHandler<LoadHistoricalStatisticsForCountryQuery,
-            IEnumerable<CountryStatsDto>>
+            IEnumerable<CountryStatisticsDto>>
     {
         private readonly IMapper mapper;
         private readonly ICountryStatisticsRepository countryStatisticsRepository;
@@ -24,14 +24,14 @@ namespace Covid19Api.UseCases.Queries
             this.countryStatisticsRepository = countryStatisticsRepository;
         }
 
-        public async Task<IEnumerable<CountryStatsDto>> Handle(LoadHistoricalStatisticsForCountryQuery request,
+        public async Task<IEnumerable<CountryStatisticsDto>> Handle(LoadHistoricalStatisticsForCountryQuery request,
             CancellationToken cancellationToken)
         {
             var minFetchedAt = DateTime.UtcNow.Date.AddDays(-9);
 
             var statsForCountry = await this.countryStatisticsRepository.HistoricalAsync(minFetchedAt, request.Country);
 
-            return this.mapper.Map<IEnumerable<CountryStatsDto>>(statsForCountry);
+            return this.mapper.Map<IEnumerable<CountryStatisticsDto>>(statsForCountry);
         }
     }
 }

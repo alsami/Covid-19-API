@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Covid19Api.UseCases.Abstractions.Queries
 {
-    public class LoadLatestGlobalStatisticsQuery : IRequest<GlobalStatsDto>
+    public class LoadLatestGlobalStatisticsQuery : IRequest<GlobalStatisticsDto>
     {
     }
 }

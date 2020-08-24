@@ -11,9 +11,9 @@ namespace Covid19Api.AutoMapper
     {
         public GlobalStatsProfile()
         {
-            this.CreateMap<GlobalStatistics, GlobalStatsDto>()
+            this.CreateMap<GlobalStatistics, GlobalStatisticsDto>()
                 .ConvertUsing(src =>
-                    new GlobalStatsDto(src.Total, src.Recovered, src.Deaths, src.FetchedAt));
+                    new GlobalStatisticsDto(src.Total, src.Recovered, src.Deaths, src.FetchedAt));
         }
     }
 }

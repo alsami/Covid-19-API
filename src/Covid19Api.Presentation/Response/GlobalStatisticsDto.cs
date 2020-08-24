@@ -6,7 +6,7 @@ using System;
 
 namespace Covid19Api.Presentation.Response
 {
-    public class GlobalStatsDto
+    public class GlobalStatisticsDto
     {
         public int Total { get; }
 
@@ -18,7 +18,7 @@ namespace Covid19Api.Presentation.Response
 
         public DateTime FetchedAt { get; }
 
-        public GlobalStatsDto(int total, int recovered, int deaths, DateTime fetchedAt)
+        public GlobalStatisticsDto(int total, int recovered, int deaths, DateTime fetchedAt)
         {
             this.Total = total;
             this.Recovered = recovered;
