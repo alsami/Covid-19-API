@@ -1,0 +1,10 @@
+mongo-container:
+   image: mongo:latest
+   environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+   ports:
+      - 27017:27017
+   volumes:
+      - db-data:/data/db
+   command: mongod
