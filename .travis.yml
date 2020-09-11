@@ -4,13 +4,7 @@ language: csharp
 mono: none
 dotnet: 3.1.402
 solution: Covid19Api.sln
-env:
-  global:
-    - DocumentDbContextOptions__ConnectionString="mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@localhost:27017"
-    - DocumentDbContextOptions__DatabaseName="Etdb_UserService_Dev_Testing"
-    - RedisCacheOptions__Configuration="${RedisConnection}"
-    - RedisCacheOptions__InstanceName="Etdb_UserService_Travis"
-    - ASPNETCORE__ENVIRONMENT="CI"
+
 stages:
   - build
   - publish
