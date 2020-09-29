@@ -5,19 +5,31 @@ mono: none
 dotnet: 3.1.402
 solution: Covid19Api.sln
 
+addons:
+  apt:
+    update: true
+
 stages:
   - build
+  - test
   - publish
   - deploy
+
 jobs:
   include:
     - stage: build
-      name: build
+      name: dotnet-build
       if: tag IS NOT present
       script:
         - dotnet build
+    - stage: test
+      name: dotnet-test
+      before_script: 
+        - sudo apt-get update && sudo apt-get install curl -y
+      script:
+        - ./test.sh
     - stage: publish
-      name: publish
+      name: docker-container-publish
       if: tag IS present
       services:
         - docker
@@ -28,9 +40,6 @@ jobs:
     - stage: deploy
       name: deploy
       if: tag IS present
-      addons:
-        apt:
-          update: true
       before_script:
         - curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
       script:

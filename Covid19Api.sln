@@ -24,6 +24,7 @@ ProjectSection(SolutionItems) = preProject
 	global.json = global.json
 	docker-compose.yml = docker-compose.yml
 	Directory.Build.props = Directory.Build.props
+	test.sh = test.sh
 EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Covid19Api.IoC", "src\Covid19Api.IoC\Covid19Api.IoC.csproj", "{783AD7D5-5C4D-4A63-86DE-543B972F3F46}"
@@ -47,6 +48,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Covid19Api.Repositories.Abstractions", "src\Covid19Api.Repositories.Abstractions\Covid19Api.Repositories.Abstractions.csproj", "{3FAF620F-B417-43EF-8540-B0DDBA932DC8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Covid19Api.Mongo.Scaffolder", "src\Covid19Api.Mongo.Scaffolder\Covid19Api.Mongo.Scaffolder.csproj", "{CC6C9309-C452-4C12-9783-35B5298781AF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{EBCCA0C8-4218-490F-A131-E8DF265DC415}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Covid19Api.Tests", "test\Covid19Api.Tests\Covid19Api.Tests.csproj", "{663655F5-2BFE-4154-AF3F-BB8BF36C2165}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -241,6 +246,18 @@ Global
 		{CC6C9309-C452-4C12-9783-35B5298781AF}.Release|x64.Build.0 = Release|Any CPU
 		{CC6C9309-C452-4C12-9783-35B5298781AF}.Release|x86.ActiveCfg = Release|Any CPU
 		{CC6C9309-C452-4C12-9783-35B5298781AF}.Release|x86.Build.0 = Release|Any CPU
+		{663655F5-2BFE-4154-AF3F-BB8BF36C2165}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{663655F5-2BFE-4154-AF3F-BB8BF36C2165}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{663655F5-2BFE-4154-AF3F-BB8BF36C2165}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{663655F5-2BFE-4154-AF3F-BB8BF36C2165}.Debug|x64.Build.0 = Debug|Any CPU
+		{663655F5-2BFE-4154-AF3F-BB8BF36C2165}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{663655F5-2BFE-4154-AF3F-BB8BF36C2165}.Debug|x86.Build.0 = Debug|Any CPU
+		{663655F5-2BFE-4154-AF3F-BB8BF36C2165}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{663655F5-2BFE-4154-AF3F-BB8BF36C2165}.Release|Any CPU.Build.0 = Release|Any CPU
+		{663655F5-2BFE-4154-AF3F-BB8BF36C2165}.Release|x64.ActiveCfg = Release|Any CPU
+		{663655F5-2BFE-4154-AF3F-BB8BF36C2165}.Release|x64.Build.0 = Release|Any CPU
+		{663655F5-2BFE-4154-AF3F-BB8BF36C2165}.Release|x86.ActiveCfg = Release|Any CPU
+		{663655F5-2BFE-4154-AF3F-BB8BF36C2165}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1A670B81-08F0-4F15-81AF-4DDD12E765D6} = {2A35F3E7-12D1-4F74-8867-F5882FB47009}
@@ -258,5 +275,6 @@ Global
 		{BB980D99-014F-415A-B727-CCBAAD3B2AA2} = {2A35F3E7-12D1-4F74-8867-F5882FB47009}
 		{3FAF620F-B417-43EF-8540-B0DDBA932DC8} = {2A35F3E7-12D1-4F74-8867-F5882FB47009}
 		{CC6C9309-C452-4C12-9783-35B5298781AF} = {2A35F3E7-12D1-4F74-8867-F5882FB47009}
+		{663655F5-2BFE-4154-AF3F-BB8BF36C2165} = {EBCCA0C8-4218-490F-A131-E8DF265DC415}
 	EndGlobalSection
 EndGlobal
