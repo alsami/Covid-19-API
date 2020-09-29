@@ -4,9 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2A35F3E7-12D1-4F74-8867-F5882FB47009}"
-ProjectSection(SolutionItems) = preProject
-	src\Directory.Build.props = src\Directory.Build.props
-EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Covid19Api", "src\Covid19Api\Covid19Api.csproj", "{1A670B81-08F0-4F15-81AF-4DDD12E765D6}"
 EndProject
@@ -26,6 +23,7 @@ ProjectSection(SolutionItems) = preProject
 	.gitignore = .gitignore
 	global.json = global.json
 	docker-compose.yml = docker-compose.yml
+	Directory.Build.props = Directory.Build.props
 EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Covid19Api.IoC", "src\Covid19Api.IoC\Covid19Api.IoC.csproj", "{783AD7D5-5C4D-4A63-86DE-543B972F3F46}"

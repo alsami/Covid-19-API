@@ -1,11 +1,10 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using Covid19Api.UseCases.Abstractions.Commands;
 using Covid19Api.UseCases.Abstractions.Queries;
 using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -49,9 +48,9 @@ namespace Covid19Api.Worker
         {
             this.logger.LogInformation("Start fetching html document");
 
-            await using var scope = this.serviceProvider.GetAutofacRoot().BeginLifetimeScope();
+            using var scope = this.serviceProvider.CreateScope();
 
-            var mediator = scope.Resolve<IMediator>();
+            var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
             var document = await mediator.Send(new LoadHtmlDocumentQuery());
 

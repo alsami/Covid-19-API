@@ -67,8 +67,8 @@ namespace Covid19Api
         public void ConfigureContainer(ContainerBuilder containerBuilder)
         {
             containerBuilder
-                .AddAutoMapper(typeof(Startup).Assembly)
-                .AddMediatR(typeof(LoadHtmlDocumentQueryHandler).Assembly)
+                .RegisterAutoMapper(typeof(Startup).Assembly)
+                .RegisterMediatR(typeof(LoadHtmlDocumentQueryHandler).Assembly)
                 .RegisterWorker()
                 .RegisterParser()
                 .RegisterHtmlDocumentCache()
