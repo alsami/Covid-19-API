@@ -37,7 +37,10 @@ namespace Covid19Api.Services.Decorator
 
             var serialized = JsonSerializer.Serialize(fetchedCountryMetaData);
 
-            await this.distributedCache.SetAsync(CacheKey, Encoding.UTF8.GetBytes(serialized));
+            await this.distributedCache.SetAsync(CacheKey, Encoding.UTF8.GetBytes(serialized), new DistributedCacheEntryOptions
+            {
+                AbsoluteExpiration = DateTime.UtcNow.AddDays(10)
+            });
 
             return fetchedCountryMetaData;
         }
