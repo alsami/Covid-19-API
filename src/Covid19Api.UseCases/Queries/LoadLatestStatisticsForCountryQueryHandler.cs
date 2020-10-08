@@ -33,12 +33,10 @@ namespace Covid19Api.UseCases.Queries
         {
             var fetchedAt = DateTime.UtcNow;
 
-            var document = await this.htmlDocumentCache.LoadAsync();
-
-            var countries = this.countryStatisticsParser.Parse(document, fetchedAt);
+            var countries =
+                await this.countryStatisticsParser.ParseAsync(fetchedAt, CountryStatsFilter.ValidOnly.Value);
 
             var wanted = countries
-                .Where(CountryStatsFilter.ValidOnly.Value)
                 .SingleOrDefault(stats =>
                     string.Equals(stats!.Country, request.Country, StringComparison.InvariantCultureIgnoreCase));
 

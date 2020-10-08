@@ -23,7 +23,8 @@ namespace Covid19Api
 
         private const string CorsPolicyName = "DefaultCorsPolicy";
 
-        private readonly string[] compressionMimeTypes = {
+        private readonly string[] compressionMimeTypes =
+        {
             "application/json"
         };
 
@@ -62,16 +63,16 @@ namespace Covid19Api
 
             services.AddMemoryCache();
         }
-    
+
         // ReSharper disable once UnusedMember.Global
         public void ConfigureContainer(ContainerBuilder containerBuilder)
         {
             containerBuilder
                 .RegisterAutoMapper(typeof(Startup).Assembly)
-                .RegisterMediatR(typeof(LoadHtmlDocumentQueryHandler).Assembly)
+                .RegisterMediatR(typeof(LoadLatestGlobalStatisticsQueryHandler).Assembly)
                 .RegisterWorker()
                 .RegisterParser()
-                .RegisterHtmlDocumentCache()
+                .RegisterDataLoader()
                 .RegisterDatabaseDependencies(this.webHostEnvironment, this.configuration);
         }
 

@@ -14,6 +14,8 @@ namespace Covid19Api.Domain
 
         public string Country { get; private set; }
 
+        public string? CountryCode { get; private set; }
+
         public int TotalCases { get; private set; }
 
         public int NewCases { get; private set; }
@@ -31,10 +33,12 @@ namespace Covid19Api.Domain
         public DateTime FetchedAt { get; private set; }
 
 
-        public CountryStatistics(string country, int totalCases, int newCases, int totalDeaths, int newDeaths,
+        public CountryStatistics(string country, string? countryCode, int totalCases, int newCases, int totalDeaths,
+            int newDeaths,
             int recoveredCases, int activeCases, int seriousCases, DateTime fetchedAt)
         {
             this.Country = country;
+            this.CountryCode = countryCode;
             this.TotalCases = totalCases;
             this.NewCases = newCases;
             this.TotalDeaths = totalDeaths;
@@ -58,10 +62,10 @@ namespace Covid19Api.Domain
         {
             using var hasher = MD5.Create();
 
-            var unhashed =
+            var valueToHash =
                 $"{this.Country}{this.FetchedAt.Date:O}";
 
-            var hashed = hasher.ComputeHash(Encoding.UTF8.GetBytes(unhashed));
+            var hashed = hasher.ComputeHash(Encoding.UTF8.GetBytes(valueToHash));
 
             return new Guid(hashed);
         }

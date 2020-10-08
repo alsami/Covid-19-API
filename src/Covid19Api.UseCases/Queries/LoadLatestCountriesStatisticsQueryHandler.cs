@@ -34,11 +34,8 @@ namespace Covid19Api.UseCases.Queries
         {
             var fetchedAt = DateTime.UtcNow;
 
-            var document = await this.htmlDocumentCache.LoadAsync();
-
-            var countries = this.countryStatisticsParser
-                .Parse(document, fetchedAt)
-                .Where(CountryStatsFilter.ValidOnly.Value);
+            var countries = await this.countryStatisticsParser
+                .ParseAsync(fetchedAt, CountryStatsFilter.ValidOnly.Value);
 
             return this.mapper.Map<IEnumerable<CountryStatisticsDto>>(countries)
                 .OrderByDescending(country => country!.TotalCases);

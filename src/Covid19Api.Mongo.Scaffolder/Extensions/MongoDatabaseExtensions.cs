@@ -12,7 +12,7 @@ namespace Covid19Api.Mongo.Scaffolder.Extensions
 
             await database.CreateCollectionAsync(collectionName);
         }
-        
+
         private static async Task<bool> CollectionExistsAsync(this IMongoDatabase database, string collectionName)
         {
             var filter = new BsonDocument("name", collectionName);

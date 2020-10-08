@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Covid19Api.Domain;
-using HtmlAgilityPack;
 
 namespace Covid19Api.Services.Abstractions.Parser
 {
     public interface ICountryStatisticsParser
     {
-        IEnumerable<CountryStatistics?> Parse(HtmlDocument document, DateTime fetchedAt);
+        Task<IEnumerable<CountryStatistics?>> ParseAsync(DateTime fetchedAt,
+            Func<CountryStatistics?, bool>? filter = null);
     }
 }

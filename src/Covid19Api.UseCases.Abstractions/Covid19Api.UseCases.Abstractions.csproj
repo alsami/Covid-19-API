@@ -6,7 +6,6 @@
 
     <ItemGroup>
         <PackageReference Include="MediatR" Version="9.0.0" />
-        <PackageReference Include="HtmlAgilityPack" Version="1.11.24" />
     </ItemGroup>
 
     <ItemGroup>

@@ -6,6 +6,8 @@ namespace Covid19Api.Presentation.Response
     {
         public string Country { get; }
 
+        public string CountryCode { get; set; }
+
         public int TotalCases { get; }
 
         public int NewCases { get; }
@@ -22,10 +24,12 @@ namespace Covid19Api.Presentation.Response
 
         public DateTime FetchedAt { get; }
 
-        public CountryStatisticsDto(string country, int totalCases, int newCases, int totalDeaths, int newDeaths,
+        public CountryStatisticsDto(string country, string countryCode, int totalCases, int newCases, int totalDeaths,
+            int newDeaths,
             int recoveredCases, int activeCases, int seriousCases, DateTime fetchedAt)
         {
             this.Country = country;
+            this.CountryCode = countryCode;
             this.TotalCases = totalCases;
             this.NewCases = newCases;
             this.TotalDeaths = totalDeaths;

@@ -30,9 +30,7 @@ namespace Covid19Api.UseCases.Queries
         {
             var fetchedAt = DateTime.UtcNow;
 
-            var document = await this.htmlDocumentCache.LoadAsync();
-
-            var latest = this.globalStatisticsParser.Parse(document, fetchedAt);
+            var latest = await this.globalStatisticsParser.ParseAsync(fetchedAt);
 
             return this.mapper.Map<GlobalStatisticsDto>(latest);
         }

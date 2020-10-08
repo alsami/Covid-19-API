@@ -7,6 +7,7 @@ using Covid19Api.Mongo;
 using Covid19Api.Repositories.Abstractions;
 using Covid19Api.Repositories.Extensions;
 using MongoDB.Driver;
+
 // ReSharper disable SpecifyStringComparison
 
 namespace Covid19Api.Repositories

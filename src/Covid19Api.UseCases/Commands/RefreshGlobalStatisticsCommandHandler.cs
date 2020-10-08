@@ -21,7 +21,7 @@ namespace Covid19Api.UseCases.Commands
 
         public async Task<Unit> Handle(RefreshGlobalStatisticsCommand request, CancellationToken cancellationToken)
         {
-            var globalStatistics = this.globalStatisticsParser.Parse(request.Document, request.FetchedAt);
+            var globalStatistics = await this.globalStatisticsParser.ParseAsync(request.FetchedAt);
 
             await this.globalStatisticsRepository.StoreAsync(globalStatistics);
 

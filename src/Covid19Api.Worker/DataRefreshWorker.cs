@@ -2,7 +2,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Covid19Api.UseCases.Abstractions.Commands;
-using Covid19Api.UseCases.Abstractions.Queries;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -52,19 +51,17 @@ namespace Covid19Api.Worker
 
             var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
-            var document = await mediator.Send(new LoadHtmlDocumentQuery());
-
             var fetchedAt = DateTime.UtcNow;
 
             this.logger.LogInformation("Refreshing global-statistics");
 
-            var refreshGlobalStatisticsCommand = new RefreshGlobalStatisticsCommand(fetchedAt, document);
+            var refreshGlobalStatisticsCommand = new RefreshGlobalStatisticsCommand(fetchedAt);
 
             await mediator.Send(refreshGlobalStatisticsCommand);
 
             this.logger.LogInformation("Refreshing countries-statistics");
 
-            var refreshCountriesStatisticsCommand = new RefreshCountriesStatisticsCommand(fetchedAt, document);
+            var refreshCountriesStatisticsCommand = new RefreshCountriesStatisticsCommand(fetchedAt);
 
             await mediator.Send(refreshCountriesStatisticsCommand);
         }

@@ -30,10 +30,11 @@ namespace Covid19Api.Mongo.Scaffolder.Updates
 
             var fetchedAtIndexModel = new CreateIndexModel<GlobalStatistics>(fetchedAtIndex, new CreateIndexOptions
             {
-                Name = $"{CollectionNames.GlobalStatistics}_fetchedAt_descending" 
+                Name = $"{CollectionNames.GlobalStatistics}_fetchedAt_descending"
             });
-            
-            var collection = this.databaseContext.Database.GetCollection<GlobalStatistics>(CollectionNames.GlobalStatistics);
+
+            var collection =
+                this.databaseContext.Database.GetCollection<GlobalStatistics>(CollectionNames.GlobalStatistics);
 
             await collection.Indexes.CreateOneAsync(fetchedAtIndexModel);
         }

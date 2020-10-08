@@ -2,7 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using Covid19Api.Domain;
+using Covid19Api.Services.Abstractions.Caching;
+using Covid19Api.Services.Abstractions.Loader;
+using Covid19Api.Services.Abstractions.Models;
 using Covid19Api.Services.Abstractions.Parser;
 using HtmlAgilityPack;
 
@@ -10,15 +14,34 @@ namespace Covid19Api.Services.Parser
 {
     public class CountryStatisticsParser : ICountryStatisticsParser
     {
-        public IEnumerable<CountryStatistics?> Parse(HtmlDocument document, DateTime fetchedAt)
-        {
-            var tableRows = GetTableRows(document);
+        private readonly ICountryMetaDataLoader countryMetaDataLoader;
+        private readonly IHtmlDocumentCache htmlDocumentCache;
 
-            foreach (var tableRow in tableRows)
-                yield return Parse(tableRow, fetchedAt);
+        private readonly Func<CountryStatistics?, bool> countryStatisticsFilter = _ => true;
+
+        public CountryStatisticsParser(ICountryMetaDataLoader countryMetaDataLoader,
+            IHtmlDocumentCache htmlDocumentCache)
+        {
+            this.countryMetaDataLoader = countryMetaDataLoader;
+            this.htmlDocumentCache = htmlDocumentCache;
         }
 
-        private static CountryStatistics? Parse(HtmlNode htmlNode, DateTime fetchedAt)
+        public async Task<IEnumerable<CountryStatistics?>> ParseAsync(DateTime fetchedAt,
+            Func<CountryStatistics?, bool>? filter = null)
+        {
+            var document = await this.htmlDocumentCache.LoadAsync();
+
+            var countryMetaData = await this.countryMetaDataLoader.LoadCountryMetaDataByCountryAsync();
+
+            var countryStatistics = GetTableRows(document)
+                .Select(tableRow => Parse(countryMetaData, tableRow, fetchedAt))
+                .Where(filter ?? this.countryStatisticsFilter);
+
+            return countryStatistics;
+        }
+
+        private static CountryStatistics? Parse(IEnumerable<CountryMetaData> countryMetaData, HtmlNode htmlNode,
+            DateTime fetchedAt)
         {
             var tableDataNodes = GetTableDataNodes(htmlNode).ToArray();
 
@@ -33,7 +56,13 @@ namespace Covid19Api.Services.Parser
 
             if (string.IsNullOrWhiteSpace(country)) return null;
 
-            return new CountryStatistics(country, totalCases, newCases, totalDeaths, newDeaths, recovered,
+            var countryCode =
+                countryMetaData.FirstOrDefault(metaData =>
+                    metaData.Name.Equals(country, StringComparison.InvariantCultureIgnoreCase) ||
+                    metaData.AltSpellings.Contains(country, StringComparer.InvariantCultureIgnoreCase))?.Alpha2Code ??
+                "N/A";
+
+            return new CountryStatistics(country, countryCode, totalCases, newCases, totalDeaths, newDeaths, recovered,
                 active, serious, fetchedAt);
         }
 
