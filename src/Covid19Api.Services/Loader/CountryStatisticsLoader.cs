@@ -54,14 +54,24 @@ namespace Covid19Api.Services.Loader
 
             if (string.IsNullOrWhiteSpace(country)) return null;
             
-            var countryCode =
-                countryMetaData.FirstOrDefault(metaData =>
-                    metaData.Name.StartsWith(country, StringComparison.InvariantCultureIgnoreCase) ||
-                    metaData.AltSpellings.Contains(country, StringComparer.InvariantCultureIgnoreCase))?.Alpha2Code ??
-                "N/A";
+            var countryCode = GetCountryCode(countryMetaData, country);
 
             return new CountryStatistics(country, countryCode, totalCases, newCases, totalDeaths, newDeaths, recovered,
                 active, serious, fetchedAt);
+        }
+
+        private static string GetCountryCode(IEnumerable<CountryMetaData> countryMetaData, string country)
+        {
+            var countryCode =
+                countryMetaData.FirstOrDefault(metaData =>
+                    metaData.Name.StartsWith(country
+                            .Replace("UK", "United Kingdom")
+                            .Replace("Czechia", "Czech Republic")
+                            .Replace("Estwatini", "Kingdom of Eswatini"),
+                        StringComparison.InvariantCultureIgnoreCase) ||
+                    metaData.AltSpellings.Contains(country, StringComparer.InvariantCultureIgnoreCase))?.Alpha2Code ??
+                "N/A";
+            return countryCode;
         }
 
         private static IEnumerable<HtmlNode> GetTableRows(HtmlDocument document)
