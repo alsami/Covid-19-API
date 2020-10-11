@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Covid19Api.Repositories.Abstractions;
-using Covid19Api.Services.Abstractions.Parser;
+using Covid19Api.Services.Abstractions.Loader;
 using Covid19Api.UseCases.Abstractions.Commands;
 using MediatR;
 
@@ -10,18 +10,18 @@ namespace Covid19Api.UseCases.Commands
     public class RefreshGlobalStatisticsCommandHandler : IRequestHandler<RefreshGlobalStatisticsCommand>
     {
         private readonly IGlobalStatisticsRepository globalStatisticsRepository;
-        private readonly IGlobalStatisticsParser globalStatisticsParser;
+        private readonly IGlobalStatisticsLoader globalStatisticsLoader;
 
         public RefreshGlobalStatisticsCommandHandler(IGlobalStatisticsRepository globalStatisticsRepository,
-            IGlobalStatisticsParser globalStatisticsParser)
+            IGlobalStatisticsLoader globalStatisticsLoader)
         {
             this.globalStatisticsRepository = globalStatisticsRepository;
-            this.globalStatisticsParser = globalStatisticsParser;
+            this.globalStatisticsLoader = globalStatisticsLoader;
         }
 
         public async Task<Unit> Handle(RefreshGlobalStatisticsCommand request, CancellationToken cancellationToken)
         {
-            var globalStatistics = await this.globalStatisticsParser.ParseAsync(request.FetchedAt);
+            var globalStatistics = await this.globalStatisticsLoader.ParseAsync(request.FetchedAt);
 
             await this.globalStatisticsRepository.StoreAsync(globalStatistics);
 

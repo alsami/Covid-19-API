@@ -5,8 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Covid19Api.Presentation.Response;
-using Covid19Api.Services.Abstractions.Caching;
-using Covid19Api.Services.Abstractions.Parser;
+using Covid19Api.Services.Abstractions.Loader;
 using Covid19Api.UseCases.Abstractions.Queries;
 using Covid19Api.UseCases.Filter;
 using MediatR;
@@ -18,15 +17,15 @@ namespace Covid19Api.UseCases.Queries
             IEnumerable<CountryStatisticsDto>>
     {
         private readonly IMapper mapper;
-        private readonly IHtmlDocumentCache htmlDocumentCache;
-        private readonly ICountryStatisticsParser countryStatisticsParser;
+        private readonly IHtmlDocumentLoader htmlDocumentLoader;
+        private readonly ICountryStatisticsLoader countryStatisticsLoader;
 
-        public LoadLatestCountriesStatisticsQueryHandler(IMapper mapper, IHtmlDocumentCache htmlDocumentCache,
-            ICountryStatisticsParser countryStatisticsParser)
+        public LoadLatestCountriesStatisticsQueryHandler(IMapper mapper, IHtmlDocumentLoader htmlDocumentLoader,
+            ICountryStatisticsLoader countryStatisticsLoader)
         {
             this.mapper = mapper;
-            this.htmlDocumentCache = htmlDocumentCache;
-            this.countryStatisticsParser = countryStatisticsParser;
+            this.htmlDocumentLoader = htmlDocumentLoader;
+            this.countryStatisticsLoader = countryStatisticsLoader;
         }
 
         public async Task<IEnumerable<CountryStatisticsDto>> Handle(LoadLatestCountriesStatisticsQuery request,
@@ -34,7 +33,7 @@ namespace Covid19Api.UseCases.Queries
         {
             var fetchedAt = DateTime.UtcNow;
 
-            var countries = await this.countryStatisticsParser
+            var countries = await this.countryStatisticsLoader
                 .ParseAsync(fetchedAt, CountryStatsFilter.ValidOnly.Value);
 
             return this.mapper.Map<IEnumerable<CountryStatisticsDto>>(countries)

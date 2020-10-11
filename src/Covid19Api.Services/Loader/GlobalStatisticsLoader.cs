@@ -3,24 +3,23 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Covid19Api.Domain;
-using Covid19Api.Services.Abstractions.Caching;
-using Covid19Api.Services.Abstractions.Parser;
+using Covid19Api.Services.Abstractions.Loader;
 using HtmlAgilityPack;
 
-namespace Covid19Api.Services.Parser
+namespace Covid19Api.Services.Loader
 {
-    public class GlobalStatisticsParser : IGlobalStatisticsParser
+    public class GlobalStatisticsLoader : IGlobalStatisticsLoader
     {
-        private readonly IHtmlDocumentCache htmlDocumentCache;
+        private readonly IHtmlDocumentLoader htmlDocumentLoader;
 
-        public GlobalStatisticsParser(IHtmlDocumentCache htmlDocumentCache)
+        public GlobalStatisticsLoader(IHtmlDocumentLoader htmlDocumentLoader)
         {
-            this.htmlDocumentCache = htmlDocumentCache;
+            this.htmlDocumentLoader = htmlDocumentLoader;
         }
 
         public async Task<GlobalStatistics> ParseAsync(DateTime fetchedAt)
         {
-            var document = await this.htmlDocumentCache.LoadAsync();
+            var document = await this.htmlDocumentLoader.LoadAsync();
 
             var mainCounterNodes = document
                 .DocumentNode

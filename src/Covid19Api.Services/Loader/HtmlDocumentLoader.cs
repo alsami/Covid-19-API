@@ -2,19 +2,19 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Covid19Api.Constants;
-using Covid19Api.Services.Abstractions.Caching;
+using Covid19Api.Services.Abstractions.Loader;
 using HtmlAgilityPack;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace Covid19Api.Services.Cache
+namespace Covid19Api.Services.Loader
 {
-    public class HtmlDocumentCache : IHtmlDocumentCache
+    public class HtmlDocumentLoader : IHtmlDocumentLoader
     {
         private readonly IMemoryCache memoryCache;
         private readonly IHttpClientFactory httpClientFactory;
         private const string Key = "HTMLDOCCACHE";
 
-        public HtmlDocumentCache(IMemoryCache memoryCache, IHttpClientFactory httpClientFactory)
+        public HtmlDocumentLoader(IMemoryCache memoryCache, IHttpClientFactory httpClientFactory)
         {
             this.memoryCache = memoryCache;
             this.httpClientFactory = httpClientFactory;

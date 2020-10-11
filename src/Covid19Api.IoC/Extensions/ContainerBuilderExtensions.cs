@@ -2,13 +2,9 @@ using Autofac;
 using Covid19Api.IoC.Modules;
 using Covid19Api.Repositories;
 using Covid19Api.Repositories.Abstractions;
-using Covid19Api.Services.Abstractions.Caching;
 using Covid19Api.Services.Abstractions.Loader;
-using Covid19Api.Services.Abstractions.Parser;
-using Covid19Api.Services.Cache;
 using Covid19Api.Services.Decorator;
 using Covid19Api.Services.Loader;
-using Covid19Api.Services.Parser;
 using Covid19Api.Worker;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
@@ -36,36 +32,32 @@ namespace Covid19Api.IoC.Extensions
             return builder;
         }
 
-        public static ContainerBuilder RegisterParser(this ContainerBuilder builder)
-        {
-            builder.RegisterType<CountryStatisticsParser>()
-                .As<ICountryStatisticsParser>()
-                .SingleInstance();
-
-            builder.RegisterType<GlobalStatisticsParser>()
-                .As<IGlobalStatisticsParser>()
-                .SingleInstance();
-
-            return builder;
-        }
-
         public static ContainerBuilder RegisterDataLoader(this ContainerBuilder builder)
         {
+            builder.RegisterType<CountryStatisticsLoader>()
+                .As<ICountryStatisticsLoader>()
+                .SingleInstance();
+
+            builder.RegisterType<GlobalStatisticsLoader>()
+                .As<IGlobalStatisticsLoader>()
+                .SingleInstance();
+
             builder.Register(_ =>
                     new MemoryDistributedCache(
                         Options.Create(new MemoryDistributedCacheOptions())))
                 .As<IDistributedCache>()
                 .SingleInstance();
 
-            builder.RegisterType<HtmlDocumentCache>()
-                .As<IHtmlDocumentCache>()
+            builder.RegisterType<HtmlDocumentLoader>()
+                .As<IHtmlDocumentLoader>()
                 .SingleInstance();
 
             builder.RegisterType<CountryMetaDataLoader>()
                 .As<ICountryMetaDataLoader>()
                 .SingleInstance();
-            
+
             builder.RegisterDecorator<CountryMetaDataLoaderDecorator, ICountryMetaDataLoader>();
+            builder.RegisterDecorator<HtmlDocumentLoaderDecorator, IHtmlDocumentLoader>();
 
             return builder;
         }

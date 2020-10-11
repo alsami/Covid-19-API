@@ -71,7 +71,6 @@ namespace Covid19Api
                 .RegisterAutoMapper(typeof(Startup).Assembly)
                 .RegisterMediatR(typeof(LoadLatestGlobalStatisticsQueryHandler).Assembly)
                 .RegisterWorker()
-                .RegisterParser()
                 .RegisterDataLoader()
                 .RegisterDatabaseDependencies(this.webHostEnvironment, this.configuration);
         }

@@ -4,32 +4,30 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Covid19Api.Domain;
-using Covid19Api.Services.Abstractions.Caching;
 using Covid19Api.Services.Abstractions.Loader;
 using Covid19Api.Services.Abstractions.Models;
-using Covid19Api.Services.Abstractions.Parser;
 using HtmlAgilityPack;
 
-namespace Covid19Api.Services.Parser
+namespace Covid19Api.Services.Loader
 {
-    public class CountryStatisticsParser : ICountryStatisticsParser
+    public class CountryStatisticsLoader : ICountryStatisticsLoader
     {
         private readonly ICountryMetaDataLoader countryMetaDataLoader;
-        private readonly IHtmlDocumentCache htmlDocumentCache;
+        private readonly IHtmlDocumentLoader htmlDocumentLoader;
 
         private readonly Func<CountryStatistics?, bool> countryStatisticsFilter = _ => true;
 
-        public CountryStatisticsParser(ICountryMetaDataLoader countryMetaDataLoader,
-            IHtmlDocumentCache htmlDocumentCache)
+        public CountryStatisticsLoader(ICountryMetaDataLoader countryMetaDataLoader,
+            IHtmlDocumentLoader htmlDocumentLoader)
         {
             this.countryMetaDataLoader = countryMetaDataLoader;
-            this.htmlDocumentCache = htmlDocumentCache;
+            this.htmlDocumentLoader = htmlDocumentLoader;
         }
 
         public async Task<IEnumerable<CountryStatistics?>> ParseAsync(DateTime fetchedAt,
             Func<CountryStatistics?, bool>? filter = null)
         {
-            var document = await this.htmlDocumentCache.LoadAsync();
+            var document = await this.htmlDocumentLoader.LoadAsync();
 
             var countryMetaData = await this.countryMetaDataLoader.LoadCountryMetaDataByCountryAsync();
 

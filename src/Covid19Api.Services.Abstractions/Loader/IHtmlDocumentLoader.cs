@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 
-namespace Covid19Api.Services.Abstractions.Caching
+namespace Covid19Api.Services.Abstractions.Loader
 {
-    public interface IHtmlDocumentCache
+    public interface IHtmlDocumentLoader
     {
         Task<HtmlDocument> LoadAsync();
     }
