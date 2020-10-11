@@ -15,7 +15,7 @@ namespace Covid19Api.Services.Loader
         private readonly ICountryMetaDataLoader countryMetaDataLoader;
         private readonly IHtmlDocumentLoader htmlDocumentLoader;
 
-        private readonly Func<CountryStatistics?, bool> countryStatisticsFilter = _ => true;
+        private readonly Func<CountryStatistics?, bool> defaultCountryStatisticsFilter = _ => true;
 
         public CountryStatisticsLoader(ICountryMetaDataLoader countryMetaDataLoader,
             IHtmlDocumentLoader htmlDocumentLoader)
@@ -33,7 +33,7 @@ namespace Covid19Api.Services.Loader
 
             var countryStatistics = GetTableRows(document)
                 .Select(tableRow => Parse(countryMetaData, tableRow, fetchedAt))
-                .Where(filter ?? this.countryStatisticsFilter);
+                .Where(filter ?? this.defaultCountryStatisticsFilter);
 
             return countryStatistics;
         }
@@ -53,10 +53,10 @@ namespace Covid19Api.Services.Loader
             var serious = ParseIntegerValue(tableDataNodes[9]);
 
             if (string.IsNullOrWhiteSpace(country)) return null;
-
+            
             var countryCode =
                 countryMetaData.FirstOrDefault(metaData =>
-                    metaData.Name.Equals(country, StringComparison.InvariantCultureIgnoreCase) ||
+                    metaData.Name.StartsWith(country, StringComparison.InvariantCultureIgnoreCase) ||
                     metaData.AltSpellings.Contains(country, StringComparer.InvariantCultureIgnoreCase))?.Alpha2Code ??
                 "N/A";
 

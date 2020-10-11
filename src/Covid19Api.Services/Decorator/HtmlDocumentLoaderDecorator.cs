@@ -15,7 +15,6 @@ namespace Covid19Api.Services.Decorator
         private readonly IDistributedCache distributedCache;
         private readonly IHtmlDocumentLoader htmlDocumentLoader;
 
-
         public HtmlDocumentLoaderDecorator(IDistributedCache distributedCache, IHtmlDocumentLoader htmlDocumentLoader)
         {
             this.distributedCache = distributedCache;
