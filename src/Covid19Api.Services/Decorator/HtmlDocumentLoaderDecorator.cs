@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Covid19Api.Services.Abstractions.Compression;
 using Covid19Api.Services.Abstractions.Loader;
 using HtmlAgilityPack;
 using Microsoft.Extensions.Caching.Distributed;
@@ -14,22 +15,26 @@ namespace Covid19Api.Services.Decorator
 
         private readonly IDistributedCache distributedCache;
         private readonly IHtmlDocumentLoader htmlDocumentLoader;
+        private readonly ICompressionService compressionService;
 
-        public HtmlDocumentLoaderDecorator(IDistributedCache distributedCache, IHtmlDocumentLoader htmlDocumentLoader)
+        public HtmlDocumentLoaderDecorator(IDistributedCache distributedCache, IHtmlDocumentLoader htmlDocumentLoader,
+            ICompressionService compressionService)
         {
             this.distributedCache = distributedCache;
             this.htmlDocumentLoader = htmlDocumentLoader;
+            this.compressionService = compressionService;
         }
 
         public async Task<HtmlDocument> LoadAsync()
         {
             HtmlDocument document;
-            var cached = await this.distributedCache.GetAsync(Key);
+            var compressed = await this.distributedCache.GetAsync(Key);
 
-            if (!(cached is null) && !cached.SequenceEqual(Array.Empty<byte>()))
+            if (!(compressed is null) && !compressed.SequenceEqual(Array.Empty<byte>()))
             {
+                var decompressed = await this.compressionService.DecompressAsync(compressed);
                 document = new HtmlDocument();
-                document.LoadHtml(Encoding.UTF8.GetString(cached));
+                document.LoadHtml(Encoding.UTF8.GetString(decompressed));
                 return document;
             }
 
@@ -41,7 +46,8 @@ namespace Covid19Api.Services.Decorator
 
         private async Task CacheAsync(HtmlDocument document)
         {
-            await this.distributedCache.SetAsync(Key, Encoding.UTF8.GetBytes(document.Text),
+            var compressed = await this.compressionService.CompressAsync(Encoding.UTF8.GetBytes(document.Text));
+            await this.distributedCache.SetAsync(Key, compressed,
                 new DistributedCacheEntryOptions
                 {
                     AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(30)

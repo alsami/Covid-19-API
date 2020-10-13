@@ -3,6 +3,7 @@ using Autofac;
 using AutoMapper.Contrib.Autofac.DependencyInjection;
 using Covid19Api.ExceptionFilter;
 using Covid19Api.IoC.Extensions;
+using Covid19Api.Middleware;
 using Covid19Api.UseCases.Queries;
 using MediatR.Extensions.Autofac.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
@@ -61,7 +62,7 @@ namespace Covid19Api
 
             services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Fastest);
 
-            services.AddMemoryCache();
+            services.AddScoped<RedirectDefaultRequestMiddleware>();
         }
 
         // ReSharper disable once UnusedMember.Global
@@ -71,13 +72,15 @@ namespace Covid19Api
                 .RegisterAutoMapper(typeof(Startup).Assembly)
                 .RegisterMediatR(typeof(LoadLatestGlobalStatisticsQueryHandler).Assembly)
                 .RegisterWorker()
-                .RegisterDataLoader()
-                .RegisterDatabaseDependencies(this.webHostEnvironment, this.configuration);
+                .RegisterServices()
+                .RegisterRepositories(this.webHostEnvironment, this.configuration);
         }
 
         // ReSharper disable once UnusedMember.Global
         public void Configure(IApplicationBuilder app)
         {
+            app.UseMiddleware<RedirectDefaultRequestMiddleware>();
+
             app
                 .UseResponseCompression()
                 .UseSwagger()

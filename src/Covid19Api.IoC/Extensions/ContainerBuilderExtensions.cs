@@ -2,7 +2,9 @@ using Autofac;
 using Covid19Api.IoC.Modules;
 using Covid19Api.Repositories;
 using Covid19Api.Repositories.Abstractions;
+using Covid19Api.Services.Abstractions.Compression;
 using Covid19Api.Services.Abstractions.Loader;
+using Covid19Api.Services.Compression;
 using Covid19Api.Services.Decorator;
 using Covid19Api.Services.Loader;
 using Covid19Api.Worker;
@@ -16,7 +18,7 @@ namespace Covid19Api.IoC.Extensions
 {
     public static class ContainerBuilderExtensions
     {
-        public static ContainerBuilder RegisterDatabaseDependencies(this ContainerBuilder builder,
+        public static ContainerBuilder RegisterRepositories(this ContainerBuilder builder,
             IHostEnvironment hostEnvironment, IConfiguration configuration)
         {
             builder.RegisterType<GlobalStatisticsRepository>()
@@ -32,8 +34,12 @@ namespace Covid19Api.IoC.Extensions
             return builder;
         }
 
-        public static ContainerBuilder RegisterDataLoader(this ContainerBuilder builder)
+        public static ContainerBuilder RegisterServices(this ContainerBuilder builder)
         {
+            builder.RegisterType<BrotliCompressionService>()
+                .As<ICompressionService>()
+                .SingleInstance();
+            
             builder.RegisterType<CountryStatisticsLoader>()
                 .As<ICountryStatisticsLoader>()
                 .SingleInstance();

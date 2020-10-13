@@ -1,11 +1,12 @@
 using System;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
+using Covid19Api.Services.Abstractions.Compression;
 using Covid19Api.Services.Abstractions.Loader;
 using Covid19Api.Services.Abstractions.Models;
 using Microsoft.Extensions.Caching.Distributed;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Covid19Api.Services.Decorator
 {
@@ -14,14 +15,15 @@ namespace Covid19Api.Services.Decorator
         private const string CacheKey = "CountryMetaData";
 
         private readonly IDistributedCache distributedCache;
-        
         private readonly ICountryMetaDataLoader countryMetaDataLoader;
+        private readonly ICompressionService compressionService;
 
-
-        public CountryMetaDataLoaderDecorator(IDistributedCache distributedCache, ICountryMetaDataLoader countryMetaDataLoader)
+        public CountryMetaDataLoaderDecorator(IDistributedCache distributedCache,
+            ICountryMetaDataLoader countryMetaDataLoader, ICompressionService compressionService)
         {
             this.distributedCache = distributedCache;
             this.countryMetaDataLoader = countryMetaDataLoader;
+            this.compressionService = compressionService;
         }
 
         public async Task<CountryMetaData[]> LoadCountryMetaDataByCountryAsync()
@@ -30,14 +32,16 @@ namespace Covid19Api.Services.Decorator
 
             if (!(cached is null) && !cached.SequenceEqual(Array.Empty<byte>()))
             {
-                return JsonSerializer.Deserialize<CountryMetaData[]>(cached);
+                var decompressed = await this.compressionService.DecompressAsync(cached);
+                return JsonSerializer.Deserialize<CountryMetaData[]>(decompressed);
             }
 
             var fetchedCountryMetaData = await this.countryMetaDataLoader.LoadCountryMetaDataByCountryAsync();
 
             var serialized = JsonSerializer.Serialize(fetchedCountryMetaData);
+            var compressed = await this.compressionService.CompressAsync(Encoding.UTF8.GetBytes(serialized));
 
-            await this.distributedCache.SetAsync(CacheKey, Encoding.UTF8.GetBytes(serialized), new DistributedCacheEntryOptions
+            await this.distributedCache.SetAsync(CacheKey, compressed, new DistributedCacheEntryOptions
             {
                 AbsoluteExpiration = DateTime.UtcNow.AddDays(10)
             });

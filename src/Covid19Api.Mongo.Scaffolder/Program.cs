@@ -47,7 +47,7 @@ namespace Covid19Api.Mongo.Scaffolder
                 .As<DatabaseUpdateDefinition>()
                 .InstancePerDependency();
 
-            builder.RegisterDatabaseDependencies(context.HostingEnvironment, context.Configuration);
+            builder.RegisterRepositories(context.HostingEnvironment, context.Configuration);
         }
     }
 }
