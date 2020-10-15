@@ -14,9 +14,5 @@
       <ProjectReference Include="..\Covid19Api.Services\Covid19Api.Services.csproj" />
       <ProjectReference Include="..\Covid19Api.UseCases.Abstractions\Covid19Api.UseCases.Abstractions.csproj" />
     </ItemGroup>
-    
-    <ItemGroup>
-      <PackageReference Include="AutoMapper" Version="10.0.0" />
-    </ItemGroup>
 
 </Project>
