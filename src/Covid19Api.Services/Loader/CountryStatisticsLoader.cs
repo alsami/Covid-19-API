@@ -60,17 +60,22 @@ namespace Covid19Api.Services.Loader
                 active, serious, fetchedAt);
         }
 
-        private static string GetCountryCode(IEnumerable<CountryMetaData> countryMetaData, string country)
+        private static string? GetCountryCode(IEnumerable<CountryMetaData> countryMetaData, string country)
         {
             var countryCode =
                 countryMetaData.FirstOrDefault(metaData =>
                     metaData.Name.StartsWith(country
                             .Replace("UK", "United Kingdom")
                             .Replace("Czechia", "Czech Republic")
-                            .Replace("Estwatini", "Kingdom of Eswatini"),
+                            .Replace("Estwatini", "Kingdom of Eswatini")
+                            .Replace("S. Korea", "Korea (Republic of)")
+                            .Replace("North Macedonia", "Macedonia (the former Yugoslav Republic of)")
+                            .Replace("Vietnam", "Viet Nam")
+                            .Replace("Vatican City", "Holy See")
+                        ,
                         StringComparison.InvariantCultureIgnoreCase) ||
-                    metaData.AltSpellings.Contains(country, StringComparer.InvariantCultureIgnoreCase))?.Alpha2Code ??
-                "N/A";
+                    metaData.AltSpellings.Contains(country, StringComparer.InvariantCultureIgnoreCase))?.Alpha2Code;
+            
             return countryCode;
         }
 
