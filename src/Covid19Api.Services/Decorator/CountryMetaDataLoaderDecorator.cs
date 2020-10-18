@@ -33,7 +33,7 @@ namespace Covid19Api.Services.Decorator
             if (!(cached is null) && !cached.SequenceEqual(Array.Empty<byte>()))
             {
                 var decompressed = await this.compressionService.DecompressAsync(cached);
-                return JsonSerializer.Deserialize<CountryMetaData[]>(decompressed);
+                return JsonSerializer.Deserialize<CountryMetaData[]>(decompressed) ?? Array.Empty<CountryMetaData>();
             }
 
             var fetchedCountryMetaData = await this.countryMetaDataLoader.LoadCountryMetaDataByCountryAsync();
