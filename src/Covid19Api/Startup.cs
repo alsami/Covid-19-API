@@ -4,6 +4,7 @@ using AutoMapper.Contrib.Autofac.DependencyInjection;
 using Covid19Api.ExceptionFilter;
 using Covid19Api.IoC.Extensions;
 using Covid19Api.Middleware;
+using Covid19Api.UseCases.Behaviors;
 using Covid19Api.UseCases.Queries;
 using MediatR.Extensions.Autofac.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
@@ -70,7 +71,7 @@ namespace Covid19Api
         {
             containerBuilder
                 .RegisterAutoMapper(typeof(Startup).Assembly)
-                .RegisterMediatR(typeof(LoadLatestGlobalStatisticsQueryHandler).Assembly)
+                .RegisterMediatR(typeof(LoadLatestGlobalStatisticsQueryHandler).Assembly, typeof(CachingBehavior<,>))
                 .RegisterWorker()
                 .RegisterServices()
                 .RegisterRepositories(this.webHostEnvironment, this.configuration);
