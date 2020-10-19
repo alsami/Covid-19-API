@@ -1,6 +1,9 @@
 using System.IO.Compression;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Autofac;
 using AutoMapper.Contrib.Autofac.DependencyInjection;
+using Covid19Api.AutoMapper;
 using Covid19Api.ExceptionFilter;
 using Covid19Api.IoC.Extensions;
 using Covid19Api.Middleware;
@@ -42,6 +45,11 @@ namespace Covid19Api
             {
                 options.Filters.Add<UnhandledExceptionFilter>();
                 options.Filters.Add<AzureCosmosDbThrottleExceptionFilter>();
+            }).AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.IgnoreNullValues = true;
+                options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
             });
 
             services.AddSwaggerGen(options => options.SwaggerDoc(ApiVersion, new OpenApiInfo
@@ -70,7 +78,7 @@ namespace Covid19Api
         public void ConfigureContainer(ContainerBuilder containerBuilder)
         {
             containerBuilder
-                .RegisterAutoMapper(typeof(Startup).Assembly)
+                .RegisterAutoMapper(typeof(CountryStatsProfile).Assembly)
                 .RegisterMediatR(typeof(LoadLatestGlobalStatisticsQueryHandler).Assembly, typeof(CachingBehavior<,>))
                 .RegisterWorker()
                 .RegisterServices()

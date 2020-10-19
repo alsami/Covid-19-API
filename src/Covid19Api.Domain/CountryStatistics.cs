@@ -32,7 +32,6 @@ namespace Covid19Api.Domain
 
         public DateTime FetchedAt { get; private set; }
 
-
         public CountryStatistics(string country, string? countryCode, int totalCases, int newCases, int totalDeaths,
             int newDeaths,
             int recoveredCases, int activeCases, int seriousCases, DateTime fetchedAt)

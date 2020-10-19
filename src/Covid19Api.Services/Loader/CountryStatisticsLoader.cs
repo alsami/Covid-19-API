@@ -53,7 +53,7 @@ namespace Covid19Api.Services.Loader
             var serious = ParseIntegerValue(tableDataNodes[9]);
 
             if (string.IsNullOrWhiteSpace(country)) return null;
-            
+
             var countryCode = GetCountryCode(countryMetaData, country);
 
             return new CountryStatistics(country, countryCode, totalCases, newCases, totalDeaths, newDeaths, recovered,
@@ -75,7 +75,7 @@ namespace Covid19Api.Services.Loader
                         ,
                         StringComparison.InvariantCultureIgnoreCase) ||
                     metaData.AltSpellings.Contains(country, StringComparer.InvariantCultureIgnoreCase))?.Alpha2Code;
-            
+
             return countryCode;
         }
 

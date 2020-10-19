@@ -10,5 +10,6 @@ namespace Covid19Api.Repositories.Abstractions
         Task StoreAsync(GlobalStatistics globalStatistics);
         Task<IEnumerable<GlobalStatistics>> HistoricalAsync(DateTime minFetchedAt);
         Task<IEnumerable<GlobalStatistics>> HistoricalForDayAsync(DateTime minFetchedAt);
+        Task<IList<GlobalStatistics>> HistoricalInRange(DateTime inclusiveStart, DateTime inclusiveEnd);
     }
 }

@@ -9,7 +9,7 @@ namespace Covid19Api.UseCases.Abstractions.Models
             this.Key = !string.IsNullOrWhiteSpace(key) ? key : throw new ArgumentNullException(nameof(key));
             this.Duration = duration;
         }
-        
+
         public string Key { get; }
 
         public TimeSpan Duration { get; }

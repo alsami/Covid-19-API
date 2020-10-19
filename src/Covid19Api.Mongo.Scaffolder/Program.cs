@@ -45,7 +45,7 @@ namespace Covid19Api.Mongo.Scaffolder
             builder.RegisterAssemblyTypes(typeof(Program).Assembly)
                 .AssignableTo(typeof(DatabaseUpdateDefinition))
                 .As<DatabaseUpdateDefinition>()
-                .InstancePerDependency();
+                .InstancePerLifetimeScope();
 
             builder.RegisterRepositories(context.HostingEnvironment, context.Configuration);
         }

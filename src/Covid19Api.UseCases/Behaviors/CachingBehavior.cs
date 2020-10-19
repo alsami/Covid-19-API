@@ -13,7 +13,8 @@ using Microsoft.Extensions.Caching.Distributed;
 
 namespace Covid19Api.UseCases.Behaviors
 {
-    public class CachingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull where TResponse : class
+    public class CachingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+        where TRequest : notnull where TResponse : class
     {
         private readonly JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions
         {
@@ -25,7 +26,7 @@ namespace Covid19Api.UseCases.Behaviors
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             PropertyNameCaseInsensitive = false
         };
-        
+
         private readonly IDistributedCache distributedCache;
         private readonly ICompressionService compressionService;
 
@@ -35,7 +36,8 @@ namespace Covid19Api.UseCases.Behaviors
             this.compressionService = compressionService;
         }
 
-        public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+        public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken,
+            RequestHandlerDelegate<TResponse> next)
         {
             if (!(request is ICacheableRequest cacheableRequest))
             {

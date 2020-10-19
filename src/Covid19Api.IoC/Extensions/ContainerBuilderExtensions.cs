@@ -25,6 +25,10 @@ namespace Covid19Api.IoC.Extensions
                 .As<IGlobalStatisticsRepository>()
                 .InstancePerLifetimeScope();
 
+            builder.RegisterType<GlobalStatisticsAggregatesRepository>()
+                .As<IGlobalStatisticsAggregatesRepository>()
+                .InstancePerLifetimeScope();
+
             builder.RegisterType<CountryStatisticsRepository>()
                 .As<ICountryStatisticsRepository>()
                 .InstancePerLifetimeScope();
@@ -39,7 +43,7 @@ namespace Covid19Api.IoC.Extensions
             builder.RegisterType<BrotliCompressionService>()
                 .As<ICompressionService>()
                 .SingleInstance();
-            
+
             builder.RegisterType<CountryStatisticsLoader>()
                 .As<ICountryStatisticsLoader>()
                 .SingleInstance();
@@ -71,6 +75,10 @@ namespace Covid19Api.IoC.Extensions
         public static ContainerBuilder RegisterWorker(this ContainerBuilder builder)
         {
             builder.RegisterType<DataRefreshWorker>()
+                .As<IHostedService>()
+                .InstancePerDependency();
+
+            builder.RegisterType<GlobalStatisticsAggregationWorker>()
                 .As<IHostedService>()
                 .InstancePerDependency();
 

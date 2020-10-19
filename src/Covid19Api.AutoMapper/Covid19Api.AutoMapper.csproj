@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="10.1.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Covid19Api.Domain\Covid19Api.Domain.csproj" />
+      <ProjectReference Include="..\Covid19Api.Presentation\Covid19Api.Presentation.csproj" />
+    </ItemGroup>
+
+</Project>

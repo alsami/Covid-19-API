@@ -15,6 +15,8 @@ namespace Covid19Api.UseCases.Abstractions.Queries
         }
 
         public DateTime MinFetchedAt { get; }
-        public CacheConfiguration GetCacheConfiguration() => new CacheConfiguration(nameof(LoadHistoricalGlobalStatisticsQuery), TimeSpan.FromMinutes(30));
+
+        public CacheConfiguration GetCacheConfiguration() =>
+            new CacheConfiguration(nameof(LoadHistoricalGlobalStatisticsQuery), TimeSpan.FromMinutes(30));
     }
 }
