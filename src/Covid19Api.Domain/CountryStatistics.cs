@@ -28,13 +28,11 @@ namespace Covid19Api.Domain
 
         public int ActiveCases { get; private set; }
 
-        public int SeriousCases { get; private set; }
-
         public DateTime FetchedAt { get; private set; }
 
         public CountryStatistics(string country, string? countryCode, int totalCases, int newCases, int totalDeaths,
             int newDeaths,
-            int recoveredCases, int activeCases, int seriousCases, DateTime fetchedAt)
+            int recoveredCases, int activeCases, DateTime fetchedAt)
         {
             this.Country = country;
             this.CountryCode = countryCode;
@@ -44,7 +42,6 @@ namespace Covid19Api.Domain
             this.NewDeaths = newDeaths;
             this.RecoveredCases = recoveredCases;
             this.ActiveCases = activeCases;
-            this.SeriousCases = seriousCases;
             this.FetchedAt = fetchedAt;
             this.Id = this.Generate();
         }
@@ -53,8 +50,7 @@ namespace Covid19Api.Domain
         {
             return this.TotalCases == 0 && this.NewCases == 0 &&
                    this.TotalDeaths == 0 && this.NewDeaths == 0 &&
-                   this.RecoveredCases == 0 && this.ActiveCases == 0 &&
-                   this.SeriousCases == 0;
+                   this.RecoveredCases == 0 && this.ActiveCases == 0;
         }
 
         private Guid Generate()

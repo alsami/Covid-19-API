@@ -18,7 +18,6 @@ stages:
   - test
   - publish
   - deploy
-  - database
 
 jobs:
   include:
@@ -56,16 +55,3 @@ jobs:
         - curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
       script:
         - ./deploy-app.sh
-
-    - stage: database
-      name: database migrations and updates
-      if: tag IS present
-      env:
-        global: 
-          - DOTNET_ENVIRONMENT="Azure"
-      before_script:
-        - sudo snap alias dotnet-sdk.dotnet dotnet
-      script: 
-        - ./execute-database-updates.sh
-        - rm -rf publish
-        - ./execute-database-migrations

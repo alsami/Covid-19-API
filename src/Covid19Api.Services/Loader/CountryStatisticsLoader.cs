@@ -50,14 +50,14 @@ namespace Covid19Api.Services.Loader
             var newDeaths = ParseIntegerValue(tableDataNodes[5]);
             var recovered = ParseIntegerValue(tableDataNodes[6]);
             var active = ParseIntegerValue(tableDataNodes[8]);
-            var serious = ParseIntegerValue(tableDataNodes[9]);
+            // This would be serious: var serious = ParseIntegerValue(tableDataNodes[9])
 
             if (string.IsNullOrWhiteSpace(country)) return null;
 
             var countryCode = GetCountryCode(countryMetaData, country);
 
             return new CountryStatistics(country, countryCode, totalCases, newCases, totalDeaths, newDeaths, recovered,
-                active, serious, fetchedAt);
+                active, fetchedAt);
         }
 
         private static string? GetCountryCode(IEnumerable<CountryMetaData> countryMetaData, string country)
