@@ -1,7 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using Covid19Api.Domain;
 using Covid19Api.Presentation.Response;
 using Covid19Api.Repositories.Abstractions;
 using Covid19Api.UseCases.Abstractions.Queries;

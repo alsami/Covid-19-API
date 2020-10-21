@@ -11,7 +11,8 @@ namespace Covid19Api.Repositories.Abstractions
         Task<IEnumerable<CountryStatistics>> HistoricalAsync(DateTime minFetchedAt);
         Task<IEnumerable<CountryStatistics>> HistoricalAsync(DateTime minFetchedAt, string country);
         Task<IEnumerable<CountryStatistics>> HistoricalForDayAsync(DateTime minFetchedAt, string country);
-        Task<IList<CountryStatistics>> HistoricalInRangeAsync(string country, DateTime inclusiveStart,
+
+        Task<CountryStatistics?> FindInRangeAsync(string country, DateTime inclusiveStart,
             DateTime exclusiveEnd);
         Task StoreManyAsync(IEnumerable<CountryStatistics> countryStats);
     }

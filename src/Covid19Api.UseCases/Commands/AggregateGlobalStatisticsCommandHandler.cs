@@ -1,6 +1,5 @@
 using System;
 using System.Globalization;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Covid19Api.Domain;
@@ -38,15 +37,12 @@ namespace Covid19Api.UseCases.Commands
                 start.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture),
                 end.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture));
 
-            var globalStatisticsInRange = await this.globalStatisticsRepository.HistoricalInRange(start, end);
+            var globalStatisticsInRange = await this.globalStatisticsRepository.FindInRangeAsync(start, end);
 
-            if (!globalStatisticsInRange.Any()) return Unit.Value;
+            if (globalStatisticsInRange is null) return Unit.Value;
 
-            var aggregate = new GlobalStatisticsAggregate(
-                globalStatisticsInRange.Sum(statistics => statistics.Total),
-                globalStatisticsInRange.Sum(statistics => statistics.Recovered),
-                globalStatisticsInRange.Sum(statistics => statistics.Deaths),
-                request.Month, request.Year);
+            var aggregate = new GlobalStatisticsAggregate(globalStatisticsInRange.Total,
+                globalStatisticsInRange.Recovered, globalStatisticsInRange.Deaths, request.Month, request.Year);
 
             await this.globalStatisticsAggregatesRepository.StoreAsync(aggregate);
 

@@ -98,7 +98,7 @@ namespace Covid19Api.Repositories
             return await cursor.ToListAsync();
         }
 
-        public async Task<IList<CountryStatistics>> HistoricalInRangeAsync(string country, DateTime inclusiveStart,
+        public async Task<CountryStatistics?> FindInRangeAsync(string country, DateTime inclusiveStart,
             DateTime exclusiveEnd)
         {
             var collection = this.GetCollection();
@@ -115,11 +115,16 @@ namespace Covid19Api.Repositories
                 Builders<CountryStatistics>.Filter.Where(
                     statistics => statistics.FetchedAt <= exclusiveEnd);
 
+            var sort = Builders<CountryStatistics>.Sort.Descending(statistics => statistics.FetchedAt);
+
             var filter = countryFilter & startFilter & endFilter;
 
-            var cursor = await collection.FindAsync(filter);
+            var cursor = await collection.FindAsync(filter, new FindOptions<CountryStatistics>
+            {
+                Sort = sort
+            });
 
-            return await cursor.ToListAsync();
+            return await cursor.FirstOrDefaultAsync();
         }
 
         public async Task StoreManyAsync(IEnumerable<CountryStatistics> countryStats)

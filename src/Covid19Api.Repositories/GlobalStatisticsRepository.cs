@@ -59,16 +59,21 @@ namespace Covid19Api.Repositories
             return all.OrderBy(entry => entry.FetchedAt);
         }
 
-        public async Task<IList<GlobalStatistics>> HistoricalInRange(DateTime inclusiveStart, DateTime inclusiveEnd)
+        public async Task<GlobalStatistics?> FindInRangeAsync(DateTime inclusiveStart, DateTime inclusiveEnd)
         {
             var collection = this.GetCollection();
 
             var leftFilter = Builders<GlobalStatistics>.Filter.Where(global => global.FetchedAt >= inclusiveStart);
             var rightFilter = Builders<GlobalStatistics>.Filter.Where(global => global.FetchedAt <= inclusiveEnd);
             var combinedFilter = leftFilter & rightFilter;
+            var sort = Builders<GlobalStatistics>.Sort.Descending(global => global.FetchedAt);
 
-            var cursor = await collection.FindAsync(combinedFilter);
-            return await cursor.ToListAsync();
+            var cursor = await collection.FindAsync(combinedFilter, new FindOptions<GlobalStatistics>
+            {
+                Sort = sort
+            });
+
+            return await cursor.FirstOrDefaultAsync();
         }
 
         private IMongoCollection<GlobalStatistics> GetCollection()

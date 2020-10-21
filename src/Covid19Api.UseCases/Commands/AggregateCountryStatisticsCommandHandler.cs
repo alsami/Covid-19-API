@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Covid19Api.Domain;
@@ -45,17 +44,17 @@ namespace Covid19Api.UseCases.Commands
 
         private async Task AggregateCountryAsync(string country, DateTime start, DateTime end)
         {
-            var statisticsInRange = await this.countryStatisticsRepository.HistoricalInRangeAsync(country, start, end);
+            var statisticInRange = await this.countryStatisticsRepository.FindInRangeAsync(country, start, end);
 
-            if (!statisticsInRange.Any()) return;
+            if (statisticInRange is null) return;
             
-            var aggregate = new CountryStatisticsAggregate(country, statisticsInRange.First().CountryCode, 
-                statisticsInRange.Sum(statistics => statistics.TotalCases),
-                statisticsInRange.Sum(statistics => statistics.NewCases),
-                statisticsInRange.Sum(statistics => statistics.TotalDeaths),
-                statisticsInRange.Sum(statistics => statistics.NewDeaths),
-                statisticsInRange.Sum(statistics => statistics.RecoveredCases),
-                statisticsInRange.Sum(statistics => statistics.ActiveCases),
+            var aggregate = new CountryStatisticsAggregate(country, statisticInRange.CountryCode, 
+                statisticInRange.TotalCases,
+                statisticInRange.NewCases,
+                statisticInRange.TotalDeaths,
+                statisticInRange.NewDeaths,
+                statisticInRange.RecoveredCases,
+                statisticInRange.ActiveCases,
                 start.Month,
                 start.Year
                 );
