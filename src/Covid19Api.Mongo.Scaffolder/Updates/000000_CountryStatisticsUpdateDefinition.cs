@@ -30,8 +30,22 @@ namespace Covid19Api.Mongo.Scaffolder.Updates
             await collection.Indexes.CreateManyAsync(new[]
             {
                 CreateTotalCasesFetchedAtIndexModel(),
-                CreateTotalCasesFetchedAtCountryIndexModel()
+                CreateTotalCasesFetchedAtCountryIndexModel(),
+                CreatFetchedAtIndexModel()
             });
+        }
+
+        private static CreateIndexModel<CountryStatistics> CreatFetchedAtIndexModel()
+        {
+            var fetchedAt = Builders<CountryStatistics>
+                .IndexKeys
+                .Ascending(statistics => statistics.FetchedAt);
+
+            var fetchedAtIndexModel = new CreateIndexModel<CountryStatistics>(fetchedAt, new CreateIndexOptions
+            {
+                Name = $"{CollectionNames.CountryStatistics}_fetchedAt"
+            });
+            return fetchedAtIndexModel;
         }
 
         private static CreateIndexModel<CountryStatistics> CreateTotalCasesFetchedAtIndexModel()
