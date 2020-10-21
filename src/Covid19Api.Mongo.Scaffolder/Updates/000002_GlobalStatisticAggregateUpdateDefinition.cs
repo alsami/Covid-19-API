@@ -24,7 +24,7 @@ namespace Covid19Api.Mongo.Scaffolder.Updates
         protected override async Task ExecuteAsync()
         {
             await this.databaseContext.Database.CreateCollectionIfNotExistsAsync(CollectionNames
-                .GlobalStatisticsAggregate);
+                .GlobalStatisticsAggregates);
 
             var monthIndex = Builders<GlobalStatisticsAggregate>
                 .IndexKeys
@@ -32,7 +32,7 @@ namespace Covid19Api.Mongo.Scaffolder.Updates
 
             var monthIndexModel = new CreateIndexModel<GlobalStatisticsAggregate>(monthIndex, new CreateIndexOptions
             {
-                Name = $"{CollectionNames.GlobalStatisticsAggregate}_month_descending"
+                Name = $"{CollectionNames.GlobalStatisticsAggregates}_month_descending"
             });
 
             var yearIndex = Builders<GlobalStatisticsAggregate>
@@ -41,7 +41,7 @@ namespace Covid19Api.Mongo.Scaffolder.Updates
 
             var yearIndexModel = new CreateIndexModel<GlobalStatisticsAggregate>(yearIndex, new CreateIndexOptions
             {
-                Name = $"{CollectionNames.GlobalStatisticsAggregate}_year_descending"
+                Name = $"{CollectionNames.GlobalStatisticsAggregates}_year_descending"
             });
 
             var yearMonthIndex = Builders<GlobalStatisticsAggregate>
@@ -51,13 +51,13 @@ namespace Covid19Api.Mongo.Scaffolder.Updates
             var yearMonthIndexModel = new CreateIndexModel<GlobalStatisticsAggregate>(yearMonthIndex,
                 new CreateIndexOptions
                 {
-                    Name = $"{CollectionNames.GlobalStatisticsAggregate}_year_month",
+                    Name = $"{CollectionNames.GlobalStatisticsAggregates}_year_month",
                     Unique = true
                 });
 
             var collection =
                 this.databaseContext.Database.GetCollection<GlobalStatisticsAggregate>(CollectionNames
-                    .GlobalStatisticsAggregate);
+                    .GlobalStatisticsAggregates);
 
             await collection.Indexes.CreateManyAsync(new[]
             {

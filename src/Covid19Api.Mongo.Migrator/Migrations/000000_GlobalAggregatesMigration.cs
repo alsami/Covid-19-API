@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 
 namespace Covid19Api.Mongo.Migrator.Migrations
 {
+    // ReSharper disable once UnusedType.Global
     public class GlobalAggregatesMigration : DatabaseMigration
     {
         private readonly GlobalAggregatesStartConfiguration options;

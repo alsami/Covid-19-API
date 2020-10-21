@@ -17,14 +17,12 @@ namespace Covid19Api.UseCases.Queries
             IEnumerable<CountryStatisticsDto>>
     {
         private readonly IMapper mapper;
-        private readonly IHtmlDocumentLoader htmlDocumentLoader;
         private readonly ICountryStatisticsLoader countryStatisticsLoader;
 
-        public LoadLatestCountriesStatisticsQueryHandler(IMapper mapper, IHtmlDocumentLoader htmlDocumentLoader,
+        public LoadLatestCountriesStatisticsQueryHandler(IMapper mapper,
             ICountryStatisticsLoader countryStatisticsLoader)
         {
             this.mapper = mapper;
-            this.htmlDocumentLoader = htmlDocumentLoader;
             this.countryStatisticsLoader = countryStatisticsLoader;
         }
 

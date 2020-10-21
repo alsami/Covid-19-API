@@ -29,7 +29,7 @@ namespace Covid19Api.Mongo.Migrator
 
             foreach (var databaseMigration in migrations.OrderBy(migration => migration.Number))
                 await databaseMigration.ExecuteUpdateAsync();
-            
+
             await host.StopAsync();
         }
 
@@ -45,8 +45,14 @@ namespace Covid19Api.Mongo.Migrator
         private static void ConfigureServices(HostBuilderContext hostBuilderContext, IServiceCollection services)
         {
             services.AddOptions();
+
+            services.AddHttpClient();
+
             services.Configure<GlobalAggregatesStartConfiguration>(options =>
                 hostBuilderContext.Configuration.GetSection(nameof(GlobalAggregatesStartConfiguration)).Bind(options));
+
+            services.Configure<CountryAggregatesStartConfiguration>(options =>
+                hostBuilderContext.Configuration.GetSection(nameof(CountryAggregatesStartConfiguration)).Bind(options));
         }
 
         private static void ConfigureLogger(HostBuilderContext context, LoggerConfiguration loggerConfiguration)

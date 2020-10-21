@@ -33,6 +33,10 @@ namespace Covid19Api.IoC.Extensions
                 .As<ICountryStatisticsRepository>()
                 .InstancePerLifetimeScope();
 
+            builder.RegisterType<CountryStatisticsAggregatesRepository>()
+                .As<ICountryStatisticsAggregatesRepository>()
+                .InstancePerLifetimeScope();
+
             builder.RegisterModule(new Covid19ApiDbContextModule(hostEnvironment, configuration));
 
             return builder;
@@ -79,6 +83,10 @@ namespace Covid19Api.IoC.Extensions
                 .InstancePerDependency();
 
             builder.RegisterType<GlobalStatisticsAggregationWorker>()
+                .As<IHostedService>()
+                .InstancePerDependency();
+            
+            builder.RegisterType<CountryStatisticsAggregateWorker>()
                 .As<IHostedService>()
                 .InstancePerDependency();
 
