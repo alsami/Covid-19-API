@@ -6,5 +6,8 @@ namespace Covid19Api.IoC.Extensions
     {
         public static bool IsAzure(this IHostEnvironment hostingEnvironment)
             => hostingEnvironment.EnvironmentName == "Azure";
+
+        public static bool IsContinuousIntegration(this IHostEnvironment hostEnvironment)
+            => hostEnvironment.EnvironmentName == "CI";
     }
 }

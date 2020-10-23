@@ -22,7 +22,7 @@ namespace Covid19Api
     public class Startup
     {
         private readonly IConfiguration configuration;
-        private readonly IWebHostEnvironment webHostEnvironment;
+        private readonly IWebHostEnvironment hostEnvironment;
         private const string ApiName = "Covid19-API";
         private const string ApiVersion = "1.0.0";
 
@@ -33,10 +33,10 @@ namespace Covid19Api
             "application/json"
         };
 
-        public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
+        public Startup(IConfiguration configuration, IWebHostEnvironment hostEnvironment)
         {
             this.configuration = configuration;
-            this.webHostEnvironment = webHostEnvironment;
+            this.hostEnvironment = hostEnvironment;
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -80,9 +80,9 @@ namespace Covid19Api
             containerBuilder
                 .RegisterAutoMapper(typeof(CountryStatsProfile).Assembly)
                 .RegisterMediatR(typeof(LoadLatestGlobalStatisticsQueryHandler).Assembly, typeof(CachingBehavior<,>))
-                .RegisterWorker()
+                .RegisterWorker(this.hostEnvironment)
                 .RegisterServices()
-                .RegisterRepositories(this.webHostEnvironment, this.configuration);
+                .RegisterRepositories(this.hostEnvironment, this.configuration);
         }
 
         // ReSharper disable once UnusedMember.Global

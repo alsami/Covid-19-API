@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Covid19Api.Tests.Fixtures;
 using FluentAssertions;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Covid19Api.Tests
 {
@@ -11,10 +12,12 @@ namespace Covid19Api.Tests
         private const string ControllerBasePath = "api/v1/global";
 
         private readonly HttpClient client;
+        private readonly ITestOutputHelper testOutputHelper;
         private HttpResponseMessage response = null!;
 
-        public GlobalStatisticsV1IntegrationTests(WebApplicationFactoryFixture webApplicationFactoryFixture)
+        public GlobalStatisticsV1IntegrationTests(WebApplicationFactoryFixture webApplicationFactoryFixture, ITestOutputHelper testOutputHelper)
         {
+            this.testOutputHelper = testOutputHelper;
             this.client = webApplicationFactoryFixture.CreateClient();
         }
 
@@ -23,7 +26,7 @@ namespace Covid19Api.Tests
         {
             // GivenADefaultEnvironment()
             await this.WhenRequestingCurrentGlobalStatisticsAsync();
-            this.ThenTheResponseShouldBeSuccessful();
+            await this.ThenTheResponseShouldBeSuccessfulAsync();
         }
 
         private async Task WhenRequestingCurrentGlobalStatisticsAsync()
@@ -31,9 +34,11 @@ namespace Covid19Api.Tests
             this.response = await this.client.GetAsync(ControllerBasePath);
         }
 
-        private void ThenTheResponseShouldBeSuccessful()
+        private async Task ThenTheResponseShouldBeSuccessfulAsync()
         {
             this.response.Should().NotBeNull();
+            this.testOutputHelper.WriteLine(this.response.StatusCode.ToString());
+            this.testOutputHelper.WriteLine(await this.response.Content.ReadAsStringAsync());
             this.response.IsSuccessStatusCode.Should().BeTrue();
         }
     }
