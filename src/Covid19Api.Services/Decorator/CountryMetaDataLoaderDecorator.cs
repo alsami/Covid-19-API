@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Covid19Api.Services.Abstractions.Compression;
 using Covid19Api.Services.Abstractions.Loader;
@@ -10,9 +11,11 @@ using Microsoft.Extensions.Caching.Distributed;
 
 namespace Covid19Api.Services.Decorator
 {
-    public class CountryMetaDataLoaderDecorator : ICountryMetaDataLoader
+    public class CountryMetaDataLoaderDecorator : ICountryMetaDataLoader, IDisposable
     {
         private const string CacheKey = "CountryMetaData";
+
+        private static readonly SemaphoreSlim Mutex = new SemaphoreSlim(1);
 
         private readonly IDistributedCache distributedCache;
         private readonly ICountryMetaDataLoader countryMetaDataLoader;
@@ -25,8 +28,28 @@ namespace Covid19Api.Services.Decorator
             this.countryMetaDataLoader = countryMetaDataLoader;
             this.compressionService = compressionService;
         }
+        
+        
+        public void Dispose()
+        {
+            Mutex.Dispose();
+            GC.SuppressFinalize(this);
+        }
 
-        public async Task<CountryMetaData[]> LoadCountryMetaDataByCountryAsync()
+        public async Task<CountryMetaData[]> LoadCountryMetaDataAsync()
+        {
+            try
+            {
+                await Mutex.WaitAsync();
+                return await this.LoadCountryMetaDataInternalAsync();
+            }
+            finally
+            {
+                Mutex.Release(1);
+            }
+        }
+
+        private async Task<CountryMetaData[]> LoadCountryMetaDataInternalAsync()
         {
             var cached = await this.distributedCache.GetAsync(CacheKey);
 
@@ -36,8 +59,14 @@ namespace Covid19Api.Services.Decorator
                 return JsonSerializer.Deserialize<CountryMetaData[]>(decompressed) ?? Array.Empty<CountryMetaData>();
             }
 
-            var fetchedCountryMetaData = await this.countryMetaDataLoader.LoadCountryMetaDataByCountryAsync();
+            var fetchedCountryMetaData = await this.countryMetaDataLoader.LoadCountryMetaDataAsync();
+            await this.CacheAsync(fetchedCountryMetaData);
 
+            return fetchedCountryMetaData;
+        }
+
+        private async ValueTask CacheAsync(CountryMetaData[] fetchedCountryMetaData)
+        {
             var serialized = JsonSerializer.Serialize(fetchedCountryMetaData);
             var compressed = await this.compressionService.CompressAsync(Encoding.UTF8.GetBytes(serialized));
 
@@ -45,8 +74,6 @@ namespace Covid19Api.Services.Decorator
             {
                 AbsoluteExpiration = DateTime.UtcNow.AddDays(10)
             });
-
-            return fetchedCountryMetaData;
         }
     }
 }

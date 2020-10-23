@@ -5,6 +5,6 @@ namespace Covid19Api.Services.Abstractions.Loader
 {
     public interface ICountryMetaDataLoader
     {
-        Task<CountryMetaData[]> LoadCountryMetaDataByCountryAsync();
+        Task<CountryMetaData[]> LoadCountryMetaDataAsync();
     }
 }

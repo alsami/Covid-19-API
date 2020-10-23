@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Covid19Api.Services.Abstractions.Loader;
 using Covid19Api.Services.Abstractions.Models;
@@ -13,6 +14,11 @@ namespace Covid19Api.Services.Loader
         private const string ApiUrl = "https://restcountries.eu/rest/v2/all";
 #pragma warning restore
 
+        private static readonly JsonSerializerOptions SerializerOptions = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        };
+        
         private readonly ILogger<CountryMetaDataLoader> logger;
         private readonly IHttpClientFactory httpClientFactory;
 
@@ -22,13 +28,19 @@ namespace Covid19Api.Services.Loader
             this.httpClientFactory = httpClientFactory;
         }
 
-        public async Task<CountryMetaData[]> LoadCountryMetaDataByCountryAsync()
+        public async Task<CountryMetaData[]> LoadCountryMetaDataAsync()
         {
             var client = this.httpClientFactory.CreateClient();
 
             var response = await client.GetAsync(ApiUrl);
 
-            if (response.IsSuccessStatusCode) return await response.Content.ReadAsAsync<CountryMetaData[]>();
+            if (response.IsSuccessStatusCode)
+            {
+                var deserialized = await JsonSerializer.DeserializeAsync<CountryMetaData[]>(
+                    await response.Content.ReadAsStreamAsync(), SerializerOptions);
+                
+                return deserialized ?? Array.Empty<CountryMetaData>();
+            }
 
             var error = await response.Content.ReadAsStringAsync();
             this.logger.LogError("Failed load country meta-data from {url}! Status-Code: {statusCode} Error:\n{error}",

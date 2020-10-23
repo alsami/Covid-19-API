@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Covid19Api.Services.Abstractions.Compression;
 using Covid19Api.Services.Abstractions.Loader;
@@ -9,9 +10,11 @@ using Microsoft.Extensions.Caching.Distributed;
 
 namespace Covid19Api.Services.Decorator
 {
-    public class HtmlDocumentLoaderDecorator : IHtmlDocumentLoader
+    public class HtmlDocumentLoaderDecorator : IHtmlDocumentLoader, IDisposable
     {
         private const string Key = "HTMLDOCCACHE";
+
+        private static readonly SemaphoreSlim Mutex = new SemaphoreSlim(1);
 
         private readonly IDistributedCache distributedCache;
         private readonly IHtmlDocumentLoader htmlDocumentLoader;
@@ -25,7 +28,26 @@ namespace Covid19Api.Services.Decorator
             this.compressionService = compressionService;
         }
 
+        public void Dispose()
+        {
+            Mutex.Dispose();
+            GC.SuppressFinalize(this);
+        }
+
         public async Task<HtmlDocument> LoadAsync()
+        {
+            try
+            {
+                await Mutex.WaitAsync();
+                return await this.LoadInternalAsync();
+            }
+            finally
+            {
+                Mutex.Release(1);
+            }
+        }
+
+        private async Task<HtmlDocument> LoadInternalAsync()
         {
             HtmlDocument document;
             var compressed = await this.distributedCache.GetAsync(Key);

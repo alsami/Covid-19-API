@@ -1,8 +1,3 @@
-// ReSharper disable MemberCanBePrivate.Global
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-// ReSharper disable UnusedMember.Local
-// ReSharper disable ClassNeverInstantiated.Global
-
 namespace Covid19Api.Services.Abstractions.Models
 {
     public class CountryMetaData
@@ -14,14 +9,10 @@ namespace Covid19Api.Services.Abstractions.Models
             this.AltSpellings = altSpellings;
         }
 
-        private CountryMetaData()
-        {
-        }
+        public string Name { get; }
 
-        public string Name { get; set; } = null!;
+        public string Alpha2Code { get; }
 
-        public string Alpha2Code { get; set; } = null!;
-
-        public string[] AltSpellings { get; set; } = null!;
+        public string[] AltSpellings { get; }
     }
 }

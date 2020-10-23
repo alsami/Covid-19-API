@@ -29,7 +29,7 @@ namespace Covid19Api.Services.Loader
         {
             var document = await this.htmlDocumentLoader.LoadAsync();
 
-            var countryMetaData = await this.countryMetaDataLoader.LoadCountryMetaDataByCountryAsync();
+            var countryMetaData = await this.countryMetaDataLoader.LoadCountryMetaDataAsync();
 
             var countryStatistics = GetTableRows(document)
                 .Select(tableRow => Parse(countryMetaData, tableRow, fetchedAt))
