@@ -14,6 +14,7 @@ namespace Covid19Api.Repositories.Abstractions
 
         Task<CountryStatistics?> FindInRangeAsync(string country, DateTime inclusiveStart,
             DateTime exclusiveEnd);
+
         Task StoreManyAsync(IEnumerable<CountryStatistics> countryStats);
     }
 }

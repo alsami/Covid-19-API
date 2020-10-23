@@ -18,7 +18,7 @@ namespace Covid19Api.Services.Loader
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
-        
+
         private readonly ILogger<CountryMetaDataLoader> logger;
         private readonly IHttpClientFactory httpClientFactory;
 
@@ -38,7 +38,7 @@ namespace Covid19Api.Services.Loader
             {
                 var deserialized = await JsonSerializer.DeserializeAsync<CountryMetaData[]>(
                     await response.Content.ReadAsStreamAsync(), SerializerOptions);
-                
+
                 return deserialized ?? Array.Empty<CountryMetaData>();
             }
 

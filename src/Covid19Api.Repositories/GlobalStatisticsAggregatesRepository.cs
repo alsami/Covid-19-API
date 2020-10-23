@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Covid19Api.Domain;
 using Covid19Api.Mongo;
@@ -36,6 +37,15 @@ namespace Covid19Api.Repositories
             var cursor = await collection.FindAsync(aggregate => aggregate.Month == month && aggregate.Year == year);
 
             return await cursor.SingleOrDefaultAsync();
+        }
+
+        public async Task<IList<GlobalStatisticsAggregate>> FindInYearAsync(int year)
+        {
+            var collection = this.GetCollection();
+
+            var cursor = await collection.FindAsync(aggregate => aggregate.Year == year);
+
+            return await cursor.ToListAsync();
         }
 
         private IMongoCollection<GlobalStatisticsAggregate> GetCollection()

@@ -25,19 +25,20 @@ namespace Covid19Api.Mongo.Scaffolder.Updates
         {
             await this.databaseContext.Database.CreateCollectionIfNotExistsAsync(CollectionNames
                 .CountryStatisticsAggregates);
-            
+
             var collection =
                 this.databaseContext.Database.GetCollection<CountryStatisticsAggregate>(CollectionNames
                     .CountryStatisticsAggregates);
-            
+
             var countryIndex = Builders<CountryStatisticsAggregate>
                 .IndexKeys
                 .Ascending(statistics => statistics.Country);
 
-            var countryIndexModel = new CreateIndexModel<CountryStatisticsAggregate>(countryIndex, new CreateIndexOptions
-            {
-                Name = $"{CollectionNames.CountryStatisticsAggregates}_country"
-            });
+            var countryIndexModel = new CreateIndexModel<CountryStatisticsAggregate>(countryIndex,
+                new CreateIndexOptions
+                {
+                    Name = $"{CollectionNames.CountryStatisticsAggregates}_country"
+                });
 
             await collection.Indexes.CreateOneAsync(countryIndexModel);
 
@@ -49,7 +50,7 @@ namespace Covid19Api.Mongo.Scaffolder.Updates
             {
                 Name = $"{CollectionNames.CountryStatisticsAggregates}_month_descending"
             });
-            
+
             await collection.Indexes.CreateOneAsync(monthIndexModel);
 
             var yearIndex = Builders<CountryStatisticsAggregate>
@@ -60,7 +61,7 @@ namespace Covid19Api.Mongo.Scaffolder.Updates
             {
                 Name = $"{CollectionNames.CountryStatisticsAggregates}_year_descending"
             });
-            
+
             await collection.Indexes.CreateOneAsync(yearIndexModel);
 
             var yearMonthIndex = Builders<CountryStatisticsAggregate>
@@ -72,9 +73,9 @@ namespace Covid19Api.Mongo.Scaffolder.Updates
                 {
                     Name = $"{CollectionNames.CountryStatisticsAggregates}_year_month",
                 });
-            
+
             await collection.Indexes.CreateOneAsync(yearMonthIndexModel);
-            
+
             var countryYearMonthIndex = Builders<CountryStatisticsAggregate>
                 .IndexKeys
                 .Combine(countryIndex, yearIndex, monthIndex);

@@ -11,10 +11,11 @@ namespace Covid19Api.Mongo.Migrator.Abstractions
         {
             this.logger = logger;
         }
+
         public abstract int Number { get; }
-        
+
         protected abstract string Name { get; }
-        
+
         public async Task ExecuteUpdateAsync()
         {
             this.logger.LogInformation("Executing migration {number}-{migration}", this.Number, this.Name);

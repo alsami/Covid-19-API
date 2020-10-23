@@ -5,21 +5,21 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Covid19Api.Presentation.Response;
 using Covid19Api.Services.Abstractions.Loader;
-using Covid19Api.UseCases.Abstractions.Queries;
+using Covid19Api.UseCases.Abstractions.Queries.CountryStatistics;
 using Covid19Api.UseCases.Filter;
 using MediatR;
 
-namespace Covid19Api.UseCases.Queries
+namespace Covid19Api.UseCases.Queries.CountryStatistics
 {
     public class
-        LoadLatestStatisticsForCountryQueryHandler : IRequestHandler<LoadLatestStatisticsForCountryQuery,
+        LoadLatestCountryStatisticsForCountryQueryHandler : IRequestHandler<LoadLatestStatisticsForCountryQuery,
             CountryStatisticsDto>
     {
         private readonly IMapper mapper;
         private readonly IHtmlDocumentLoader htmlDocumentLoader;
         private readonly ICountryStatisticsLoader countryStatisticsLoader;
 
-        public LoadLatestStatisticsForCountryQueryHandler(IMapper mapper, IHtmlDocumentLoader htmlDocumentLoader,
+        public LoadLatestCountryStatisticsForCountryQueryHandler(IMapper mapper, IHtmlDocumentLoader htmlDocumentLoader,
             ICountryStatisticsLoader countryStatisticsLoader)
         {
             this.mapper = mapper;

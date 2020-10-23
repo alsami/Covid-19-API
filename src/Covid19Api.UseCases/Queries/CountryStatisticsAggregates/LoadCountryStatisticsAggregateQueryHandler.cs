@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Covid19Api.Presentation.Response;
 using Covid19Api.Repositories.Abstractions;
-using Covid19Api.UseCases.Abstractions.Queries;
+using Covid19Api.UseCases.Abstractions.Queries.CountryStatisticsAggregates;
 using MediatR;
 
-namespace Covid19Api.UseCases.Queries
+namespace Covid19Api.UseCases.Queries.CountryStatisticsAggregates
 {
     public class
         LoadCountryStatisticsAggregateQueryHandler : IRequestHandler<LoadCountryStatisticsAggregate,

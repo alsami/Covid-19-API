@@ -85,7 +85,7 @@ namespace Covid19Api.IoC.Extensions
             builder.RegisterType<GlobalStatisticsAggregationWorker>()
                 .As<IHostedService>()
                 .InstancePerDependency();
-            
+
             builder.RegisterType<CountryStatisticsAggregateWorker>()
                 .As<IHostedService>()
                 .InstancePerDependency();

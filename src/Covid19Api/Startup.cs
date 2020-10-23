@@ -8,7 +8,7 @@ using Covid19Api.ExceptionFilter;
 using Covid19Api.IoC.Extensions;
 using Covid19Api.Middleware;
 using Covid19Api.UseCases.Behaviors;
-using Covid19Api.UseCases.Queries;
+using Covid19Api.UseCases.Queries.GlobalStatistics;
 using MediatR.Extensions.Autofac.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

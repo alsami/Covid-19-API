@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Covid19Api.Presentation.Response;
-using Covid19Api.UseCases.Abstractions.Queries;
+using Covid19Api.UseCases.Abstractions.Queries.CountryStatistics;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,6 +33,6 @@ namespace Covid19Api.Controllers.V1
 
         [HttpGet("{country}/history")]
         public Task<IEnumerable<CountryStatisticsDto>> LoadHistoryForCountryAsync(string country) =>
-            this.mediator.Send(new LoadHistoricalStatisticsForCountryQuery(country));
+            this.mediator.Send(new LoadHistoricalCountryStatisticsForCountryQuery(country));
     }
 }

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Covid19Api.Mongo.Migrator.Abstractions;
 using Covid19Api.Mongo.Migrator.Configuration;
 using Covid19Api.UseCases.Abstractions.Commands;
-using Covid19Api.UseCases.Abstractions.Queries;
+using Covid19Api.UseCases.Abstractions.Queries.GlobalStatisticsAggregates;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -23,7 +23,7 @@ namespace Covid19Api.Mongo.Migrator.Migrations
             this.mediator = mediator;
             this.options = options?.Value ?? throw new ArgumentNullException(nameof(options));
         }
-        
+
         public override int Number => 0;
         protected override string Name => nameof(GlobalAggregatesMigration);
 
@@ -36,16 +36,16 @@ namespace Covid19Api.Mongo.Migrator.Migrations
             {
                 if (next.Month > end.Month && next.Year >= end.Year)
                     break;
-                
+
                 var query = new LoadGlobalStatisticsAggregate(next.Month, next.Year);
                 var aggregate = await this.mediator.Send(query);
-                
+
                 if (aggregate is {})
                 {
                     next = next.AddMonths(1);
                     continue;
                 }
-                
+
                 var command = new AggregateGlobalStatisticsCommand(next.Month, next.Year);
                 await this.mediator.Send(command);
 

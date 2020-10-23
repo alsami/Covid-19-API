@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Covid19Api.Domain;
 using Covid19Api.Mongo;
@@ -46,6 +47,25 @@ namespace Covid19Api.Repositories
             var cursor = await collection.FindAsync(filter);
 
             return await cursor.SingleOrDefaultAsync();
+        }
+
+        public async Task<IList<CountryStatisticsAggregate>> FindForCountryInYearAsync(string country, int year)
+        {
+            // ReSharper disable once SpecifyStringComparison
+            var countryFilter =
+                Builders<CountryStatisticsAggregate>.Filter.Where(statistics =>
+                    statistics.Country.ToLower() == country.ToLower());
+
+            var yearFilter =
+                Builders<CountryStatisticsAggregate>.Filter.Where(statistics => statistics.Year == year);
+
+            var filter = countryFilter & yearFilter;
+
+            var collection = this.GetCollection();
+
+            var cursor = await collection.FindAsync(filter);
+
+            return await cursor.ToListAsync();
         }
 
         private IMongoCollection<CountryStatisticsAggregate> GetCollection()

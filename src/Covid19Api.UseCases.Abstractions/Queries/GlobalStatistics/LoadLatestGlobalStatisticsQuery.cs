@@ -4,7 +4,7 @@ using Covid19Api.UseCases.Abstractions.Base;
 using Covid19Api.UseCases.Abstractions.Models;
 using MediatR;
 
-namespace Covid19Api.UseCases.Abstractions.Queries
+namespace Covid19Api.UseCases.Abstractions.Queries.GlobalStatistics
 {
     public class LoadLatestGlobalStatisticsQuery : ICacheableRequest, IRequest<GlobalStatisticsDto>
     {

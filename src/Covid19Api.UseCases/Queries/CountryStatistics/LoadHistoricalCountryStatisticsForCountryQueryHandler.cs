@@ -5,26 +5,28 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Covid19Api.Presentation.Response;
 using Covid19Api.Repositories.Abstractions;
-using Covid19Api.UseCases.Abstractions.Queries;
+using Covid19Api.UseCases.Abstractions.Queries.CountryStatistics;
 using MediatR;
 
-namespace Covid19Api.UseCases.Queries
+namespace Covid19Api.UseCases.Queries.CountryStatistics
 {
     public class
-        LoadHistoricalStatisticsForCountryQueryHandler : IRequestHandler<LoadHistoricalStatisticsForCountryQuery,
+        LoadHistoricalCountryStatisticsForCountryQueryHandler : IRequestHandler<
+            LoadHistoricalCountryStatisticsForCountryQuery,
             IEnumerable<CountryStatisticsDto>>
     {
         private readonly IMapper mapper;
         private readonly ICountryStatisticsRepository countryStatisticsRepository;
 
-        public LoadHistoricalStatisticsForCountryQueryHandler(IMapper mapper,
+        public LoadHistoricalCountryStatisticsForCountryQueryHandler(IMapper mapper,
             ICountryStatisticsRepository countryStatisticsRepository)
         {
             this.mapper = mapper;
             this.countryStatisticsRepository = countryStatisticsRepository;
         }
 
-        public async Task<IEnumerable<CountryStatisticsDto>> Handle(LoadHistoricalStatisticsForCountryQuery request,
+        public async Task<IEnumerable<CountryStatisticsDto>> Handle(
+            LoadHistoricalCountryStatisticsForCountryQuery request,
             CancellationToken cancellationToken)
         {
             var minFetchedAt = DateTime.UtcNow.Date.AddDays(-9);

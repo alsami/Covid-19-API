@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Covid19Api.Presentation.Response;
-using Covid19Api.UseCases.Abstractions.Queries;
+using Covid19Api.UseCases.Abstractions.Queries.GlobalStatistics;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

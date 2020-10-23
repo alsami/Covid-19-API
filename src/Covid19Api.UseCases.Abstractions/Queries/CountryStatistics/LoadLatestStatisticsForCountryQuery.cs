@@ -4,7 +4,7 @@ using Covid19Api.UseCases.Abstractions.Base;
 using Covid19Api.UseCases.Abstractions.Models;
 using MediatR;
 
-namespace Covid19Api.UseCases.Abstractions.Queries
+namespace Covid19Api.UseCases.Abstractions.Queries.CountryStatistics
 {
     public class LoadLatestStatisticsForCountryQuery : ICacheableRequest, IRequest<CountryStatisticsDto>
     {
@@ -16,7 +16,7 @@ namespace Covid19Api.UseCases.Abstractions.Queries
         public string Country { get; }
 
         public CacheConfiguration GetCacheConfiguration() =>
-            new CacheConfiguration($"{nameof(LoadLatestStatisticsForCountryQuery)}_{Country}",
+            new CacheConfiguration($"{nameof(LoadLatestStatisticsForCountryQuery)}_{this.Country}",
                 TimeSpan.FromMinutes(30));
     }
 }

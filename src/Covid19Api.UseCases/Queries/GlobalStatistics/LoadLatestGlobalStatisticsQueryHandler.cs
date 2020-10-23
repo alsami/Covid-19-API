@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Covid19Api.Presentation.Response;
 using Covid19Api.Services.Abstractions.Loader;
-using Covid19Api.UseCases.Abstractions.Queries;
+using Covid19Api.UseCases.Abstractions.Queries.GlobalStatistics;
 using MediatR;
 
-namespace Covid19Api.UseCases.Queries
+namespace Covid19Api.UseCases.Queries.GlobalStatistics
 {
     public class
         LoadLatestGlobalStatisticsQueryHandler : IRequestHandler<LoadLatestGlobalStatisticsQuery, GlobalStatisticsDto>

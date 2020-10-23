@@ -5,12 +5,12 @@ using Covid19Api.UseCases.Abstractions.Base;
 using Covid19Api.UseCases.Abstractions.Models;
 using MediatR;
 
-namespace Covid19Api.UseCases.Abstractions.Queries
+namespace Covid19Api.UseCases.Abstractions.Queries.CountryStatistics
 {
-    public class LoadHistoricalStatisticsForCountryQuery : ICacheableRequest,
+    public class LoadHistoricalCountryStatisticsForCountryQuery : ICacheableRequest,
         IRequest<IEnumerable<CountryStatisticsDto>>
     {
-        public LoadHistoricalStatisticsForCountryQuery(string country)
+        public LoadHistoricalCountryStatisticsForCountryQuery(string country)
         {
             this.Country = country;
         }
@@ -18,7 +18,7 @@ namespace Covid19Api.UseCases.Abstractions.Queries
         public string Country { get; }
 
         public CacheConfiguration GetCacheConfiguration() =>
-            new CacheConfiguration($"{nameof(LoadHistoricalStatisticsForCountryQuery)}_{Country}",
+            new CacheConfiguration($"{nameof(LoadHistoricalCountryStatisticsForCountryQuery)}_{this.Country}",
                 TimeSpan.FromMinutes(30));
     }
 }

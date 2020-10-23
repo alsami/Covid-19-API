@@ -28,8 +28,8 @@ namespace Covid19Api.Services.Decorator
             this.countryMetaDataLoader = countryMetaDataLoader;
             this.compressionService = compressionService;
         }
-        
-        
+
+
         public void Dispose()
         {
             Mutex.Dispose();

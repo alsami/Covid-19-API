@@ -1,7 +1,7 @@
 using Covid19Api.Presentation.Response;
 using MediatR;
 
-namespace Covid19Api.UseCases.Abstractions.Queries
+namespace Covid19Api.UseCases.Abstractions.Queries.CountryStatisticsAggregates
 {
     public class LoadCountryStatisticsAggregate : IRequest<CountryStatisticsAggregateDto?>
     {
