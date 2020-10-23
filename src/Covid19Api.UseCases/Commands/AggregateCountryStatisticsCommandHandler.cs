@@ -1,4 +1,6 @@
 using System;
+using System.Globalization;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Covid19Api.Domain;
@@ -16,7 +18,9 @@ namespace Covid19Api.UseCases.Commands
         private readonly ICountryStatisticsRepository countryStatisticsRepository;
         private readonly ICountryStatisticsAggregatesRepository countryStatisticsAggregatesRepository;
 
-        public AggregateCountryStatisticsCommandHandler(ILogger<AggregateGlobalStatisticsCommandHandler> logger, ICountryStatisticsRepository countryStatisticsRepository, ICountryStatisticsAggregatesRepository countryStatisticsAggregatesRepository)
+        public AggregateCountryStatisticsCommandHandler(ILogger<AggregateGlobalStatisticsCommandHandler> logger,
+            ICountryStatisticsRepository countryStatisticsRepository,
+            ICountryStatisticsAggregatesRepository countryStatisticsAggregatesRepository)
         {
             this.logger = logger;
             this.countryStatisticsRepository = countryStatisticsRepository;
@@ -25,20 +29,29 @@ namespace Covid19Api.UseCases.Commands
 
         public async Task<Unit> Handle(AggregateCountryStatisticsCommand request, CancellationToken cancellationToken)
         {
-            this.logger.LogInformation("Aggregating statistics for countries");
-            this.logger.LogDebug("Countries that are being aggregated: {countries}",
-                string.Join(", ", request.Countries));
             var start = new DateTime(request.Year, request.Month, 1, 0, 0, 0, DateTimeKind.Utc);
             var end = start.MonthsEnd();
+            var countries = request.Countries.OrderBy(country => country).ToList();
 
-            foreach (var country in request.Countries)
+            this.logger.LogInformation("Aggregating {entity} from {from} to {to}",
+                nameof(CountryStatistics),
+                start.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture),
+                end.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture));
+            this.logger.LogDebug("Countries that are being aggregated:\n{countries}",
+                string.Join(",\n", countries));
+
+
+            foreach (var country in countries)
             {
                 await AggregateCountryAsync(country, start, end);
                 await Task.Delay(TimeSpan.FromMilliseconds(50), cancellationToken);
             }
-            
-            this.logger.LogInformation("Aggregated statistics for countries");
-            
+
+            this.logger.LogInformation("Done aggregating {entity} from {from} to {to}",
+                nameof(CountryStatistics),
+                start.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture),
+                end.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture));
+
             return Unit.Value;
         }
 
@@ -47,8 +60,8 @@ namespace Covid19Api.UseCases.Commands
             var statisticInRange = await this.countryStatisticsRepository.FindInRangeAsync(country, start, end);
 
             if (statisticInRange is null) return;
-            
-            var aggregate = new CountryStatisticsAggregate(country, statisticInRange.CountryCode, 
+
+            var aggregate = new CountryStatisticsAggregate(country, statisticInRange.CountryCode,
                 statisticInRange.TotalCases,
                 statisticInRange.NewCases,
                 statisticInRange.TotalDeaths,
@@ -57,7 +70,7 @@ namespace Covid19Api.UseCases.Commands
                 statisticInRange.ActiveCases,
                 start.Month,
                 start.Year
-                );
+            );
 
             await this.countryStatisticsAggregatesRepository.StoreAsync(aggregate);
         }
