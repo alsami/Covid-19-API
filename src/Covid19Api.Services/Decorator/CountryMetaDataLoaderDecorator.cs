@@ -15,7 +15,7 @@ namespace Covid19Api.Services.Decorator
     {
         private const string CacheKey = "CountryMetaData";
 
-        private static readonly SemaphoreSlim Mutex = new SemaphoreSlim(1);
+        private readonly SemaphoreSlim mutex = new SemaphoreSlim(1);
 
         private readonly IDistributedCache distributedCache;
         private readonly ICountryMetaDataLoader countryMetaDataLoader;
@@ -32,7 +32,7 @@ namespace Covid19Api.Services.Decorator
 
         public void Dispose()
         {
-            Mutex.Dispose();
+            this.mutex.Dispose();
             GC.SuppressFinalize(this);
         }
 
@@ -40,12 +40,12 @@ namespace Covid19Api.Services.Decorator
         {
             try
             {
-                await Mutex.WaitAsync();
+                await this.mutex.WaitAsync();
                 return await this.LoadCountryMetaDataInternalAsync();
             }
             finally
             {
-                Mutex.Release(1);
+                this.mutex.Release(1);
             }
         }
 
