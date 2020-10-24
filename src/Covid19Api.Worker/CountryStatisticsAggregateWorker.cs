@@ -25,13 +25,15 @@ namespace Covid19Api.Worker
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            var nextRun = DateTime.UtcNow;
+            // UTC 22 PM
+            var nextRun = DateTime.UtcNow.Date.AddDays(1).AddHours(-2);
+            this.logger.LogInformation("Next country-statistics aggregation at {at}", nextRun.ToString("dd.MM.yyyy HH:mm:ss"));
             while (!stoppingToken.IsCancellationRequested)
             {
                 if (nextRun <= DateTime.UtcNow)
                 {
                     await this.ExecuteAggregationAsync(nextRun, stoppingToken);
-                    nextRun = nextRun.AddHours(12);
+                    nextRun = nextRun.AddDays(1);
                 }
 
                 await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
@@ -51,7 +53,7 @@ namespace Covid19Api.Worker
             }
             catch (Exception e)
             {
-                this.logger.LogCritical(e, "Error while aggregating global-statistics");
+                this.logger.LogCritical(e, "Error while aggregating country-statistics");
             }
         }
     }
