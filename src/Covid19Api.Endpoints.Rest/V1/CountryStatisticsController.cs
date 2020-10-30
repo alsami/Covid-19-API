@@ -6,7 +6,7 @@ using Covid19Api.UseCases.Abstractions.Queries.CountryStatistics;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Covid19Api.Controllers.V1
+namespace Covid19Api.Endpoints.Rest.V1
 {
     [ApiController]
     [Route("api/v1/countries")]
@@ -20,19 +20,19 @@ namespace Covid19Api.Controllers.V1
         }
 
         [HttpGet]
-        public Task<IEnumerable<CountryStatisticsDto>> LoadLatestAsync() =>
+        public Task<IEnumerable<CountryStatisticDto>> LoadLatestAsync() =>
             this.mediator.Send(new LoadLatestCountriesStatisticsQuery());
 
         [HttpGet("history")]
-        public Task<IEnumerable<CountryStatisticsDto>> LoadHistoryAsync()
+        public Task<IEnumerable<CountryStatisticDto>> LoadHistoryAsync()
             => this.mediator.Send(new LoadHistoricalCountriesStatisticsQuery(DateTime.UtcNow.Date.AddDays(-9)));
 
         [HttpGet("{country}")]
-        public Task<CountryStatisticsDto> LoadLatestForCountryAsync(string country) =>
+        public Task<CountryStatisticDto> LoadLatestForCountryAsync(string country) =>
             this.mediator.Send(new LoadLatestStatisticsForCountryQuery(country));
 
         [HttpGet("{country}/history")]
-        public Task<IEnumerable<CountryStatisticsDto>> LoadHistoryForCountryAsync(string country) =>
+        public Task<IEnumerable<CountryStatisticDto>> LoadHistoryForCountryAsync(string country) =>
             this.mediator.Send(new LoadHistoricalCountryStatisticsForCountryQuery(country));
     }
 }

@@ -2,9 +2,9 @@ using System;
 
 namespace Covid19Api.Presentation.Response
 {
-    public class GlobalStatisticsAggregateDto
+    public class GlobalStatisticAggregateDto
     {
-        public GlobalStatisticsAggregateDto(Guid id, int total, int recovered, int deaths, int month, int year)
+        public GlobalStatisticAggregateDto(Guid id, int total, int recovered, int deaths, int month, int year)
         {
             this.Id = id;
             this.Total = total;

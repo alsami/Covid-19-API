@@ -70,7 +70,7 @@ namespace Covid19Api.Mongo.Migrator
             builder.RegisterRepositories(context.HostingEnvironment, context.Configuration)
                 .RegisterServices()
                 .RegisterMediatR(typeof(RefreshGlobalStatisticsCommandHandler).Assembly)
-                .RegisterAutoMapper(typeof(CountryStatsProfile).Assembly);
+                .RegisterAutoMapper(typeof(CountryStatisticsProfile).Assembly);
         }
     }
 }

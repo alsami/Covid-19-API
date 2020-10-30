@@ -37,7 +37,7 @@ namespace Covid19Api.UseCases.Commands
             var countries = request.Countries.OrderBy(country => country).ToList();
 
             this.logger.LogInformation("Aggregating {entity} from {from} to {to}",
-                nameof(CountryStatistics),
+                nameof(CountryStatistic),
                 start.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture),
                 end.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture));
             this.logger.LogDebug("Countries that are being aggregated:\n{countries}",
@@ -54,7 +54,7 @@ namespace Covid19Api.UseCases.Commands
             this.aggregates.Clear();
 
             this.logger.LogInformation("Done aggregating {entity} from {from} to {to}",
-                nameof(CountryStatistics),
+                nameof(CountryStatistic),
                 start.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture),
                 end.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture));
 

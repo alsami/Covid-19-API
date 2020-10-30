@@ -8,8 +8,8 @@ namespace Covid19Api.AutoMapper
     {
         public GlobalStatisticsAggregateProfile()
         {
-            this.CreateMap<GlobalStatisticsAggregate, GlobalStatisticsAggregateDto>()
-                .ConstructUsing(source => new GlobalStatisticsAggregateDto(source.Id, source.Total, source.Recovered,
+            this.CreateMap<GlobalStatisticsAggregate, GlobalStatisticAggregateDto>()
+                .ConstructUsing(source => new GlobalStatisticAggregateDto(source.Id, source.Total, source.Recovered,
                     source.Deaths, source.Month, source.Year));
         }
     }

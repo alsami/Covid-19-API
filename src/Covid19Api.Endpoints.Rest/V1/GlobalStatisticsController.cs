@@ -6,7 +6,7 @@ using Covid19Api.UseCases.Abstractions.Queries.GlobalStatistics;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Covid19Api.Controllers.V1
+namespace Covid19Api.Endpoints.Rest.V1
 {
     [ApiController]
     [Route("api/v1/global")]
@@ -20,14 +20,14 @@ namespace Covid19Api.Controllers.V1
         }
 
         [HttpGet]
-        public Task<GlobalStatisticsDto> LoadGlobalAsync() => this.mediator.Send(new LoadLatestGlobalStatisticsQuery());
+        public Task<GlobalStatisticDto> LoadGlobalAsync() => this.mediator.Send(new LoadLatestGlobalStatisticsQuery());
 
         [HttpGet("history")]
-        public Task<IEnumerable<GlobalStatisticsDto>> LoadGlobalHistorical()
+        public Task<IEnumerable<GlobalStatisticDto>> LoadGlobalHistorical()
         {
-            var command = new LoadHistoricalGlobalStatisticsQuery(DateTime.UtcNow.Date.AddDays(-9));
+            var query = new LoadHistoricalGlobalStatisticsQuery(DateTime.UtcNow.Date.AddDays(-9));
 
-            return this.mediator.Send(command);
+            return this.mediator.Send(query);
         }
     }
 }

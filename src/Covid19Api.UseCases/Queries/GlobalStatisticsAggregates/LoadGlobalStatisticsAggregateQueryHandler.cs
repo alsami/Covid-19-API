@@ -10,7 +10,7 @@ namespace Covid19Api.UseCases.Queries.GlobalStatisticsAggregates
 {
     public class
         LoadGlobalStatisticsAggregateQueryHandler : IRequestHandler<LoadGlobalStatisticsAggregate,
-            GlobalStatisticsAggregateDto?>
+            GlobalStatisticAggregateDto?>
     {
         private readonly IMapper mapper;
         private readonly IGlobalStatisticsAggregatesRepository globalStatisticsAggregatesRepository;
@@ -22,14 +22,14 @@ namespace Covid19Api.UseCases.Queries.GlobalStatisticsAggregates
             this.globalStatisticsAggregatesRepository = globalStatisticsAggregatesRepository;
         }
 
-        public async Task<GlobalStatisticsAggregateDto?> Handle(LoadGlobalStatisticsAggregate request,
+        public async Task<GlobalStatisticAggregateDto?> Handle(LoadGlobalStatisticsAggregate request,
             CancellationToken cancellationToken)
         {
             var aggregate = await this.globalStatisticsAggregatesRepository.FindAsync(request.Month, request.Year);
 
             return aggregate is null
                 ? null
-                : this.mapper.Map<GlobalStatisticsAggregateDto>(aggregate);
+                : this.mapper.Map<GlobalStatisticAggregateDto>(aggregate);
         }
     }
 }

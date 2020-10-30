@@ -11,7 +11,7 @@ namespace Covid19Api.UseCases.Queries.GlobalStatistics
 {
     public class
         LoadHistoricalGlobalStatisticsQueryHandler : IRequestHandler<LoadHistoricalGlobalStatisticsQuery,
-            IEnumerable<GlobalStatisticsDto>>
+            IEnumerable<GlobalStatisticDto>>
     {
         private readonly IGlobalStatisticsRepository globalStatisticsRepository;
         private readonly IMapper mapper;
@@ -23,12 +23,12 @@ namespace Covid19Api.UseCases.Queries.GlobalStatistics
             this.mapper = mapper;
         }
 
-        public async Task<IEnumerable<GlobalStatisticsDto>> Handle(LoadHistoricalGlobalStatisticsQuery request,
+        public async Task<IEnumerable<GlobalStatisticDto>> Handle(LoadHistoricalGlobalStatisticsQuery request,
             CancellationToken cancellationToken)
         {
             var latestActiveCaseStats = await this.globalStatisticsRepository.HistoricalAsync(request.MinFetchedAt);
 
-            return this.mapper.Map<IEnumerable<GlobalStatisticsDto>>(latestActiveCaseStats);
+            return this.mapper.Map<IEnumerable<GlobalStatisticDto>>(latestActiveCaseStats);
         }
     }
 }

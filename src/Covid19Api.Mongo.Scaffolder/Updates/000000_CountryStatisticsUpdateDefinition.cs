@@ -25,7 +25,7 @@ namespace Covid19Api.Mongo.Scaffolder.Updates
             await this.databaseContext.Database.CreateCollectionIfNotExistsAsync(CollectionNames.CountryStatistics);
 
             var collection =
-                this.databaseContext.Database.GetCollection<CountryStatistics>(CollectionNames.CountryStatistics);
+                this.databaseContext.Database.GetCollection<CountryStatistic>(CollectionNames.CountryStatistics);
 
             await collection.Indexes.CreateManyAsync(new[]
             {
@@ -35,27 +35,27 @@ namespace Covid19Api.Mongo.Scaffolder.Updates
             });
         }
 
-        private static CreateIndexModel<CountryStatistics> CreatFetchedAtIndexModel()
+        private static CreateIndexModel<CountryStatistic> CreatFetchedAtIndexModel()
         {
-            var fetchedAt = Builders<CountryStatistics>
+            var fetchedAt = Builders<CountryStatistic>
                 .IndexKeys
                 .Ascending(statistics => statistics.FetchedAt);
 
-            var fetchedAtIndexModel = new CreateIndexModel<CountryStatistics>(fetchedAt, new CreateIndexOptions
+            var fetchedAtIndexModel = new CreateIndexModel<CountryStatistic>(fetchedAt, new CreateIndexOptions
             {
                 Name = $"{CollectionNames.CountryStatistics}_fetchedAt"
             });
             return fetchedAtIndexModel;
         }
 
-        private static CreateIndexModel<CountryStatistics> CreateTotalCasesFetchedAtIndexModel()
+        private static CreateIndexModel<CountryStatistic> CreateTotalCasesFetchedAtIndexModel()
         {
-            var totalCasesFetchedAtIndex = Builders<CountryStatistics>
+            var totalCasesFetchedAtIndex = Builders<CountryStatistic>
                 .IndexKeys
                 .Descending(statistics => statistics.TotalCases)
                 .Descending(statistics => statistics.FetchedAt);
 
-            var totalCasesFetchedAtIndexModel = new CreateIndexModel<CountryStatistics>(totalCasesFetchedAtIndex,
+            var totalCasesFetchedAtIndexModel = new CreateIndexModel<CountryStatistic>(totalCasesFetchedAtIndex,
                 new CreateIndexOptions
                 {
                     Name = $"{CollectionNames.CountryStatistics}_totalCases_fetchedAt_descending"
@@ -63,15 +63,15 @@ namespace Covid19Api.Mongo.Scaffolder.Updates
             return totalCasesFetchedAtIndexModel;
         }
 
-        private static CreateIndexModel<CountryStatistics> CreateTotalCasesFetchedAtCountryIndexModel()
+        private static CreateIndexModel<CountryStatistic> CreateTotalCasesFetchedAtCountryIndexModel()
         {
-            var totalCasesFetchedAtCountryIndex = Builders<CountryStatistics>
+            var totalCasesFetchedAtCountryIndex = Builders<CountryStatistic>
                 .IndexKeys
                 .Descending(statistics => statistics.TotalCases)
                 .Descending(statistics => statistics.FetchedAt)
                 .Ascending(statistics => statistics.Country);
 
-            var totalCasesFetchedAtCountryIndexModel = new CreateIndexModel<CountryStatistics>(
+            var totalCasesFetchedAtCountryIndexModel = new CreateIndexModel<CountryStatistic>(
                 totalCasesFetchedAtCountryIndex,
                 new CreateIndexOptions
                 {

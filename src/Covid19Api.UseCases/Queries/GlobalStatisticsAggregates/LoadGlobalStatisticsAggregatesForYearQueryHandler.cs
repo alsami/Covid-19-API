@@ -12,7 +12,7 @@ using MediatR;
 namespace Covid19Api.UseCases.Queries.GlobalStatisticsAggregates
 {
     public class LoadGlobalStatisticsAggregatesForYearQueryHandler : IRequestHandler<
-        LoadGlobalStatisticsAggregatesForYearQuery, IEnumerable<GlobalStatisticsAggregateDto>>
+        LoadGlobalStatisticsAggregatesForYearQuery, IEnumerable<GlobalStatisticAggregateDto>>
     {
         private readonly IMapper mapper;
         private readonly IGlobalStatisticsAggregatesRepository globalStatisticsAggregatesRepository;
@@ -24,14 +24,14 @@ namespace Covid19Api.UseCases.Queries.GlobalStatisticsAggregates
             this.globalStatisticsAggregatesRepository = globalStatisticsAggregatesRepository;
         }
 
-        public async Task<IEnumerable<GlobalStatisticsAggregateDto>> Handle(
+        public async Task<IEnumerable<GlobalStatisticAggregateDto>> Handle(
             LoadGlobalStatisticsAggregatesForYearQuery request, CancellationToken cancellationToken)
         {
             var aggregates = await this.globalStatisticsAggregatesRepository.FindInYearAsync(request.Year);
 
             return aggregates.Any()
-                ? this.mapper.Map<IEnumerable<GlobalStatisticsAggregateDto>>(aggregates)
-                : Array.Empty<GlobalStatisticsAggregateDto>();
+                ? this.mapper.Map<IEnumerable<GlobalStatisticAggregateDto>>(aggregates)
+                : Array.Empty<GlobalStatisticAggregateDto>();
         }
     }
 }

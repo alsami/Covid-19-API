@@ -14,7 +14,7 @@ namespace Covid19Api.UseCases.Queries.CountryStatistics
 {
     public class
         LoadLatestCountriesStatisticsQueryHandler : IRequestHandler<LoadLatestCountriesStatisticsQuery,
-            IEnumerable<CountryStatisticsDto>>
+            IEnumerable<CountryStatisticDto>>
     {
         private readonly IMapper mapper;
         private readonly ICountryStatisticsLoader countryStatisticsLoader;
@@ -26,7 +26,7 @@ namespace Covid19Api.UseCases.Queries.CountryStatistics
             this.countryStatisticsLoader = countryStatisticsLoader;
         }
 
-        public async Task<IEnumerable<CountryStatisticsDto>> Handle(LoadLatestCountriesStatisticsQuery request,
+        public async Task<IEnumerable<CountryStatisticDto>> Handle(LoadLatestCountriesStatisticsQuery request,
             CancellationToken cancellationToken)
         {
             var fetchedAt = DateTime.UtcNow;
@@ -34,7 +34,7 @@ namespace Covid19Api.UseCases.Queries.CountryStatistics
             var countries = await this.countryStatisticsLoader
                 .ParseAsync(fetchedAt, CountryStatsFilter.ValidOnly.Value);
 
-            return this.mapper.Map<IEnumerable<CountryStatisticsDto>>(countries)
+            return this.mapper.Map<IEnumerable<CountryStatisticDto>>(countries)
                 .OrderByDescending(country => country!.TotalCases);
         }
     }

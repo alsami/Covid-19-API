@@ -5,8 +5,8 @@ namespace Covid19Api.UseCases.Filter
 {
     public static class CountryStatsFilter
     {
-        public static readonly Lazy<Func<CountryStatistics?, bool>> ValidOnly =
-            new Lazy<Func<CountryStatistics?, bool>>(
+        public static readonly Lazy<Func<CountryStatistic?, bool>> ValidOnly =
+            new Lazy<Func<CountryStatistic?, bool>>(
                 stats =>
                     stats != null &&
                     stats.Country != "World" &&

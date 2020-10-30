@@ -10,7 +10,7 @@ namespace Covid19Api.UseCases.Queries.CountryStatisticsAggregates
 {
     public class
         LoadCountryStatisticsAggregateQueryHandler : IRequestHandler<LoadCountryStatisticsAggregate,
-            CountryStatisticsAggregateDto?>
+            CountryStatisticAggregateDto?>
     {
         private readonly IMapper mapper;
         private readonly ICountryStatisticsAggregatesRepository countryStatisticsAggregatesRepository;
@@ -23,7 +23,7 @@ namespace Covid19Api.UseCases.Queries.CountryStatisticsAggregates
             this.countryStatisticsAggregatesRepository = countryStatisticsAggregatesRepository;
         }
 
-        public async Task<CountryStatisticsAggregateDto?> Handle(LoadCountryStatisticsAggregate request,
+        public async Task<CountryStatisticAggregateDto?> Handle(LoadCountryStatisticsAggregate request,
             CancellationToken cancellationToken)
         {
             var aggregate =
@@ -32,7 +32,7 @@ namespace Covid19Api.UseCases.Queries.CountryStatisticsAggregates
 
             return aggregate is null
                 ? null
-                : this.mapper.Map<CountryStatisticsAggregateDto>(aggregate);
+                : this.mapper.Map<CountryStatisticAggregateDto>(aggregate);
         }
     }
 }
