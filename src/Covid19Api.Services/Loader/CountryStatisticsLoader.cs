@@ -15,7 +15,7 @@ namespace Covid19Api.Services.Loader
         private readonly ICountryMetaDataLoader countryMetaDataLoader;
         private readonly IHtmlDocumentLoader htmlDocumentLoader;
 
-        private readonly Func<CountryStatistics?, bool> defaultCountryStatisticsFilter = _ => true;
+        private readonly Func<CountryStatistic?, bool> defaultCountryStatisticsFilter = _ => true;
 
         public CountryStatisticsLoader(ICountryMetaDataLoader countryMetaDataLoader,
             IHtmlDocumentLoader htmlDocumentLoader)
@@ -24,8 +24,8 @@ namespace Covid19Api.Services.Loader
             this.htmlDocumentLoader = htmlDocumentLoader;
         }
 
-        public async Task<IEnumerable<CountryStatistics?>> ParseAsync(DateTime fetchedAt,
-            Func<CountryStatistics?, bool>? filter = null)
+        public async Task<IEnumerable<CountryStatistic?>> ParseAsync(DateTime fetchedAt,
+            Func<CountryStatistic?, bool>? filter = null)
         {
             var document = await this.htmlDocumentLoader.LoadAsync();
 
@@ -38,7 +38,7 @@ namespace Covid19Api.Services.Loader
             return countryStatistics;
         }
 
-        private static CountryStatistics? Parse(IEnumerable<CountryMetaData> countryMetaData, HtmlNode htmlNode,
+        private static CountryStatistic? Parse(IEnumerable<CountryMetaData> countryMetaData, HtmlNode htmlNode,
             DateTime fetchedAt)
         {
             var tableDataNodes = GetTableDataNodes(htmlNode).ToArray();
@@ -56,7 +56,7 @@ namespace Covid19Api.Services.Loader
 
             var countryCode = GetCountryCode(countryMetaData, country);
 
-            return new CountryStatistics(country, countryCode, totalCases, newCases, totalDeaths, newDeaths, recovered,
+            return new CountryStatistic(country, countryCode, totalCases, newCases, totalDeaths, newDeaths, recovered,
                 active, fetchedAt);
         }
 

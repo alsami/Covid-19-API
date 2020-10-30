@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Covid19Api.UseCases.Abstractions.Queries.GlobalStatistics
 {
-    public class LoadLatestGlobalStatisticsQuery : ICacheableRequest, IRequest<GlobalStatisticsDto>
+    public class LoadLatestGlobalStatisticsQuery : ICacheableRequest, IRequest<GlobalStatisticDto>
     {
         public CacheConfiguration GetCacheConfiguration() =>
             new CacheConfiguration(nameof(LoadLatestGlobalStatisticsQuery), TimeSpan.FromMinutes(30));

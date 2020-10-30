@@ -12,7 +12,7 @@ using MediatR;
 namespace Covid19Api.UseCases.Queries.CountryStatisticsAggregates
 {
     public class LoadCountryStatisticsAggregatesForCountryInYearQueryHandler : IRequestHandler<
-        LoadCountryStatisticsAggregatesForCountryInYearQuery, IEnumerable<CountryStatisticsAggregateDto>>
+        LoadCountryStatisticsAggregatesForCountryInYearQuery, IEnumerable<CountryStatisticAggregateDto>>
     {
         private readonly IMapper mapper;
         private readonly ICountryStatisticsAggregatesRepository countryStatisticsAggregatesRepository;
@@ -24,7 +24,7 @@ namespace Covid19Api.UseCases.Queries.CountryStatisticsAggregates
             this.countryStatisticsAggregatesRepository = countryStatisticsAggregatesRepository;
         }
 
-        public async Task<IEnumerable<CountryStatisticsAggregateDto>> Handle(
+        public async Task<IEnumerable<CountryStatisticAggregateDto>> Handle(
             LoadCountryStatisticsAggregatesForCountryInYearQuery request, CancellationToken cancellationToken)
         {
             var aggregates =
@@ -32,8 +32,8 @@ namespace Covid19Api.UseCases.Queries.CountryStatisticsAggregates
                     request.Year);
 
             return aggregates.Any()
-                ? this.mapper.Map<IEnumerable<CountryStatisticsAggregateDto>>(aggregates)
-                : Array.Empty<CountryStatisticsAggregateDto>();
+                ? this.mapper.Map<IEnumerable<CountryStatisticAggregateDto>>(aggregates)
+                : Array.Empty<CountryStatisticAggregateDto>();
         }
     }
 }

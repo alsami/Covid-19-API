@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Covid19Api.Domain
 {
-    public class CountryStatistics
+    public class CountryStatistic
     {
         public Guid Id { get; private set; }
 
@@ -30,7 +30,7 @@ namespace Covid19Api.Domain
 
         public DateTime FetchedAt { get; private set; }
 
-        public CountryStatistics(string country, string? countryCode, int totalCases, int newCases, int totalDeaths,
+        public CountryStatistic(string country, string? countryCode, int totalCases, int newCases, int totalDeaths,
             int newDeaths,
             int recoveredCases, int activeCases, DateTime fetchedAt)
         {

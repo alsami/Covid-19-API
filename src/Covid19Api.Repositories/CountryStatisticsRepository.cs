@@ -21,19 +21,19 @@ namespace Covid19Api.Repositories
             this.context = context;
         }
 
-        public async Task<CountryStatistics> MostRecentAsync(string country)
+        public async Task<CountryStatistic> MostRecentAsync(string country)
         {
             var collection = this.GetCollection();
 
-            var sort = Builders<CountryStatistics>.Sort
-                .Descending(nameof(CountryStatistics.TotalCases))
-                .Descending(nameof(CountryStatistics.FetchedAt));
+            var sort = Builders<CountryStatistic>.Sort
+                .Descending(nameof(CountryStatistic.TotalCases))
+                .Descending(nameof(CountryStatistic.FetchedAt));
 
             // ReSharper disable once SpecifyStringComparison
             var cursor = await collection.FindAsync(existingCountryStats =>
                     existingCountryStats.FetchedAt >= DateTime.UtcNow.Date.AddDays(-1) &&
                     existingCountryStats.Country.ToLower() == country.ToLower(),
-                new FindOptions<CountryStatistics>
+                new FindOptions<CountryStatistic>
                 {
                     Sort = sort,
                 });
@@ -41,18 +41,18 @@ namespace Covid19Api.Repositories
             return await cursor.FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<CountryStatistics>> HistoricalAsync(DateTime minFetchedAt)
+        public async Task<IEnumerable<CountryStatistic>> HistoricalAsync(DateTime minFetchedAt)
         {
             var collection = this.GetCollection();
 
-            var sort = Builders<CountryStatistics>.Sort
-                .Descending(nameof(CountryStatistics.TotalCases))
-                .Descending(nameof(CountryStatistics.FetchedAt))
-                .Ascending(nameof(CountryStatistics.Country));
+            var sort = Builders<CountryStatistic>.Sort
+                .Descending(nameof(CountryStatistic.TotalCases))
+                .Descending(nameof(CountryStatistic.FetchedAt))
+                .Ascending(nameof(CountryStatistic.Country));
 
             var cursor = await collection.FindAsync(
                 existingCountryStats => existingCountryStats.FetchedAt >= minFetchedAt,
-                new FindOptions<CountryStatistics>
+                new FindOptions<CountryStatistic>
                 {
                     Sort = sort,
                 });
@@ -67,19 +67,19 @@ namespace Covid19Api.Repositories
                 .SelectMany(grouping => grouping.Take(1));
         }
 
-        public async Task<IEnumerable<CountryStatistics>> HistoricalAsync(DateTime minFetchedAt, string country)
+        public async Task<IEnumerable<CountryStatistic>> HistoricalAsync(DateTime minFetchedAt, string country)
         {
             var collection = this.GetCollection();
 
-            var sort = Builders<CountryStatistics>.Sort
-                .Descending(nameof(CountryStatistics.TotalCases))
-                .Descending(nameof(CountryStatistics.FetchedAt))
-                .Ascending(nameof(CountryStatistics.Country));
+            var sort = Builders<CountryStatistic>.Sort
+                .Descending(nameof(CountryStatistic.TotalCases))
+                .Descending(nameof(CountryStatistic.FetchedAt))
+                .Ascending(nameof(CountryStatistic.Country));
 
             var cursor = await collection.FindAsync(
                 existingCountryStats => existingCountryStats.FetchedAt >= minFetchedAt &&
                                         existingCountryStats.Country.ToLowerInvariant() == country.ToLowerInvariant(),
-                new FindOptions<CountryStatistics>
+                new FindOptions<CountryStatistic>
                 {
                     Sort = sort,
                 });
@@ -87,7 +87,7 @@ namespace Covid19Api.Repositories
             return await cursor.ToListAsync();
         }
 
-        public async Task<IEnumerable<CountryStatistics>> HistoricalForDayAsync(DateTime minFetchedAt, string country)
+        public async Task<IEnumerable<CountryStatistic>> HistoricalForDayAsync(DateTime minFetchedAt, string country)
         {
             var collection = this.GetCollection();
 
@@ -98,28 +98,28 @@ namespace Covid19Api.Repositories
             return await cursor.ToListAsync();
         }
 
-        public async Task<CountryStatistics?> FindInRangeAsync(string country, DateTime inclusiveStart,
+        public async Task<CountryStatistic?> FindInRangeAsync(string country, DateTime inclusiveStart,
             DateTime exclusiveEnd)
         {
             var collection = this.GetCollection();
 
             var countryFilter =
-                Builders<CountryStatistics>.Filter.Where(
+                Builders<CountryStatistic>.Filter.Where(
                     statistics => statistics.Country.ToLower() == country.ToLower());
 
             var startFilter =
-                Builders<CountryStatistics>.Filter.Where(
+                Builders<CountryStatistic>.Filter.Where(
                     statistics => statistics.FetchedAt >= inclusiveStart);
 
             var endFilter =
-                Builders<CountryStatistics>.Filter.Where(
+                Builders<CountryStatistic>.Filter.Where(
                     statistics => statistics.FetchedAt <= exclusiveEnd);
 
-            var sort = Builders<CountryStatistics>.Sort.Descending(statistics => statistics.FetchedAt);
+            var sort = Builders<CountryStatistic>.Sort.Descending(statistics => statistics.FetchedAt);
 
             var filter = countryFilter & startFilter & endFilter;
 
-            var cursor = await collection.FindAsync(filter, new FindOptions<CountryStatistics>
+            var cursor = await collection.FindAsync(filter, new FindOptions<CountryStatistic>
             {
                 Sort = sort
             });
@@ -127,17 +127,17 @@ namespace Covid19Api.Repositories
             return await cursor.FirstOrDefaultAsync();
         }
 
-        public async Task StoreManyAsync(IEnumerable<CountryStatistics> countryStats)
+        public async Task StoreManyAsync(IEnumerable<CountryStatistic> countryStats)
         {
             var collection = this.GetCollection();
 
             var updates = countryStats.Select(currentStats =>
                 {
                     var filterDefinition =
-                        new FilterDefinitionBuilder<CountryStatistics>().Where(existingStats =>
+                        new FilterDefinitionBuilder<CountryStatistic>().Where(existingStats =>
                             existingStats.Id == currentStats.Id);
 
-                    return new ReplaceOneModel<CountryStatistics>(filterDefinition, currentStats)
+                    return new ReplaceOneModel<CountryStatistic>(filterDefinition, currentStats)
                     {
                         IsUpsert = true
                     };
@@ -160,7 +160,7 @@ namespace Covid19Api.Repositories
             }
         }
 
-        private IMongoCollection<CountryStatistics> GetCollection()
-            => this.context.Database.GetCollection<CountryStatistics>(CollectionNames.CountryStatistics);
+        private IMongoCollection<CountryStatistic> GetCollection()
+            => this.context.Database.GetCollection<CountryStatistic>(CollectionNames.CountryStatistics);
     }
 }

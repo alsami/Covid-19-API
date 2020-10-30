@@ -19,7 +19,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Covid19Api.AutoMapper\Covid19Api.AutoMapper.csproj" />
-    <ProjectReference Include="..\Covid19Api.Controllers\Covid19Api.Controllers.csproj" />
+    <ProjectReference Include="..\Covid19Api.Endpoints.Grpc\Covid19Api.Endpoints.Grpc.csproj" />
+    <ProjectReference Include="..\Covid19Api.Endpoints.Rest\Covid19Api.Endpoints.Rest.csproj" />
     <ProjectReference Include="..\Covid19Api.IoC\Covid19Api.IoC.csproj" />
     <ProjectReference Include="..\Covid19Api.Repositories\Covid19Api.Repositories.csproj" />
     <ProjectReference Include="..\Covid19Api.Services\Covid19Api.Services.csproj" />
@@ -44,6 +45,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="localhost.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 

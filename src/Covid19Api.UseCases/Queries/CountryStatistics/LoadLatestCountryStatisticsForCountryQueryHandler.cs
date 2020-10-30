@@ -13,7 +13,7 @@ namespace Covid19Api.UseCases.Queries.CountryStatistics
 {
     public class
         LoadLatestCountryStatisticsForCountryQueryHandler : IRequestHandler<LoadLatestStatisticsForCountryQuery,
-            CountryStatisticsDto>
+            CountryStatisticDto>
     {
         private readonly IMapper mapper;
         private readonly IHtmlDocumentLoader htmlDocumentLoader;
@@ -27,7 +27,7 @@ namespace Covid19Api.UseCases.Queries.CountryStatistics
             this.countryStatisticsLoader = countryStatisticsLoader;
         }
 
-        public async Task<CountryStatisticsDto> Handle(LoadLatestStatisticsForCountryQuery request,
+        public async Task<CountryStatisticDto> Handle(LoadLatestStatisticsForCountryQuery request,
             CancellationToken cancellationToken)
         {
             var fetchedAt = DateTime.UtcNow;
@@ -39,7 +39,7 @@ namespace Covid19Api.UseCases.Queries.CountryStatistics
                 .SingleOrDefault(stats =>
                     string.Equals(stats!.Country, request.Country, StringComparison.InvariantCultureIgnoreCase));
 
-            return this.mapper.Map<CountryStatisticsDto>(wanted);
+            return this.mapper.Map<CountryStatisticDto>(wanted);
         }
     }
 }
