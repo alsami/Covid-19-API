@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -14,6 +15,8 @@ namespace Covid19Api.UseCases.Commands
 {
     public class AggregateCountryStatisticsCommandHandler : IRequestHandler<AggregateCountryStatisticsCommand>
     {
+        private readonly List<CountryStatisticsAggregate> aggregates = new List<CountryStatisticsAggregate>(300);
+
         private readonly ILogger<AggregateGlobalStatisticsCommandHandler> logger;
         private readonly ICountryStatisticsRepository countryStatisticsRepository;
         private readonly ICountryStatisticsAggregatesRepository countryStatisticsAggregatesRepository;
@@ -40,12 +43,15 @@ namespace Covid19Api.UseCases.Commands
             this.logger.LogDebug("Countries that are being aggregated:\n{countries}",
                 string.Join(",\n", countries));
 
-
             foreach (var country in countries)
             {
-                await AggregateCountryAsync(country, start, end);
-                await Task.Delay(TimeSpan.FromMilliseconds(50), cancellationToken);
+                var aggregate = await this.CreateCountryAggregateAsync(country, start, end);
+
+                if (aggregate is {}) this.aggregates.Add(aggregate);
             }
+
+            await this.countryStatisticsAggregatesRepository.StoreManyAsync(aggregates);
+            this.aggregates.Clear();
 
             this.logger.LogInformation("Done aggregating {entity} from {from} to {to}",
                 nameof(CountryStatistics),
@@ -55,13 +61,14 @@ namespace Covid19Api.UseCases.Commands
             return Unit.Value;
         }
 
-        private async Task AggregateCountryAsync(string country, DateTime start, DateTime end)
+        private async Task<CountryStatisticsAggregate?> CreateCountryAggregateAsync(string country, DateTime start,
+            DateTime end)
         {
             var statisticInRange = await this.countryStatisticsRepository.FindInRangeAsync(country, start, end);
 
-            if (statisticInRange is null) return;
+            if (statisticInRange is null) return null;
 
-            var aggregate = new CountryStatisticsAggregate(country, statisticInRange.CountryCode,
+            return new CountryStatisticsAggregate(country, statisticInRange.CountryCode,
                 statisticInRange.TotalCases,
                 statisticInRange.NewCases,
                 statisticInRange.TotalDeaths,
@@ -71,8 +78,6 @@ namespace Covid19Api.UseCases.Commands
                 start.Month,
                 start.Year
             );
-
-            await this.countryStatisticsAggregatesRepository.StoreAsync(aggregate);
         }
     }
 }

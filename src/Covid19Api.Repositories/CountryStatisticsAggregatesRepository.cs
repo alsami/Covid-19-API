@@ -1,18 +1,25 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Covid19Api.Domain;
 using Covid19Api.Mongo;
 using Covid19Api.Repositories.Abstractions;
+using Covid19Api.Repositories.Extensions;
+using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 
 namespace Covid19Api.Repositories
 {
     public class CountryStatisticsAggregatesRepository : ICountryStatisticsAggregatesRepository
     {
+        private readonly ILogger<CountryStatisticsAggregatesRepository> logger;
         private readonly Covid19ApiDbContext context;
 
-        public CountryStatisticsAggregatesRepository(Covid19ApiDbContext context)
+
+        public CountryStatisticsAggregatesRepository(ILogger<CountryStatisticsAggregatesRepository> logger, Covid19ApiDbContext context)
         {
+            this.logger = logger;
             this.context = context;
         }
 
@@ -25,6 +32,39 @@ namespace Covid19Api.Repositories
                 {
                     IsUpsert = true
                 });
+        }
+
+        public async Task StoreManyAsync(IEnumerable<CountryStatisticsAggregate> countryStatisticsAggregates)
+        {
+            var collection = this.GetCollection();
+
+            var replacements = countryStatisticsAggregates.Select(currentStats =>
+                {
+                    var filterDefinition =
+                        new FilterDefinitionBuilder<CountryStatisticsAggregate>().Where(existingStats =>
+                            existingStats.Id == currentStats.Id);
+
+                    return new ReplaceOneModel<CountryStatisticsAggregate>(filterDefinition, currentStats)
+                    {
+                        IsUpsert = true
+                    };
+                })
+                .ToList();
+
+            foreach (var replacementsChunk in replacements.CreateChunks(50))
+            {
+                try
+                {
+                    await collection.BulkWriteAsync(replacementsChunk, new BulkWriteOptions
+                    {
+                        IsOrdered = false,
+                    });
+                }
+                catch (Exception exception) when (exception is MongoBulkWriteException)
+                {
+                    this.logger.LogWarning(exception, "Error while bulk-writing country-statistics");
+                }
+            }
         }
 
         public async Task<CountryStatisticsAggregate?> FindAsync(string country, int month, int year)
