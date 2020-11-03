@@ -67,6 +67,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{540073C9-F
 ProjectSection(SolutionItems) = preProject
 	docs\dev_https_cert_linux.md = docs\dev_https_cert_linux.md
 	docs\README.md = docs\README.md
+	docs\docker_commands.md = docs\docker_commands.md
 EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Covid19Api.AutoMapper.Tests", "test\Covid19Api.AutoMapper.Tests\Covid19Api.AutoMapper.Tests.csproj", "{7D85801F-6AF5-407B-B262-2F85E6D8CF7D}"

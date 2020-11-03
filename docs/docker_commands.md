@@ -1,0 +1,1 @@
+`sudo docker run --name test-https -p 5000:80 -p 5000:8080 -e Kestrel__Endpoints__Grpc__Url=http://*:80 -e Kestrel__Endpoints__Grpc__Protocols=Http2 -e Kestrel__Endpoints__webApi__Url=http://*:8080 -e Kestrel__Endpoints__webApi__Protocols=Http1 -e ASPNETCORE_URLS=http://+  covid19-https`

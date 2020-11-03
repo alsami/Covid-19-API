@@ -48,9 +48,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="localhost.pfx">
+    <Content Update="localhost.pfx">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="publish\web.config" />
+    <_ContentIncludedByDefault Remove="publish\appsettings.json" />
+    <_ContentIncludedByDefault Remove="publish\Covid19Api.deps.json" />
+    <_ContentIncludedByDefault Remove="publish\Covid19Api.runtimeconfig.json" />
   </ItemGroup>
 
 
