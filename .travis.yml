@@ -2,16 +2,8 @@ os: linux
 dist: bionic
 language: csharp
 mono: none
-#dotnet: 5.0.100-rc.2.20479.15
+dotnet: 5.0.100
 solution: Covid19Api.sln
-
-addons:
-  snaps:
-    - name: dotnet-sdk
-      confinement: classic
-      channel: 5.0/beta
-  apt:
-    update: true
 
 stages:
   - build
@@ -24,15 +16,12 @@ jobs:
     - stage: build
       name: dotnet-build
       if: tag IS NOT present
-      before_script:
-        - sudo snap alias dotnet-sdk.dotnet dotnet
       script:
         - dotnet build
 
     - stage: test
       name: dotnet-test
       before_script:
-        - sudo snap alias dotnet-sdk.dotnet dotnet
         - sudo apt-get update && sudo apt-get install curl -y
       script:
         - ./test.sh
@@ -43,7 +32,6 @@ jobs:
       services:
         - docker
       before_script:
-        - sudo snap alias dotnet-sdk.dotnet dotnet
         - docker login -u ${REGISTRY_USER} -p ${REGISTRY_PASSWORD} ${REGISTRY}
       script:
         - ./publish-docker.sh
