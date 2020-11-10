@@ -29,7 +29,7 @@ namespace Covid19Api.IoC.Modules
                 .AsSelf()
                 .InstancePerLifetimeScope();
 
-            builder.Register<Func<IMongoDatabase>>(componentContext =>
+            builder.Register<Func<IMongoDatabase>>(_ =>
                 {
                     return () =>
                     {

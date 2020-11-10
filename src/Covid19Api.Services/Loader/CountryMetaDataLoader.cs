@@ -2,6 +2,7 @@ using System;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Covid19Api.Constants;
 using Covid19Api.Services.Abstractions.Loader;
 using Covid19Api.Services.Abstractions.Models;
 using Microsoft.Extensions.Logging;
@@ -10,10 +11,6 @@ namespace Covid19Api.Services.Loader
 {
     public class CountryMetaDataLoader : ICountryMetaDataLoader
     {
-#pragma warning disable S1075
-        private const string ApiUrl = "https://restcountries.eu/rest/v2/all";
-#pragma warning restore
-
         private static readonly JsonSerializerOptions SerializerOptions = new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
@@ -32,7 +29,7 @@ namespace Covid19Api.Services.Loader
         {
             var client = this.httpClientFactory.CreateClient();
 
-            var response = await client.GetAsync(ApiUrl);
+            var response = await client.GetAsync(Urls.RestCountriesApiUrl);
 
             if (response.IsSuccessStatusCode)
             {
@@ -44,7 +41,7 @@ namespace Covid19Api.Services.Loader
 
             var error = await response.Content.ReadAsStringAsync();
             this.logger.LogError("Failed load country meta-data from {url}! Status-Code: {statusCode} Error:\n{error}",
-                ApiUrl, response.StatusCode, error);
+                Urls.RestCountriesApiUrl, response.StatusCode, error);
 
             return Array.Empty<CountryMetaData>();
         }
