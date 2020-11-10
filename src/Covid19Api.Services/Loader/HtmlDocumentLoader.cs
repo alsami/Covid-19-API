@@ -19,7 +19,7 @@ namespace Covid19Api.Services.Loader
         {
             var client = this.httpClientFactory.CreateClient();
 
-            var response = await client.GetAsync(Urls.CovidInfoWorldOmetersUrl);
+            var response = await client.GetAsync(Urls.Covid19WorldometerUrl);
 
             var document = new HtmlDocument();
 

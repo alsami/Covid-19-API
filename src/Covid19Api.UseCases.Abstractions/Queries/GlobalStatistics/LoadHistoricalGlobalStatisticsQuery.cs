@@ -7,15 +7,8 @@ using MediatR;
 
 namespace Covid19Api.UseCases.Abstractions.Queries.GlobalStatistics
 {
-    public class LoadHistoricalGlobalStatisticsQuery : ICacheableRequest, IRequest<IEnumerable<GlobalStatisticDto>>
+    public sealed record LoadHistoricalGlobalStatisticsQuery(DateTime MinFetchedAt) : ICacheableRequest, IRequest<IEnumerable<GlobalStatisticDto>>
     {
-        public LoadHistoricalGlobalStatisticsQuery(DateTime minFetchedAt)
-        {
-            this.MinFetchedAt = minFetchedAt;
-        }
-
-        public DateTime MinFetchedAt { get; }
-
         public CacheConfiguration GetCacheConfiguration() =>
             new CacheConfiguration(nameof(LoadHistoricalGlobalStatisticsQuery), TimeSpan.FromMinutes(30));
     }

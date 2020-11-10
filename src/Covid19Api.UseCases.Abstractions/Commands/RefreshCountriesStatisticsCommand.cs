@@ -3,13 +3,5 @@ using MediatR;
 
 namespace Covid19Api.UseCases.Abstractions.Commands
 {
-    public class RefreshCountriesStatisticsCommand : IRequest
-    {
-        public RefreshCountriesStatisticsCommand(DateTime fetchedAt)
-        {
-            this.FetchedAt = fetchedAt;
-        }
-
-        public DateTime FetchedAt { get; }
-    }
+    public sealed record RefreshCountriesStatisticsCommand(DateTime FetchedAt) : IRequest;
 }

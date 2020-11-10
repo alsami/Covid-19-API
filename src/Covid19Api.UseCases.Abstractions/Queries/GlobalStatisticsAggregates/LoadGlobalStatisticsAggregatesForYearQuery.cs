@@ -4,13 +4,6 @@ using MediatR;
 
 namespace Covid19Api.UseCases.Abstractions.Queries.GlobalStatisticsAggregates
 {
-    public class LoadGlobalStatisticsAggregatesForYearQuery : IRequest<IEnumerable<GlobalStatisticAggregateDto>>
-    {
-        public LoadGlobalStatisticsAggregatesForYearQuery(int year)
-        {
-            this.Year = year;
-        }
-
-        public int Year { get; }
-    }
+    public sealed record LoadGlobalStatisticsAggregatesForYearQuery
+        (int Year) : IRequest<IEnumerable<GlobalStatisticAggregateDto>>;
 }
