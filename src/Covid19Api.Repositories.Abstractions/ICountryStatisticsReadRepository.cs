@@ -5,7 +5,7 @@ using Covid19Api.Domain;
 
 namespace Covid19Api.Repositories.Abstractions
 {
-    public interface ICountryStatisticsRepository
+    public interface ICountryStatisticsReadRepository
     {
         Task<CountryStatistic> MostRecentAsync(string country);
         Task<IEnumerable<CountryStatistic>> HistoricalAsync(DateTime minFetchedAt);
@@ -14,7 +14,5 @@ namespace Covid19Api.Repositories.Abstractions
 
         Task<CountryStatistic?> FindInRangeAsync(string country, DateTime inclusiveStart,
             DateTime exclusiveEnd);
-
-        Task StoreManyAsync(IEnumerable<CountryStatistic> countryStats);
     }
 }

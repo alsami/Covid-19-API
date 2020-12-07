@@ -21,16 +21,24 @@ namespace Covid19Api.IoC.Extensions
         public static ContainerBuilder RegisterRepositories(this ContainerBuilder builder,
             IHostEnvironment hostEnvironment, IConfiguration configuration)
         {
-            builder.RegisterType<GlobalStatisticsRepository>()
-                .As<IGlobalStatisticsRepository>()
+            builder.RegisterType<GlobalStatisticsReadRepository>()
+                .As<IGlobalStatisticsReadRepository>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<GlobalStatisticsWriteRepository>()
+                .As<IGlobalStatisticsWriteRepository>()
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<GlobalStatisticsAggregatesRepository>()
                 .As<IGlobalStatisticsAggregatesRepository>()
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<CountryStatisticsRepository>()
-                .As<ICountryStatisticsRepository>()
+            builder.RegisterType<CountryStatisticsReadRepository>()
+                .As<ICountryStatisticsReadRepository>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<CountryStatisticsWriteRepository>()
+                .As<ICountryStatisticsWriteRepository>()
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<CountryStatisticsAggregatesRepository>()
@@ -76,10 +84,11 @@ namespace Covid19Api.IoC.Extensions
             return builder;
         }
 
-        public static ContainerBuilder RegisterWorker(this ContainerBuilder builder, IHostEnvironment hostEnvironment, bool enableAggregates)
+        public static ContainerBuilder RegisterWorker(this ContainerBuilder builder, IHostEnvironment hostEnvironment,
+            bool enableAggregates)
         {
             if (hostEnvironment.IsContinuousIntegration()) return builder;
-            
+
             builder.RegisterType<DataRefreshWorker>()
                 .As<IHostedService>()
                 .InstancePerDependency();

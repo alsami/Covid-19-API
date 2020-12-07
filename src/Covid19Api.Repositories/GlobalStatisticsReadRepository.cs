@@ -9,24 +9,13 @@ using MongoDB.Driver;
 
 namespace Covid19Api.Repositories
 {
-    public class GlobalStatisticsRepository : IGlobalStatisticsRepository
+    public class GlobalStatisticsReadRepository : IGlobalStatisticsReadRepository
     {
         private readonly Covid19ApiDbContext context;
 
-        public GlobalStatisticsRepository(Covid19ApiDbContext context)
+        public GlobalStatisticsReadRepository(Covid19ApiDbContext context)
         {
             this.context = context;
-        }
-
-        public async Task StoreAsync(GlobalStatistics globalStatistics)
-        {
-            var collection = this.GetCollection();
-
-            await collection.ReplaceOneAsync(stats => stats.Id == globalStatistics.Id, globalStatistics,
-                new ReplaceOptions
-                {
-                    IsUpsert = true
-                });
         }
 
         public async Task<IEnumerable<GlobalStatistics>> HistoricalAsync(DateTime minFetchedAt)
@@ -38,7 +27,8 @@ namespace Covid19Api.Repositories
                 .Descending(nameof(GlobalStatistics.FetchedAt));
 
             var cursor = await collection.FindAsync(
-                existingClosedCaseStats => existingClosedCaseStats.FetchedAt >= minFetchedAt,
+                globalStatistics => globalStatistics.FetchedAt >= minFetchedAt &&
+                                    globalStatistics.Key == CollectionNames.GlobalStatistics,
                 new FindOptions<GlobalStatistics>
                 {
                     Sort = sort
@@ -52,7 +42,8 @@ namespace Covid19Api.Repositories
             var collection = this.GetCollection();
 
             var cursor = await collection.FindAsync(
-                existingCountryStats => existingCountryStats.FetchedAt >= minFetchedAt);
+                globalStatistics => globalStatistics.FetchedAt >= minFetchedAt &&
+                                    globalStatistics.Key == CollectionNames.GlobalStatistics);
 
             var all = await cursor.ToListAsync();
 
@@ -65,7 +56,8 @@ namespace Covid19Api.Repositories
 
             var leftFilter = Builders<GlobalStatistics>.Filter.Where(global => global.FetchedAt >= inclusiveStart);
             var rightFilter = Builders<GlobalStatistics>.Filter.Where(global => global.FetchedAt <= inclusiveEnd);
-            var combinedFilter = leftFilter & rightFilter;
+            var keyFilter = Builders<GlobalStatistics>.Filter.Where(global => global.Key == CollectionNames.GlobalStatistics);
+            var combinedFilter = leftFilter & rightFilter & keyFilter;
             var sort = Builders<GlobalStatistics>.Sort.Descending(global => global.FetchedAt);
 
             var cursor = await collection.FindAsync(combinedFilter, new FindOptions<GlobalStatistics>

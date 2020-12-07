@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -51,6 +52,12 @@ namespace Covid19Api.UseCases.Behaviors
             if (cached is {}) return cached;
 
             var response = await next();
+
+            // do not cache default values
+            if (EqualityComparer<TResponse>.Default.Equals(response, default))
+            {
+                return response!;
+            }
 
             await this.CacheAsync(configuration, response);
 
