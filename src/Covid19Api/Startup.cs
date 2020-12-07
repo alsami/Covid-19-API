@@ -91,7 +91,7 @@ namespace Covid19Api
             containerBuilder
                 .RegisterAutoMapper(typeof(CountryStatisticsProfile).Assembly)
                 .RegisterMediatR(typeof(LoadLatestGlobalStatisticsQueryHandler).Assembly, typeof(CachingBehavior<,>))
-                .RegisterWorker(this.hostEnvironment)
+                .RegisterWorker(this.hostEnvironment, this.configuration.GetSection("EnableAggregates").Get<bool>())
                 .RegisterServices()
                 .RegisterRepositories(this.hostEnvironment, this.configuration);
         }
