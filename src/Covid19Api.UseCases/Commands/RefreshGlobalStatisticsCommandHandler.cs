@@ -9,13 +9,13 @@ namespace Covid19Api.UseCases.Commands
 {
     public class RefreshGlobalStatisticsCommandHandler : IRequestHandler<RefreshGlobalStatisticsCommand>
     {
-        private readonly IGlobalStatisticsRepository globalStatisticsRepository;
+        private readonly IGlobalStatisticsWriteRepository globalStatisticsWriteRepository;
         private readonly IGlobalStatisticsLoader globalStatisticsLoader;
 
-        public RefreshGlobalStatisticsCommandHandler(IGlobalStatisticsRepository globalStatisticsRepository,
+        public RefreshGlobalStatisticsCommandHandler(IGlobalStatisticsWriteRepository globalStatisticsWriteRepository,
             IGlobalStatisticsLoader globalStatisticsLoader)
         {
-            this.globalStatisticsRepository = globalStatisticsRepository;
+            this.globalStatisticsWriteRepository = globalStatisticsWriteRepository;
             this.globalStatisticsLoader = globalStatisticsLoader;
         }
 
@@ -23,7 +23,7 @@ namespace Covid19Api.UseCases.Commands
         {
             var globalStatistics = await this.globalStatisticsLoader.ParseAsync(request.FetchedAt);
 
-            await this.globalStatisticsRepository.StoreAsync(globalStatistics);
+            await this.globalStatisticsWriteRepository.StoreAsync(globalStatistics);
 
             return Unit.Value;
         }

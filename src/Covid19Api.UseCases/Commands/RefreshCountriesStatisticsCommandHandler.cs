@@ -13,15 +13,15 @@ namespace Covid19Api.UseCases.Commands
     public class RefreshCountriesStatisticsCommandHandler : IRequestHandler<RefreshCountriesStatisticsCommand>
     {
         private readonly ILogger<RefreshCountriesStatisticsCommandHandler> logger;
-        private readonly ICountryStatisticsRepository countryStatisticsRepository;
+        private readonly ICountryStatisticsWriteRepository countryStatisticsWriteRepository;
         private readonly ICountryStatisticsLoader countryStatisticsLoader;
 
-
         public RefreshCountriesStatisticsCommandHandler(ILogger<RefreshCountriesStatisticsCommandHandler> logger,
-            ICountryStatisticsRepository countryStatisticsRepository, ICountryStatisticsLoader countryStatisticsLoader)
+            ICountryStatisticsWriteRepository countryStatisticsWriteRepository,
+            ICountryStatisticsLoader countryStatisticsLoader)
         {
             this.logger = logger;
-            this.countryStatisticsRepository = countryStatisticsRepository;
+            this.countryStatisticsWriteRepository = countryStatisticsWriteRepository;
             this.countryStatisticsLoader = countryStatisticsLoader;
         }
 
@@ -41,7 +41,7 @@ namespace Covid19Api.UseCases.Commands
                     string.Join(", ", countriesWithoutCountryCode.Select(statistics => statistics!.Country)));
             }
 
-            await this.countryStatisticsRepository.StoreManyAsync(countriesStatistics!);
+            await this.countryStatisticsWriteRepository.StoreManyAsync(countriesStatistics!);
 
             return Unit.Value;
         }

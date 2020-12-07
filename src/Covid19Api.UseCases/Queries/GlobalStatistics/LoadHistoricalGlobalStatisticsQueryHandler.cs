@@ -13,20 +13,20 @@ namespace Covid19Api.UseCases.Queries.GlobalStatistics
         LoadHistoricalGlobalStatisticsQueryHandler : IRequestHandler<LoadHistoricalGlobalStatisticsQuery,
             IEnumerable<GlobalStatisticDto>>
     {
-        private readonly IGlobalStatisticsRepository globalStatisticsRepository;
+        private readonly IGlobalStatisticsReadRepository globalStatisticsReadRepository;
         private readonly IMapper mapper;
 
-        public LoadHistoricalGlobalStatisticsQueryHandler(IGlobalStatisticsRepository globalStatisticsRepository,
+        public LoadHistoricalGlobalStatisticsQueryHandler(IGlobalStatisticsReadRepository globalStatisticsReadRepository,
             IMapper mapper)
         {
-            this.globalStatisticsRepository = globalStatisticsRepository;
+            this.globalStatisticsReadRepository = globalStatisticsReadRepository;
             this.mapper = mapper;
         }
 
         public async Task<IEnumerable<GlobalStatisticDto>> Handle(LoadHistoricalGlobalStatisticsQuery request,
             CancellationToken cancellationToken)
         {
-            var latestActiveCaseStats = await this.globalStatisticsRepository.HistoricalAsync(request.MinFetchedAt);
+            var latestActiveCaseStats = await this.globalStatisticsReadRepository.HistoricalAsync(request.MinFetchedAt);
 
             return this.mapper.Map<IEnumerable<GlobalStatisticDto>>(latestActiveCaseStats);
         }

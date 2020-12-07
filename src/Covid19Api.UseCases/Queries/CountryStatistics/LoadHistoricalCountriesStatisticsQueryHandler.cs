@@ -13,19 +13,19 @@ namespace Covid19Api.UseCases.Queries.CountryStatistics
         IEnumerable<CountryStatisticDto>>
     {
         private readonly IMapper mapper;
-        private readonly ICountryStatisticsRepository countryStatisticsRepository;
+        private readonly ICountryStatisticsReadRepository countryStatisticsReadRepository;
 
         public LoadHistoricalCountriesStatisticsQueryHandler(IMapper mapper,
-            ICountryStatisticsRepository countryStatisticsRepository)
+            ICountryStatisticsReadRepository countryStatisticsReadRepository)
         {
             this.mapper = mapper;
-            this.countryStatisticsRepository = countryStatisticsRepository;
+            this.countryStatisticsReadRepository = countryStatisticsReadRepository;
         }
 
         public async Task<IEnumerable<CountryStatisticDto>> Handle(LoadHistoricalCountriesStatisticsQuery request,
             CancellationToken cancellationToken)
         {
-            var countryHistories = await this.countryStatisticsRepository.HistoricalAsync(request.MinFetchedAt);
+            var countryHistories = await this.countryStatisticsReadRepository.HistoricalAsync(request.MinFetchedAt);
 
             return this.mapper.Map<IEnumerable<CountryStatisticDto>>(countryHistories);
         }

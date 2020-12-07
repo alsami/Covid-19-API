@@ -14,16 +14,16 @@ namespace Covid19Api.UseCases.Commands
     public class AggregateGlobalStatisticsCommandHandler : IRequestHandler<AggregateGlobalStatisticsCommand>
     {
         private readonly ILogger<AggregateGlobalStatisticsCommandHandler> logger;
-        private readonly IGlobalStatisticsRepository globalStatisticsRepository;
+        private readonly IGlobalStatisticsReadRepository globalStatisticsReadRepository;
         private readonly IGlobalStatisticsAggregatesRepository globalStatisticsAggregatesRepository;
 
 
         public AggregateGlobalStatisticsCommandHandler(ILogger<AggregateGlobalStatisticsCommandHandler> logger,
-            IGlobalStatisticsRepository globalStatisticsRepository,
+            IGlobalStatisticsReadRepository globalStatisticsReadRepository,
             IGlobalStatisticsAggregatesRepository globalStatisticsAggregatesRepository)
         {
             this.logger = logger;
-            this.globalStatisticsRepository = globalStatisticsRepository;
+            this.globalStatisticsReadRepository = globalStatisticsReadRepository;
             this.globalStatisticsAggregatesRepository = globalStatisticsAggregatesRepository;
         }
 
@@ -37,7 +37,7 @@ namespace Covid19Api.UseCases.Commands
                 start.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture),
                 end.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture));
 
-            var globalStatisticsInRange = await this.globalStatisticsRepository.FindInRangeAsync(start, end);
+            var globalStatisticsInRange = await this.globalStatisticsReadRepository.FindInRangeAsync(start, end);
 
             if (globalStatisticsInRange is null) return Unit.Value;
 

@@ -18,15 +18,15 @@ namespace Covid19Api.UseCases.Commands
         private readonly List<CountryStatisticsAggregate> aggregates = new List<CountryStatisticsAggregate>(300);
 
         private readonly ILogger<AggregateGlobalStatisticsCommandHandler> logger;
-        private readonly ICountryStatisticsRepository countryStatisticsRepository;
+        private readonly ICountryStatisticsReadRepository countryStatisticsReadRepository;
         private readonly ICountryStatisticsAggregatesRepository countryStatisticsAggregatesRepository;
 
         public AggregateCountryStatisticsCommandHandler(ILogger<AggregateGlobalStatisticsCommandHandler> logger,
-            ICountryStatisticsRepository countryStatisticsRepository,
+            ICountryStatisticsReadRepository countryStatisticsReadRepository,
             ICountryStatisticsAggregatesRepository countryStatisticsAggregatesRepository)
         {
             this.logger = logger;
-            this.countryStatisticsRepository = countryStatisticsRepository;
+            this.countryStatisticsReadRepository = countryStatisticsReadRepository;
             this.countryStatisticsAggregatesRepository = countryStatisticsAggregatesRepository;
         }
 
@@ -64,7 +64,7 @@ namespace Covid19Api.UseCases.Commands
         private async Task<CountryStatisticsAggregate?> CreateCountryAggregateAsync(string country, DateTime start,
             DateTime end)
         {
-            var statisticInRange = await this.countryStatisticsRepository.FindInRangeAsync(country, start, end);
+            var statisticInRange = await this.countryStatisticsReadRepository.FindInRangeAsync(country, start, end);
 
             if (statisticInRange is null) return null;
 
