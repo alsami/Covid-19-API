@@ -15,16 +15,16 @@ namespace Covid19Api.UseCases.Commands
     {
         private readonly ILogger<AggregateGlobalStatisticsCommandHandler> logger;
         private readonly IGlobalStatisticsReadRepository globalStatisticsReadRepository;
-        private readonly IGlobalStatisticsAggregatesRepository globalStatisticsAggregatesRepository;
+        private readonly IGlobalStatisticsAggregatesWriteRepository globalStatisticsAggregatesWriteRepository;
 
 
         public AggregateGlobalStatisticsCommandHandler(ILogger<AggregateGlobalStatisticsCommandHandler> logger,
             IGlobalStatisticsReadRepository globalStatisticsReadRepository,
-            IGlobalStatisticsAggregatesRepository globalStatisticsAggregatesRepository)
+            IGlobalStatisticsAggregatesWriteRepository globalStatisticsAggregatesWriteRepository)
         {
             this.logger = logger;
             this.globalStatisticsReadRepository = globalStatisticsReadRepository;
-            this.globalStatisticsAggregatesRepository = globalStatisticsAggregatesRepository;
+            this.globalStatisticsAggregatesWriteRepository = globalStatisticsAggregatesWriteRepository;
         }
 
         public async Task<Unit> Handle(AggregateGlobalStatisticsCommand request, CancellationToken cancellationToken)
@@ -44,7 +44,7 @@ namespace Covid19Api.UseCases.Commands
             var aggregate = new GlobalStatisticsAggregate(globalStatisticsInRange.Total,
                 globalStatisticsInRange.Recovered, globalStatisticsInRange.Deaths, request.Month, request.Year);
 
-            await this.globalStatisticsAggregatesRepository.StoreAsync(aggregate);
+            await this.globalStatisticsAggregatesWriteRepository.StoreAsync(aggregate);
 
             this.logger.LogInformation("Done aggregating {entity} from {from} to {to}",
                 nameof(GlobalStatistics),

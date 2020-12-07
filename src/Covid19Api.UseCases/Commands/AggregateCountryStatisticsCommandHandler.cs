@@ -19,15 +19,15 @@ namespace Covid19Api.UseCases.Commands
 
         private readonly ILogger<AggregateGlobalStatisticsCommandHandler> logger;
         private readonly ICountryStatisticsReadRepository countryStatisticsReadRepository;
-        private readonly ICountryStatisticsAggregatesRepository countryStatisticsAggregatesRepository;
+        private readonly ICountryStatisticsAggregatesWriteRepository countryStatisticsAggregatesWriteRepository;
 
         public AggregateCountryStatisticsCommandHandler(ILogger<AggregateGlobalStatisticsCommandHandler> logger,
             ICountryStatisticsReadRepository countryStatisticsReadRepository,
-            ICountryStatisticsAggregatesRepository countryStatisticsAggregatesRepository)
+            ICountryStatisticsAggregatesWriteRepository countryStatisticsAggregatesWriteRepository)
         {
             this.logger = logger;
             this.countryStatisticsReadRepository = countryStatisticsReadRepository;
-            this.countryStatisticsAggregatesRepository = countryStatisticsAggregatesRepository;
+            this.countryStatisticsAggregatesWriteRepository = countryStatisticsAggregatesWriteRepository;
         }
 
         public async Task<Unit> Handle(AggregateCountryStatisticsCommand request, CancellationToken cancellationToken)
@@ -50,7 +50,7 @@ namespace Covid19Api.UseCases.Commands
                 if (aggregate is {}) this.aggregates.Add(aggregate);
             }
 
-            await this.countryStatisticsAggregatesRepository.StoreManyAsync(aggregates);
+            await this.countryStatisticsAggregatesWriteRepository.StoreManyAsync(aggregates);
             this.aggregates.Clear();
 
             this.logger.LogInformation("Done aggregating {entity} from {from} to {to}",

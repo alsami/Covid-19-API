@@ -15,20 +15,20 @@ namespace Covid19Api.UseCases.Queries.CountryStatisticsAggregates
         LoadCountryStatisticsAggregatesForCountryInYearQuery, IEnumerable<CountryStatisticAggregateDto>>
     {
         private readonly IMapper mapper;
-        private readonly ICountryStatisticsAggregatesRepository countryStatisticsAggregatesRepository;
+        private readonly ICountryStatisticsAggregatesReadRepository countryStatisticsAggregatesReadRepository;
 
         public LoadCountryStatisticsAggregatesForCountryInYearQueryHandler(IMapper mapper,
-            ICountryStatisticsAggregatesRepository countryStatisticsAggregatesRepository)
+            ICountryStatisticsAggregatesReadRepository countryStatisticsAggregatesReadRepository)
         {
             this.mapper = mapper;
-            this.countryStatisticsAggregatesRepository = countryStatisticsAggregatesRepository;
+            this.countryStatisticsAggregatesReadRepository = countryStatisticsAggregatesReadRepository;
         }
 
         public async Task<IEnumerable<CountryStatisticAggregateDto>> Handle(
             LoadCountryStatisticsAggregatesForCountryInYearQuery request, CancellationToken cancellationToken)
         {
             var aggregates =
-                await this.countryStatisticsAggregatesRepository.FindForCountryInYearAsync(request.Country,
+                await this.countryStatisticsAggregatesReadRepository.FindForCountryInYearAsync(request.Country,
                     request.Year);
 
             return aggregates.Any()

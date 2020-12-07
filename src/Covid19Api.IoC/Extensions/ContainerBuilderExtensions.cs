@@ -29,10 +29,14 @@ namespace Covid19Api.IoC.Extensions
                 .As<IGlobalStatisticsWriteRepository>()
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<GlobalStatisticsAggregatesRepository>()
-                .As<IGlobalStatisticsAggregatesRepository>()
+            builder.RegisterType<GlobalStatisticsAggregatesReadRepository>()
+                .As<IGlobalStatisticsAggregatesReadRepository>()
                 .InstancePerLifetimeScope();
-
+            
+            builder.RegisterType<GlobalStatisticsAggregatesWriteRepository>()
+                .As<IGlobalStatisticsAggregatesWriteRepository>()
+                .InstancePerLifetimeScope();
+            
             builder.RegisterType<CountryStatisticsReadRepository>()
                 .As<ICountryStatisticsReadRepository>()
                 .InstancePerLifetimeScope();
@@ -41,8 +45,12 @@ namespace Covid19Api.IoC.Extensions
                 .As<ICountryStatisticsWriteRepository>()
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<CountryStatisticsAggregatesRepository>()
-                .As<ICountryStatisticsAggregatesRepository>()
+            builder.RegisterType<CountryStatisticsAggregatesReadRepository>()
+                .As<ICountryStatisticsAggregatesReadRepository>()
+                .InstancePerLifetimeScope();
+            
+            builder.RegisterType<CountryStatisticsAggregatesWriteRepository>()
+                .As<ICountryStatisticsAggregatesWriteRepository>()
                 .InstancePerLifetimeScope();
 
             builder.RegisterModule(new Covid19ApiDbContextModule(hostEnvironment, configuration));

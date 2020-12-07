@@ -13,19 +13,19 @@ namespace Covid19Api.UseCases.Queries.GlobalStatisticsAggregates
             GlobalStatisticAggregateDto?>
     {
         private readonly IMapper mapper;
-        private readonly IGlobalStatisticsAggregatesRepository globalStatisticsAggregatesRepository;
+        private readonly IGlobalStatisticsAggregatesReadRepository globalStatisticsAggregatesReadRepository;
 
         public LoadGlobalStatisticsAggregateQueryHandler(IMapper mapper,
-            IGlobalStatisticsAggregatesRepository globalStatisticsAggregatesRepository)
+            IGlobalStatisticsAggregatesReadRepository globalStatisticsAggregatesReadRepository)
         {
             this.mapper = mapper;
-            this.globalStatisticsAggregatesRepository = globalStatisticsAggregatesRepository;
+            this.globalStatisticsAggregatesReadRepository = globalStatisticsAggregatesReadRepository;
         }
 
         public async Task<GlobalStatisticAggregateDto?> Handle(LoadGlobalStatisticsAggregate request,
             CancellationToken cancellationToken)
         {
-            var aggregate = await this.globalStatisticsAggregatesRepository.FindAsync(request.Month, request.Year);
+            var aggregate = await this.globalStatisticsAggregatesReadRepository.FindAsync(request.Month, request.Year);
 
             return aggregate is null
                 ? null

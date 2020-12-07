@@ -4,10 +4,8 @@ using Covid19Api.Domain;
 
 namespace Covid19Api.Repositories.Abstractions
 {
-    public interface IGlobalStatisticsAggregatesRepository
+    public interface IGlobalStatisticsAggregatesReadRepository
     {
-        Task StoreAsync(GlobalStatisticsAggregate globalStatisticsAggregate);
-
         Task<GlobalStatisticsAggregate?> FindAsync(int month, int year);
 
         Task<IList<GlobalStatisticsAggregate>> FindInYearAsync(int year);

@@ -13,21 +13,21 @@ namespace Covid19Api.UseCases.Queries.CountryStatisticsAggregates
             CountryStatisticAggregateDto?>
     {
         private readonly IMapper mapper;
-        private readonly ICountryStatisticsAggregatesRepository countryStatisticsAggregatesRepository;
+        private readonly ICountryStatisticsAggregatesReadRepository countryStatisticsAggregatesReadRepository;
 
 
         public LoadCountryStatisticsAggregateQueryHandler(IMapper mapper,
-            ICountryStatisticsAggregatesRepository countryStatisticsAggregatesRepository)
+            ICountryStatisticsAggregatesReadRepository countryStatisticsAggregatesReadRepository)
         {
             this.mapper = mapper;
-            this.countryStatisticsAggregatesRepository = countryStatisticsAggregatesRepository;
+            this.countryStatisticsAggregatesReadRepository = countryStatisticsAggregatesReadRepository;
         }
 
         public async Task<CountryStatisticAggregateDto?> Handle(LoadCountryStatisticsAggregate request,
             CancellationToken cancellationToken)
         {
             var aggregate =
-                await this.countryStatisticsAggregatesRepository.FindAsync(request.Country, request.Month,
+                await this.countryStatisticsAggregatesReadRepository.FindAsync(request.Country, request.Month,
                     request.Year);
 
             return aggregate is null

@@ -1,7 +1,7 @@
 using System;
 using System.Security.Cryptography;
 using System.Text;
-using Covid19Api.Mongo;
+using Covid19Api.Domain.Constants;
 
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Local
 // ReSharper disable UnusedAutoPropertyAccessor.Global
@@ -22,7 +22,7 @@ namespace Covid19Api.Domain
 
         // ReSharper disable once UnusedMember.Global
         // This needs to be present for mongo-db!
-        public string Key { get; private set; } = CollectionNames.GlobalStatistics;
+        public string Key { get; private set; } = EntityKeys.GlobalStatistics;
 
         public GlobalStatistics(int total, int recovered, int deaths, DateTime fetchedAt)
         {

@@ -1,6 +1,7 @@
 using System;
 using System.Security.Cryptography;
 using System.Text;
+using Covid19Api.Domain.Constants;
 
 namespace Covid19Api.Domain
 {
@@ -28,6 +29,10 @@ namespace Covid19Api.Domain
         public int Active { get; private set; }
         public int Month { get; private set; }
         public int Year { get; private set; }
+        
+        // ReSharper disable once UnusedMember.Global
+        // This needs to be present for mongo-db!
+        public string Key { get; private set; } = EntityKeys.CountryStatisticsAggregates;
 
 
         public CountryStatisticsAggregate(string country, string? countryCode, int total, int @new, int deaths,

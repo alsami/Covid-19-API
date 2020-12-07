@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Covid19Api.Domain;
+using Covid19Api.Domain.Constants;
 using Covid19Api.Mongo.Scaffolder.Abstractions;
 using Covid19Api.Mongo.Scaffolder.Extensions;
 using Microsoft.Extensions.Logging;
@@ -24,7 +25,7 @@ namespace Covid19Api.Mongo.Scaffolder.Updates
         protected override async Task ExecuteAsync()
         {
             await this.databaseContext.Database.CreateCollectionIfNotExistsAsync(CollectionNames
-                .GlobalStatisticsAggregates);
+                .GlobalStatistics);
 
             var monthIndex = Builders<GlobalStatisticsAggregate>
                 .IndexKeys
@@ -32,7 +33,7 @@ namespace Covid19Api.Mongo.Scaffolder.Updates
 
             var monthIndexModel = new CreateIndexModel<GlobalStatisticsAggregate>(monthIndex, new CreateIndexOptions
             {
-                Name = $"{CollectionNames.GlobalStatisticsAggregates}_month_descending"
+                Name = $"{EntityKeys.GlobalStatisticsAggregates}_month_descending"
             });
 
             var yearIndex = Builders<GlobalStatisticsAggregate>
@@ -41,7 +42,7 @@ namespace Covid19Api.Mongo.Scaffolder.Updates
 
             var yearIndexModel = new CreateIndexModel<GlobalStatisticsAggregate>(yearIndex, new CreateIndexOptions
             {
-                Name = $"{CollectionNames.GlobalStatisticsAggregates}_year_descending"
+                Name = $"{EntityKeys.GlobalStatisticsAggregates}_year_descending"
             });
 
             var yearMonthIndex = Builders<GlobalStatisticsAggregate>
@@ -51,13 +52,12 @@ namespace Covid19Api.Mongo.Scaffolder.Updates
             var yearMonthIndexModel = new CreateIndexModel<GlobalStatisticsAggregate>(yearMonthIndex,
                 new CreateIndexOptions
                 {
-                    Name = $"{CollectionNames.GlobalStatisticsAggregates}_year_month",
-                    Unique = true
+                    Name = $"{EntityKeys.GlobalStatisticsAggregates}_year_month",
                 });
 
             var collection =
                 this.databaseContext.Database.GetCollection<GlobalStatisticsAggregate>(CollectionNames
-                    .GlobalStatisticsAggregates);
+                    .GlobalStatistics);
 
             await collection.Indexes.CreateManyAsync(new[]
             {

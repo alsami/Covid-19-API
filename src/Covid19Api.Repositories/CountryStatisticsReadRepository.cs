@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Covid19Api.Domain;
+using Covid19Api.Domain.Constants;
 using Covid19Api.Mongo;
 using Covid19Api.Repositories.Abstractions;
 using MongoDB.Driver;
@@ -32,7 +33,7 @@ namespace Covid19Api.Repositories
             var cursor = await collection.FindAsync(statistics =>
                     statistics.FetchedAt >= DateTime.UtcNow.Date.AddDays(-1) &&
                     statistics.Country.ToLower() == country.ToLower() &&
-                    statistics.Key == CollectionNames.CountryStatistics,
+                    statistics.Key == EntityKeys.CountryStatistics,
                 new FindOptions<CountryStatistic>
                 {
                     Sort = sort,
@@ -52,7 +53,7 @@ namespace Covid19Api.Repositories
 
             var cursor = await collection.FindAsync(
                 statistics => statistics.FetchedAt >= minFetchedAt &&
-                              statistics.Key == CollectionNames.CountryStatistics,
+                              statistics.Key == EntityKeys.CountryStatistics,
                 new FindOptions<CountryStatistic>
                 {
                     Sort = sort,
@@ -80,7 +81,7 @@ namespace Covid19Api.Repositories
             var cursor = await collection.FindAsync(
                 statistics => statistics.FetchedAt >= minFetchedAt &&
                               statistics.Country.ToLowerInvariant() == country.ToLowerInvariant() &&
-                              statistics.Key == CollectionNames.CountryStatistics,
+                              statistics.Key == EntityKeys.CountryStatistics,
                 new FindOptions<CountryStatistic>
                 {
                     Sort = sort,
@@ -96,7 +97,7 @@ namespace Covid19Api.Repositories
             var cursor = await collection.FindAsync(
                 statistics => statistics.FetchedAt >= minFetchedAt &&
                               statistics.Country.ToLowerInvariant() == country.ToLowerInvariant() &&
-                              statistics.Key == CollectionNames.CountryStatistics);
+                              statistics.Key == EntityKeys.CountryStatistics);
 
             return await cursor.ToListAsync();
         }
@@ -120,7 +121,7 @@ namespace Covid19Api.Repositories
 
             var keyFilter =
                 Builders<CountryStatistic>.Filter.Where(statistics =>
-                    statistics.Key == CollectionNames.CountryStatistics);
+                    statistics.Key == EntityKeys.CountryStatistics);
 
             var sort = Builders<CountryStatistic>.Sort.Descending(statistics => statistics.FetchedAt);
 

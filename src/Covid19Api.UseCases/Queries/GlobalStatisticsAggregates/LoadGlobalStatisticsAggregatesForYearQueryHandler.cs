@@ -15,19 +15,19 @@ namespace Covid19Api.UseCases.Queries.GlobalStatisticsAggregates
         LoadGlobalStatisticsAggregatesForYearQuery, IEnumerable<GlobalStatisticAggregateDto>>
     {
         private readonly IMapper mapper;
-        private readonly IGlobalStatisticsAggregatesRepository globalStatisticsAggregatesRepository;
+        private readonly IGlobalStatisticsAggregatesReadRepository globalStatisticsAggregatesReadRepository;
 
         public LoadGlobalStatisticsAggregatesForYearQueryHandler(IMapper mapper,
-            IGlobalStatisticsAggregatesRepository globalStatisticsAggregatesRepository)
+            IGlobalStatisticsAggregatesReadRepository globalStatisticsAggregatesReadRepository)
         {
             this.mapper = mapper;
-            this.globalStatisticsAggregatesRepository = globalStatisticsAggregatesRepository;
+            this.globalStatisticsAggregatesReadRepository = globalStatisticsAggregatesReadRepository;
         }
 
         public async Task<IEnumerable<GlobalStatisticAggregateDto>> Handle(
             LoadGlobalStatisticsAggregatesForYearQuery request, CancellationToken cancellationToken)
         {
-            var aggregates = await this.globalStatisticsAggregatesRepository.FindInYearAsync(request.Year);
+            var aggregates = await this.globalStatisticsAggregatesReadRepository.FindInYearAsync(request.Year);
 
             return aggregates.Any()
                 ? this.mapper.Map<IEnumerable<GlobalStatisticAggregateDto>>(aggregates)

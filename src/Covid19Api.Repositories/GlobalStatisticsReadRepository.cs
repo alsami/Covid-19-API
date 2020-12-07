@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Covid19Api.Domain;
+using Covid19Api.Domain.Constants;
 using Covid19Api.Mongo;
 using Covid19Api.Repositories.Abstractions;
 using MongoDB.Driver;
@@ -28,7 +29,7 @@ namespace Covid19Api.Repositories
 
             var cursor = await collection.FindAsync(
                 globalStatistics => globalStatistics.FetchedAt >= minFetchedAt &&
-                                    globalStatistics.Key == CollectionNames.GlobalStatistics,
+                                    globalStatistics.Key == EntityKeys.GlobalStatistics,
                 new FindOptions<GlobalStatistics>
                 {
                     Sort = sort
@@ -43,7 +44,7 @@ namespace Covid19Api.Repositories
 
             var cursor = await collection.FindAsync(
                 globalStatistics => globalStatistics.FetchedAt >= minFetchedAt &&
-                                    globalStatistics.Key == CollectionNames.GlobalStatistics);
+                                    globalStatistics.Key == EntityKeys.GlobalStatistics);
 
             var all = await cursor.ToListAsync();
 
@@ -56,7 +57,7 @@ namespace Covid19Api.Repositories
 
             var leftFilter = Builders<GlobalStatistics>.Filter.Where(global => global.FetchedAt >= inclusiveStart);
             var rightFilter = Builders<GlobalStatistics>.Filter.Where(global => global.FetchedAt <= inclusiveEnd);
-            var keyFilter = Builders<GlobalStatistics>.Filter.Where(global => global.Key == CollectionNames.GlobalStatistics);
+            var keyFilter = Builders<GlobalStatistics>.Filter.Where(global => global.Key == EntityKeys.GlobalStatistics);
             var combinedFilter = leftFilter & rightFilter & keyFilter;
             var sort = Builders<GlobalStatistics>.Sort.Descending(global => global.FetchedAt);
 
