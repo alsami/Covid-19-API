@@ -6,7 +6,7 @@
 
     <ItemGroup>
       <PackageReference Include="AutoMapper" Version="10.1.1" />
-      <PackageReference Include="Grpc.AspNetCore" Version="2.33.1" />
+      <PackageReference Include="Grpc.AspNetCore" Version="2.34.0" />
     </ItemGroup>
     
     <ItemGroup>
