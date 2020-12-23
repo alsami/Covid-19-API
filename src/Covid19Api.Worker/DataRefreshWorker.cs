@@ -24,23 +24,46 @@ namespace Covid19Api.Worker
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            var nextRun = this.CalculateInitialExecutionTime();
             while (!stoppingToken.IsCancellationRequested)
             {
                 try
                 {
-                    await this.ProcessAsync();
+                    if (DateTime.UtcNow >= nextRun)
+                    {
+                        await this.ProcessAsync();
+
+                        nextRun = this.CalculateNextRun();
+                    }
                 }
                 catch (Exception e)
                 {
                     this.logger.LogCritical(e, e.Message);
                 }
 
-                var nextRun = DateTime.UtcNow.AddHours(4);
-
-                this.logger.LogInformation("Next run {nextRun}", nextRun.ToString("O"));
-
-                await Task.Delay(TimeSpan.FromHours(4), stoppingToken);
+                await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
             }
+        }
+
+        private DateTime CalculateInitialExecutionTime()
+        {
+            var currentTime = DateTime.UtcNow;
+            var minutesDiff = 60 - currentTime.Minute;
+            var nextExecution = currentTime.AddMinutes(minutesDiff).AddSeconds(-currentTime.Second);
+            this.logger.LogInformation("Next refresh run {nextRun}", nextExecution.ToString("O"));
+            return nextExecution;
+        }
+
+        private DateTime CalculateNextRun()
+        {
+            var nextExecution = DateTime.UtcNow.AddHours(4);
+            if (nextExecution.Day != DateTime.UtcNow.Day)
+            {
+                nextExecution = DateTime.UtcNow.Date.AddDays(1);
+            }
+
+            this.logger.LogInformation("Next refresh run {nextRun}", nextExecution.ToString("O"));
+            return nextExecution;
         }
 
         private async Task ProcessAsync()
