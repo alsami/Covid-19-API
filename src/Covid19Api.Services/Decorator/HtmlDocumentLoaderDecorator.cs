@@ -72,7 +72,7 @@ namespace Covid19Api.Services.Decorator
             await this.distributedCache.SetAsync(Key, compressed,
                 new DistributedCacheEntryOptions
                 {
-                    AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(30)
+                    AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(5)
                 });
         }
     }
