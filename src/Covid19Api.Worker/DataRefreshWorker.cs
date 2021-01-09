@@ -57,10 +57,19 @@ namespace Covid19Api.Worker
         private DateTime CalculateNextRun()
         {
             var nextExecution = DateTime.UtcNow.AddHours(4);
+            
             if (nextExecution.Day != DateTime.UtcNow.Day)
             {
                 nextExecution = DateTime.UtcNow.Date.AddDays(1);
             }
+
+            var hourDiffTillNextDay = 24 - nextExecution.Hour;
+
+            if (hourDiffTillNextDay <= 4)
+            {
+                nextExecution = nextExecution.AddHours(hourDiffTillNextDay - 1);
+            }
+            
 
             this.logger.LogInformation("Next refresh run {nextRun}", nextExecution.ToString("O"));
             return nextExecution;
