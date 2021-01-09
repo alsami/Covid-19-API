@@ -25,8 +25,8 @@ namespace Covid19Api.Worker
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            // UTC 22 PM
-            var nextRun = DateTime.UtcNow.Date.AddDays(1).AddHours(-2);
+            // UTC day switch
+            var nextRun = DateTime.UtcNow.Date.AddDays(1);
             this.logger.LogInformation("Next country-statistics aggregation at {at}", nextRun.ToString("dd.MM.yyyy HH:mm:ss"));
             while (!stoppingToken.IsCancellationRequested)
             {
