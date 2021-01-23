@@ -6,8 +6,6 @@ using Covid19Api.UseCases.Abstractions.Queries.Countries;
 using Covid19Api.UseCases.Abstractions.Queries.CountryStatistics;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Primitives;
-using Microsoft.Net.Http.Headers;
 
 namespace Covid19Api.Endpoints.Rest.V1
 {

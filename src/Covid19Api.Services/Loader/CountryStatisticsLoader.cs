@@ -117,7 +117,7 @@ namespace Covid19Api.Services.Loader
 
         private static int ParseIntegerValue(HtmlNode htmlNode)
         {
-            var value = ClearValue(htmlNode.InnerHtml)
+            var value = ClearValue(htmlNode.InnerText)
                 .Replace(",", "");
 
             try
