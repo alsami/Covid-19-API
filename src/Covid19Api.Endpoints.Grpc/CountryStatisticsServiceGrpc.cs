@@ -62,7 +62,7 @@ namespace Covid19Api.Endpoints.Grpc
             CountryStatisticsForCountryGrpcMessage request,
             ServerCallContext context)
         {
-            var query = new LoadHistoricalCountryStatisticsForCountryQuery(request.Country);
+            var query = new LoadHistoricalCountryStatisticsForCountryQuery(request.Country, DateTime.UtcNow.Date.AddDays(-9));
             var countryStatistics = await this.mediator.Send(query);
             return new CountryStatisticsGrpcMessage
             {

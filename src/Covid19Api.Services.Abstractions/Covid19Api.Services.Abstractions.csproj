@@ -10,6 +10,7 @@
     
     <ItemGroup>
       <ProjectReference Include="..\Covid19Api.Domain\Covid19Api.Domain.csproj" />
+      <ProjectReference Include="..\Covid19Api.Presentation\Covid19Api.Presentation.csproj" />
     </ItemGroup>
 
 </Project>

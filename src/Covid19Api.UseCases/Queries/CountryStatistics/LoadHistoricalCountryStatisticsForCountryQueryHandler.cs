@@ -29,9 +29,7 @@ namespace Covid19Api.UseCases.Queries.CountryStatistics
             LoadHistoricalCountryStatisticsForCountryQuery request,
             CancellationToken cancellationToken)
         {
-            var minFetchedAt = DateTime.UtcNow.Date.AddDays(-9);
-
-            var statsForCountry = await this.countryStatisticsReadRepository.HistoricalAsync(minFetchedAt, request.Country);
+            var statsForCountry = await this.countryStatisticsReadRepository.HistoricalAsync(request.MinFetchedAt, request.Country);
 
             return this.mapper.Map<IEnumerable<CountryStatisticDto>>(statsForCountry);
         }

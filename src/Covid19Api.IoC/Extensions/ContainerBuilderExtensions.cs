@@ -2,8 +2,10 @@ using Autofac;
 using Covid19Api.IoC.Modules;
 using Covid19Api.Repositories;
 using Covid19Api.Repositories.Abstractions;
+using Covid19Api.Services.Abstractions.Calculators;
 using Covid19Api.Services.Abstractions.Compression;
 using Covid19Api.Services.Abstractions.Loader;
+using Covid19Api.Services.Calculators;
 using Covid19Api.Services.Compression;
 using Covid19Api.Services.Decorator;
 using Covid19Api.Services.Loader;
@@ -60,6 +62,10 @@ namespace Covid19Api.IoC.Extensions
 
         public static ContainerBuilder RegisterServices(this ContainerBuilder builder)
         {
+            builder.RegisterType<CountryVaryStatisticsCalculator>()
+                .As<ICountryVaryStatisticsCalculator>()
+                .SingleInstance();
+            
             builder.RegisterType<BrotliCompressionService>()
                 .As<ICompressionService>()
                 .SingleInstance();

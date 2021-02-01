@@ -28,13 +28,22 @@ namespace Covid19Api.Endpoints.Rest.V1
         public Task<IEnumerable<CountryStatisticDto>> LoadHistoryAsync()
             => this.mediator.Send(new LoadHistoricalCountriesStatisticsQuery(DateTime.UtcNow.Date.AddDays(-9)));
 
+        [HttpGet("history/vary")]
+        public Task<IEnumerable<CountryVaryStatisticContainerDto>> LoadVaryHistoryAsync()
+            => this.mediator.Send(new CalculateVaryForCountriesStatisticsQuery(DateTime.UtcNow.Date.AddDays(-9)));
+
         [HttpGet("{country}")]
         public Task<CountryStatisticDto> LoadLatestForCountryAsync(string country) =>
             this.mediator.Send(new LoadLatestStatisticsForCountryQuery(country));
 
         [HttpGet("{country}/history")]
         public Task<IEnumerable<CountryStatisticDto>> LoadHistoryForCountryAsync(string country) =>
-            this.mediator.Send(new LoadHistoricalCountryStatisticsForCountryQuery(country));
+            this.mediator.Send(
+                new LoadHistoricalCountryStatisticsForCountryQuery(country, DateTime.UtcNow.Date.AddDays(-9)));
+
+        [HttpGet("{country}/history/vary")]
+        public Task<IEnumerable<CountryVaryStatisticContainerDto>> LoadVaryHistoryForCountryAsync(string country) =>
+            this.mediator.Send(new CalculateVaryForCountryStatisticsQuery(country, DateTime.UtcNow.Date.AddDays(-9)));
 
         [HttpGet("{countryCode}/flag")]
         public async Task<IActionResult> LoadFlagAsync(string countryCode)
