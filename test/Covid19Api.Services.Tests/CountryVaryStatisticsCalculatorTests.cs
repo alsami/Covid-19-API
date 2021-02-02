@@ -47,11 +47,9 @@ namespace Covid19Api.Services.Tests
         private static void ThenCalculationShouldYieldExpectedValues(
             IReadOnlyList<CountryVaryStatisticContainerDto> res)
         {
-            res.Count.Should().Be(2);
+            res.Count.Should().Be(1);
             var varyFirst = res[0].Vary.ToList();
             varyFirst.Count.Should().Be(6);
-            var varySecond = res[1].Vary.ToList();
-            varySecond.Count.Should().Be(6);
         }
     }
 }

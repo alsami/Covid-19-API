@@ -22,7 +22,6 @@ namespace Covid19Api.Services.Calculators
 
                 if (i == 0)
                 {
-                    yield return CreateEmpty(currentGroup.Key.Date, currentGroup.ToList());
                     continue;
                 }
 
@@ -92,20 +91,6 @@ namespace Covid19Api.Services.Calculators
             var decrease = difference / (double) previous * 100;
 
             return decrease * -1;
-        }
-
-        private static CountryVaryStatisticContainerDto CreateEmpty(DateTime fetchedAt,
-            IReadOnlyList<CountryStatistic> currentStatistics)
-        {
-            return new(fetchedAt, new List<CountryVaryStatisticDto>
-            {
-                new(VaryKeys.Total, null, null, currentStatistics.Sum(c => c.TotalCases)),
-                new(VaryKeys.New, null, null, currentStatistics.Sum(c => c.NewCases)),
-                new(VaryKeys.Active, null, null, currentStatistics.Sum(c => c.ActiveCases)),
-                new(VaryKeys.Deaths, null, null, currentStatistics.Sum(c => c.TotalDeaths)),
-                new(VaryKeys.NewDeaths, null, null, currentStatistics.Sum(c => c.NewDeaths)),
-                new(VaryKeys.Recovered, null, null, currentStatistics.Sum(c => c.RecoveredCases)),
-            });
         }
     }
 }

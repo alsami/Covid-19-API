@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Covid19Api.Presentation.Response;
@@ -24,7 +25,7 @@ namespace Covid19Api.UseCases.Queries.CountryStatistics
         {
             var historicalCountriesStatistics = await this.countryStatisticsReadRepository.HistoricalAsync(request.MinFetchedAt, request.Country);
 
-            return this.countryVaryStatisticsCalculator.Calculate(historicalCountriesStatistics);
+            return this.countryVaryStatisticsCalculator.Calculate(historicalCountriesStatistics).OrderByDescending(container => container.Time);
         }
     }
 }
