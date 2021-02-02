@@ -1,9 +1,6 @@
-using System.Runtime.CompilerServices;
-
-[assembly: InternalsVisibleTo("Covid19Api.Services.Tests")]
 namespace Covid19Api.Services.Calculators
 {
-    internal static class ValueKeys
+    internal static class VaryKeys
     {
         public const string Total = "Total";
         public const string New = "New";

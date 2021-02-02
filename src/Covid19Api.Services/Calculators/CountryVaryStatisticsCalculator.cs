@@ -37,40 +37,47 @@ namespace Covid19Api.Services.Calculators
         {
             var currentTotalSum = current.Sum(c => c.TotalCases);
             var previousTotalSum = previous.Sum(c => c.TotalCases);
-            yield return new CountryVaryStatisticDto(ValueKeys.Total,
+            yield return new CountryVaryStatisticDto(VaryKeys.Total,
                 CalculateVary(currentTotalSum, previousTotalSum), previousTotalSum, currentTotalSum);
 
             var currentNewSum = current.Sum(c => c.NewCases);
             var previousNewSum = previous.Sum(c => c.NewCases);
-            yield return new CountryVaryStatisticDto(ValueKeys.New,
+            yield return new CountryVaryStatisticDto(VaryKeys.New,
                 CalculateVary(currentNewSum, previousNewSum), previousNewSum, currentNewSum);
 
             var currentActiveSum = current.Sum(c => c.ActiveCases);
             var previousActiveSum = previous.Sum(c => c.ActiveCases);
-            yield return new CountryVaryStatisticDto(ValueKeys.Active,
+            yield return new CountryVaryStatisticDto(VaryKeys.Active,
                 CalculateVary(currentActiveSum, previousActiveSum), previousActiveSum, currentActiveSum);
 
             var currentDeathsSum = current.Sum(c => c.TotalDeaths);
             var previousDeathsSum = previous.Sum(c => c.TotalDeaths);
-            yield return new CountryVaryStatisticDto(ValueKeys.Deaths,
+            yield return new CountryVaryStatisticDto(VaryKeys.Deaths,
                 CalculateVary(currentDeathsSum, previousDeathsSum), previousDeathsSum, currentDeathsSum);
 
             var currentNewDeathsSum = current.Sum(c => c.NewDeaths);
             var previousNewDeathsSum = previous.Sum(c => c.NewDeaths);
-            yield return new CountryVaryStatisticDto(ValueKeys.NewDeaths,
+            yield return new CountryVaryStatisticDto(VaryKeys.NewDeaths,
                 CalculateVary(currentNewDeathsSum, previousNewDeathsSum), previousNewDeathsSum, currentNewDeathsSum);
 
             var currentRecoveredSum = current.Sum(c => c.RecoveredCases);
             var previousRecoveredSum = previous.Sum(c => c.RecoveredCases);
-            yield return new CountryVaryStatisticDto(ValueKeys.Recovered,
+            yield return new CountryVaryStatisticDto(VaryKeys.Recovered,
                 CalculateVary(currentRecoveredSum, previousRecoveredSum), previousRecoveredSum, currentRecoveredSum);
         }
 
-        private static double CalculateVary(int current, int previous)
+        private static double? CalculateVary(int current, int previous)
         {
-            return current > previous
+            var value = current > previous
                 ? CalculateIncrease(current, previous)
                 : CalculateDecrease(current, previous);
+
+            if (double.IsInfinity(value) || double.IsNaN(value))
+            {
+                return null;
+            }
+
+            return value;
         }
 
         private static double CalculateIncrease(int current, int previous)
@@ -92,12 +99,12 @@ namespace Covid19Api.Services.Calculators
         {
             return new(fetchedAt, new List<CountryVaryStatisticDto>
             {
-                new(ValueKeys.Total, null, null, currentStatistics.Sum(c => c.TotalCases)),
-                new(ValueKeys.New, null, null, currentStatistics.Sum(c => c.NewCases)),
-                new(ValueKeys.Active, null, null, currentStatistics.Sum(c => c.ActiveCases)),
-                new(ValueKeys.Total, null, null, currentStatistics.Sum(c => c.TotalDeaths)),
-                new(ValueKeys.NewDeaths, null, null, currentStatistics.Sum(c => c.NewDeaths)),
-                new(ValueKeys.Recovered, null, null, currentStatistics.Sum(c => c.RecoveredCases)),
+                new(VaryKeys.Total, null, null, currentStatistics.Sum(c => c.TotalCases)),
+                new(VaryKeys.New, null, null, currentStatistics.Sum(c => c.NewCases)),
+                new(VaryKeys.Active, null, null, currentStatistics.Sum(c => c.ActiveCases)),
+                new(VaryKeys.Deaths, null, null, currentStatistics.Sum(c => c.TotalDeaths)),
+                new(VaryKeys.NewDeaths, null, null, currentStatistics.Sum(c => c.NewDeaths)),
+                new(VaryKeys.Recovered, null, null, currentStatistics.Sum(c => c.RecoveredCases)),
             });
         }
     }
