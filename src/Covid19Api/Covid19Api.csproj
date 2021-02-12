@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Covid19Api.AutoMapper\Covid19Api.AutoMapper.csproj" />
-    <ProjectReference Include="..\Covid19Api.Endpoints.Grpc\Covid19Api.Endpoints.Grpc.csproj" />
     <ProjectReference Include="..\Covid19Api.Endpoints.Rest\Covid19Api.Endpoints.Rest.csproj" />
     <ProjectReference Include="..\Covid19Api.IoC\Covid19Api.IoC.csproj" />
     <ProjectReference Include="..\Covid19Api.Repositories\Covid19Api.Repositories.csproj" />

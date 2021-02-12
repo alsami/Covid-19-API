@@ -4,9 +4,7 @@ using System.Text.Json.Serialization;
 using Autofac;
 using AutoMapper.Contrib.Autofac.DependencyInjection;
 using Covid19Api.AutoMapper;
-using Covid19Api.Endpoints.Grpc;
 using Covid19Api.ExceptionFilter;
-using Covid19Api.GrpcInterceptors;
 using Covid19Api.IoC.Extensions;
 using Covid19Api.Middleware;
 using Covid19Api.UseCases.Behaviors;
@@ -18,7 +16,6 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using GrpcGzipCompressionProvider = Grpc.Net.Compression.GzipCompressionProvider;
 
 namespace Covid19Api
 {
@@ -53,14 +50,6 @@ namespace Covid19Api
                 options.JsonSerializerOptions.IgnoreNullValues = true;
                 options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
-            });
-
-            services.AddGrpc(opt =>
-            {
-                opt.EnableDetailedErrors = true;
-                opt.CompressionProviders.Insert(0, new GrpcGzipCompressionProvider(CompressionLevel.Fastest));
-                opt.ResponseCompressionLevel = CompressionLevel.Fastest;
-                opt.Interceptors.Add<NoopInterceptor>();
             });
 
             services.AddSwaggerGen(options => options.SwaggerDoc(ApiVersion, new OpenApiInfo
@@ -107,12 +96,7 @@ namespace Covid19Api
                 .UseSwaggerUI(options => options.SwaggerEndpoint($"/swagger/{ApiVersion}/swagger.json", ApiName))
                 .UseRouting()
                 .UseCors(CorsPolicyName)
-                .UseEndpoints(endpoints =>
-                {
-                    endpoints.MapGrpcService<GlobalStatisticsServiceGrpc>();
-                    endpoints.MapGrpcService<CountryStatisticsServiceGrpc>();
-                    endpoints.MapControllers();
-                });
+                .UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
 }
