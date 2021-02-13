@@ -12,6 +12,7 @@ using Covid19Api.UseCases.Queries.GlobalStatistics;
 using MediatR.Extensions.Autofac.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -91,6 +92,11 @@ namespace Covid19Api
             app.UseMiddleware<RedirectDefaultRequestMiddleware>();
 
             app
+                .UseMiddleware<RedirectDefaultRequestMiddleware>()
+                .UseForwardedHeaders(new ForwardedHeadersOptions
+                {
+                    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+                })
                 .UseResponseCompression()
                 .UseSwagger()
                 .UseSwaggerUI(options => options.SwaggerEndpoint($"/swagger/{ApiVersion}/swagger.json", ApiName))
