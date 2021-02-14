@@ -55,6 +55,10 @@ namespace Covid19Api.IoC.Extensions
                 .As<ICountryStatisticsAggregatesWriteRepository>()
                 .InstancePerLifetimeScope();
 
+            builder.RegisterType<RequestLogWriteRepository>()
+                .As<IRequestLogWriteRepository>()
+                .InstancePerLifetimeScope();
+
             builder.RegisterModule(new Covid19ApiDbContextModule(hostEnvironment, configuration));
 
             return builder;

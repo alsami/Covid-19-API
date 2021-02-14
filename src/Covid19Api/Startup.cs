@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Autofac;
 using AutoMapper.Contrib.Autofac.DependencyInjection;
+using Covid19Api.ActionFilter;
 using Covid19Api.AutoMapper;
 using Covid19Api.ExceptionFilter;
 using Covid19Api.IoC.Extensions;
@@ -47,6 +48,7 @@ namespace Covid19Api
             {
                 options.Filters.Add<UnhandledExceptionFilter>();
                 options.Filters.Add<AzureCosmosDbThrottleExceptionFilter>();
+                options.Filters.Add<RequestStoreActionFilter>();
             }).AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.IgnoreNullValues = true;
@@ -85,9 +87,16 @@ namespace Covid19Api
             containerBuilder
                 .RegisterAutoMapper(typeof(CountryStatisticsProfile).Assembly)
                 .RegisterMediatR(typeof(LoadLatestGlobalStatisticsQueryHandler).Assembly, typeof(CachingBehavior<,>))
-                .RegisterWorker(this.hostEnvironment, this.configuration.GetSection("EnableAggregates").Get<bool>())
                 .RegisterServices()
                 .RegisterRepositories(this.hostEnvironment, this.configuration);
+
+            if (this.configuration.GetSection("DisableWorker").Get<bool>())
+            {
+                return;
+            }
+
+            containerBuilder.RegisterWorker(this.hostEnvironment,
+                this.configuration.GetSection("EnableAggregates").Get<bool>());
         }
 
         // ReSharper disable once UnusedMember.Global

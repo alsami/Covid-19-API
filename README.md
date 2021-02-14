@@ -13,9 +13,9 @@ The API is hosted on azure using an app-service. All times returned from the ser
 Api base url:
 https://app-covid-19-statistics-api.azurewebsites.net
 
-A swagger definition can be found [here](https://app-covid-19-statistics-api.azurewebsites.net/swagger/index.html) for testing the API.
+A swagger definition can be found [here](https://api.alsami-covid19-statistics.dev/swagger/index.html) for testing the API.
 
 ## Sample App
 
-There is a PWA available [here](https://app-covid-19-statistics.azurewebsites.net/). The code is located [here](https://github.com/alsami/Covid19-Statistics).
+There is a PWA available [here](https://app.alsami-covid19-statistics.dev). The code is located [here](https://github.com/alsami/Covid19-Statistics).
 
