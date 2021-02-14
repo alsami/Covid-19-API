@@ -25,7 +25,7 @@ namespace Covid19Api.Worker
         {
             // UTC day switch
             var nextRun = DateTime.UtcNow.Date.AddDays(1);
-            this.logger.LogInformation("Next global-statistics aggregation at {at}", nextRun.ToString("dd.MM.yyyy HH:mm:ss"));
+            this.logger.LogInformation("Next global-statistics aggregation at {At}", nextRun.ToString("dd.MM.yyyy HH:mm:ss"));
             while (!stoppingToken.IsCancellationRequested)
             {
                 if (nextRun <= DateTime.UtcNow)

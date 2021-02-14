@@ -33,12 +33,12 @@ namespace Covid19Api.Worker
                     {
                         await this.ProcessAsync();
 
-                        nextRun = this.CalculateNextRun();
+                        nextRun = this.CalculateInitialExecutionTime();
                     }
                 }
                 catch (Exception e)
                 {
-                    this.logger.LogCritical(e, e.Message);
+                    this.logger.LogCritical(e, "Error while refreshing data!");
                 }
 
                 await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
@@ -49,53 +49,40 @@ namespace Covid19Api.Worker
         {
             var currentTime = DateTime.UtcNow;
             var minutesDiff = 60 - currentTime.Minute;
-            var nextExecution = currentTime.AddMinutes(minutesDiff).AddSeconds(-currentTime.Second);
-            this.logger.LogInformation("Next refresh run {nextRun}", nextExecution.ToString("O"));
-            return nextExecution;
-        }
-
-        private DateTime CalculateNextRun()
-        {
-            var nextExecution = DateTime.UtcNow.AddHours(4);
-            
-            if (nextExecution.Day != DateTime.UtcNow.Day)
-            {
-                nextExecution = DateTime.UtcNow.Date.AddDays(1);
-            }
-
-            var hourDiffTillNextDay = 24 - nextExecution.Hour;
-
-            if (hourDiffTillNextDay <= 4)
-            {
-                nextExecution = nextExecution.AddHours(hourDiffTillNextDay - 1);
-            }
-            
-
-            this.logger.LogInformation("Next refresh run {nextRun}", nextExecution.ToString("O"));
+            var nextExecution = currentTime.AddMinutes(minutesDiff).AddSeconds(-currentTime.Second).AddMilliseconds(-currentTime.Millisecond);
+            this.logger.LogInformation("Next refresh run {NextRun}", nextExecution.ToString("O"));
             return nextExecution;
         }
 
         private async Task ProcessAsync()
         {
-            this.logger.LogInformation("Start fetching html document");
-
             using var scope = this.serviceProvider.CreateScope();
 
             var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
-            var fetchedAt = DateTime.UtcNow;
+            var currentTime = DateTime.UtcNow;
+            var fetchedAt = currentTime.AddSeconds(-currentTime.Second).AddMilliseconds(-currentTime.Millisecond);
 
-            this.logger.LogInformation("Refreshing global-statistics");
+            await Task.WhenAll(this.RefreshGlobalStatistics(mediator, fetchedAt),
+                this.RefreshCountryStatistics(mediator, fetchedAt));
+        }
 
-            var refreshGlobalStatisticsCommand = new RefreshGlobalStatisticsCommand(fetchedAt);
-
-            await mediator.Send(refreshGlobalStatisticsCommand);
-
+        private async Task RefreshCountryStatistics(ISender mediator, DateTime fetchedAt)
+        {
             this.logger.LogInformation("Refreshing countries-statistics");
 
             var refreshCountriesStatisticsCommand = new RefreshCountriesStatisticsCommand(fetchedAt);
 
             await mediator.Send(refreshCountriesStatisticsCommand);
+        }
+
+        private async Task RefreshGlobalStatistics(ISender mediator, DateTime fetchedAt)
+        {
+            this.logger.LogInformation("Refreshing global-statistics");
+
+            var refreshGlobalStatisticsCommand = new RefreshGlobalStatisticsCommand(fetchedAt);
+
+            await mediator.Send(refreshGlobalStatisticsCommand);
         }
     }
 }
