@@ -28,6 +28,7 @@ namespace Covid19Api
         private const string ApiVersion = "1.0.0";
 
         private const string CorsPolicyName = "DefaultCorsPolicy";
+        private const string EnableResponseCompressionKey = "EnableResponseCompression";
 
         private readonly string[] compressionMimeTypes =
         {
@@ -62,15 +63,18 @@ namespace Covid19Api
             services.AddHttpClient();
 
             services.AddCors(options => options.AddPolicy(CorsPolicyName, builder => builder
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader()));
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()));
 
-            services.AddResponseCompression(options => options.MimeTypes = this.compressionMimeTypes);
+            if (this.configuration.GetSection(EnableResponseCompressionKey).Get<bool>())
+            {
+                services.AddResponseCompression(options => options.MimeTypes = this.compressionMimeTypes);
 
-            services.Configure<BrotliCompressionProviderOptions>(options => options.Level = CompressionLevel.Fastest);
+                services.Configure<BrotliCompressionProviderOptions>(options => options.Level = CompressionLevel.Fastest);
 
-            services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Fastest);
+                services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Fastest);   
+            }
 
             services.AddScoped<RedirectDefaultRequestMiddleware>();
         }
@@ -96,8 +100,14 @@ namespace Covid19Api
                 .UseForwardedHeaders(new ForwardedHeadersOptions
                 {
                     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-                })
-                .UseResponseCompression()
+                });
+
+            if (this.configuration.GetSection(EnableResponseCompressionKey).Get<bool>())
+            {
+                app.UseResponseCompression();    
+            } 
+
+            app
                 .UseSwagger()
                 .UseSwaggerUI(options => options.SwaggerEndpoint($"/swagger/{ApiVersion}/swagger.json", ApiName))
                 .UseRouting()
