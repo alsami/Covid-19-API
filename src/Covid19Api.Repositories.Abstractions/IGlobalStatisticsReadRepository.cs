@@ -7,8 +7,9 @@ namespace Covid19Api.Repositories.Abstractions
 {
     public interface IGlobalStatisticsReadRepository
     {
+        Task<GlobalStatistics> LoadCurrentAsync();
+        
         Task<IEnumerable<GlobalStatistics>> HistoricalAsync(DateTime minFetchedAt);
-        Task<IEnumerable<GlobalStatistics>> HistoricalForDayAsync(DateTime minFetchedAt);
         Task<GlobalStatistics?> FindInRangeAsync(DateTime inclusiveStart, DateTime inclusiveEnd);
     }
 }

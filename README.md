@@ -11,7 +11,7 @@ While `worldometers` is only displaying recent data, this API is providing histo
 The API is hosted on azure using an app-service. All times returned from the server are in UTC.
 
 Api base url:
-https://app-covid-19-statistics-api.azurewebsites.net
+https://api.alsami-covid19-statistics.dev/
 
 A swagger definition can be found [here](https://api.alsami-covid19-statistics.dev/swagger/index.html) for testing the API.
 

@@ -6,10 +6,10 @@ using MediatR;
 
 namespace Covid19Api.UseCases.Abstractions.Queries.CountryStatistics
 {
-    public sealed record LoadLatestStatisticsForCountryQuery(string Country) : ICacheableRequest, IRequest<CountryStatisticDto>
+    public sealed record LoadCurrentStatisticsForCountryQuery(string Country) : ICacheableRequest, IRequest<CountryStatisticDto>
     {
         public CacheConfiguration GetCacheConfiguration() =>
-            new CacheConfiguration($"{nameof(LoadLatestStatisticsForCountryQuery)}_{this.Country}",
+            new CacheConfiguration($"{nameof(LoadCurrentStatisticsForCountryQuery)}_{this.Country}",
                 TimeSpan.FromMinutes(30));
     }
 }

@@ -19,6 +19,15 @@ namespace Covid19Api.Repositories
             this.context = context;
         }
 
+        public Task<GlobalStatistics> LoadCurrentAsync()
+        {
+            var collection = this.GetCollection();
+            
+            var keyFilter = Builders<GlobalStatistics>.Filter.Where(global => global.Key == EntityKeys.GlobalStatistics);
+
+            return collection.Find(keyFilter).SortByDescending(statistics => statistics.FetchedAt).Limit(1).SingleAsync();
+        }
+
         public async Task<IEnumerable<GlobalStatistics>> HistoricalAsync(DateTime minFetchedAt)
         {
             var collection = this.GetCollection();
@@ -36,19 +45,6 @@ namespace Covid19Api.Repositories
                 });
 
             return await cursor.ToListAsync();
-        }
-
-        public async Task<IEnumerable<GlobalStatistics>> HistoricalForDayAsync(DateTime minFetchedAt)
-        {
-            var collection = this.GetCollection();
-
-            var cursor = await collection.FindAsync(
-                globalStatistics => globalStatistics.FetchedAt >= minFetchedAt &&
-                                    globalStatistics.Key == EntityKeys.GlobalStatistics);
-
-            var all = await cursor.ToListAsync();
-
-            return all.OrderBy(entry => entry.FetchedAt);
         }
 
         public async Task<GlobalStatistics?> FindInRangeAsync(DateTime inclusiveStart, DateTime inclusiveEnd)

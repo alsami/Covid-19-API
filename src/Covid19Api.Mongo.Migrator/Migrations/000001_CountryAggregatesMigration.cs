@@ -38,7 +38,7 @@ namespace Covid19Api.Mongo.Migrator.Migrations
                 if (end.Year < next.Year)
                     break;
 
-                var loadCountriesStatisticsQuery = new LoadLatestCountriesStatisticsQuery();
+                var loadCountriesStatisticsQuery = new LoadCurrentStatisticsForCountyQuery();
                 var countries = (await this.mediator.Send(loadCountriesStatisticsQuery))
                     .Select(country => country.Country).ToList();
 

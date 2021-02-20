@@ -22,7 +22,7 @@ namespace Covid19Api.Endpoints.Rest.V1
 
         [HttpGet]
         public Task<IEnumerable<CountryStatisticDto>> LoadLatestAsync() =>
-            this.mediator.Send(new LoadLatestCountriesStatisticsQuery());
+            this.mediator.Send(new LoadCurrentStatisticsForCountyQuery());
 
         [HttpGet("history")]
         public Task<IEnumerable<CountryStatisticDto>> LoadHistoryAsync()
@@ -34,7 +34,7 @@ namespace Covid19Api.Endpoints.Rest.V1
 
         [HttpGet("{country}")]
         public Task<CountryStatisticDto> LoadLatestForCountryAsync(string country) =>
-            this.mediator.Send(new LoadLatestStatisticsForCountryQuery(country));
+            this.mediator.Send(new LoadCurrentStatisticsForCountryQuery(country));
 
         [HttpGet("{country}/history")]
         public Task<IEnumerable<CountryStatisticDto>> LoadHistoryForCountryAsync(string country) =>

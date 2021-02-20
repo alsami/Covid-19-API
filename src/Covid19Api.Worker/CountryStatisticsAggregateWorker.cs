@@ -46,7 +46,7 @@ namespace Covid19Api.Worker
             {
                 using var scope = this.serviceProvider.CreateScope();
                 var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-                var query = new LoadLatestCountriesStatisticsQuery();
+                var query = new LoadCurrentStatisticsForCountyQuery();
                 var countries = (await mediator.Send(query, stoppingToken)).Select(country => country.Country);
                 var command = new AggregateCountryStatisticsCommand(countries.ToArray(), nextRun.Month, nextRun.Year);
                 await mediator.Send(command, stoppingToken);

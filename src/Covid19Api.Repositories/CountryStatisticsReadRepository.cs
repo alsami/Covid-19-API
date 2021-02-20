@@ -21,27 +21,6 @@ namespace Covid19Api.Repositories
             this.context = context;
         }
 
-        public async Task<CountryStatistic> MostRecentAsync(string country)
-        {
-            var collection = this.GetCollection();
-
-            var sort = Builders<CountryStatistic>.Sort
-                .Descending(nameof(CountryStatistic.TotalCases))
-                .Descending(nameof(CountryStatistic.FetchedAt));
-
-            // ReSharper disable once SpecifyStringComparison
-            var cursor = await collection.FindAsync(statistics =>
-                    statistics.FetchedAt >= DateTime.UtcNow.Date.AddDays(-1) &&
-                    statistics.Country.ToLower() == country.ToLower() &&
-                    statistics.Key == EntityKeys.CountryStatistics,
-                new FindOptions<CountryStatistic>
-                {
-                    Sort = sort,
-                });
-
-            return await cursor.FirstOrDefaultAsync();
-        }
-
         public async Task<IEnumerable<CountryStatistic>> HistoricalAsync(DateTime minFetchedAt)
         {
             var collection = this.GetCollection();
@@ -90,18 +69,6 @@ namespace Covid19Api.Repositories
             return await cursor.ToListAsync();
         }
 
-        public async Task<IEnumerable<CountryStatistic>> HistoricalForDayAsync(DateTime minFetchedAt, string country)
-        {
-            var collection = this.GetCollection();
-
-            var cursor = await collection.FindAsync(
-                statistics => statistics.FetchedAt >= minFetchedAt &&
-                              statistics.Country.ToLowerInvariant() == country.ToLowerInvariant() &&
-                              statistics.Key == EntityKeys.CountryStatistics);
-
-            return await cursor.ToListAsync();
-        }
-
         public async Task<CountryStatistic?> FindInRangeAsync(string country, DateTime inclusiveStart,
             DateTime exclusiveEnd)
         {
@@ -133,6 +100,40 @@ namespace Covid19Api.Repositories
             });
 
             return await cursor.FirstOrDefaultAsync();
+        }
+
+        public Task<CountryStatistic> LoadCurrentAsync(string country)
+        {
+            var keyFilter =
+                Builders<CountryStatistic>.Filter.Where(statistics =>
+                    statistics.Key == EntityKeys.CountryStatistics);
+
+            var countryFilter =
+                Builders<CountryStatistic>.Filter.Where(statistic => statistic.Country.ToLower() == country.ToLower());
+
+            var filter = keyFilter & countryFilter;
+
+            return this.GetCollection()
+                .Find(filter)
+                .SortByDescending(statistic => statistic.FetchedAt)
+                .Limit(1)
+                .SingleAsync();
+        }
+
+        public async Task<IEnumerable<CountryStatistic>> LoadCurrentAsync()
+        {
+            var collection = this.GetCollection();
+
+            var cursor = await collection
+                .Find(statistic => statistic.FetchedAt >= DateTime.UtcNow.Date.AddDays(-1) && statistic.Key == EntityKeys.CountryStatistics)
+                .SortByDescending(statistic => statistic.TotalCases)
+                .ToListAsync();
+
+            var onlyLatestEntries = cursor
+                .GroupBy(countryStats => countryStats.Country)
+                .SelectMany(grouping => grouping.Take(1));
+
+            return onlyLatestEntries;
         }
 
         private IMongoCollection<CountryStatistic> GetCollection()

@@ -1,9 +1,8 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Covid19Api.Presentation.Response;
-using Covid19Api.Services.Abstractions.Loader;
+using Covid19Api.Repositories.Abstractions;
 using Covid19Api.UseCases.Abstractions.Queries.GlobalStatistics;
 using MediatR;
 
@@ -12,26 +11,22 @@ namespace Covid19Api.UseCases.Queries.GlobalStatistics
     public class
         LoadLatestGlobalStatisticsQueryHandler : IRequestHandler<LoadLatestGlobalStatisticsQuery, GlobalStatisticDto>
     {
-        private readonly IHtmlDocumentLoader htmlDocumentLoader;
         private readonly IMapper mapper;
-        private readonly IGlobalStatisticsLoader globalStatisticsLoader;
+        private readonly IGlobalStatisticsReadRepository globalStatisticsReadRepository;
 
-        public LoadLatestGlobalStatisticsQueryHandler(IHtmlDocumentLoader htmlDocumentLoader, IMapper mapper,
-            IGlobalStatisticsLoader globalStatisticsLoader)
+        public LoadLatestGlobalStatisticsQueryHandler(IMapper mapper, IGlobalStatisticsReadRepository globalStatisticsReadRepository)
         {
-            this.htmlDocumentLoader = htmlDocumentLoader;
             this.mapper = mapper;
-            this.globalStatisticsLoader = globalStatisticsLoader;
+            this.globalStatisticsReadRepository = globalStatisticsReadRepository;
         }
+
 
         public async Task<GlobalStatisticDto> Handle(LoadLatestGlobalStatisticsQuery request,
             CancellationToken cancellationToken)
         {
-            var fetchedAt = DateTime.UtcNow;
+            var current = await this.globalStatisticsReadRepository.LoadCurrentAsync();
 
-            var latest = await this.globalStatisticsLoader.ParseAsync(fetchedAt);
-
-            return this.mapper.Map<GlobalStatisticDto>(latest);
+            return this.mapper.Map<GlobalStatisticDto>(current);
         }
     }
 }
