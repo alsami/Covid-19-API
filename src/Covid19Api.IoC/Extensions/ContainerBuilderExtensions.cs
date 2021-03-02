@@ -102,19 +102,13 @@ namespace Covid19Api.IoC.Extensions
             return builder;
         }
 
-        public static ContainerBuilder RegisterWorker(this ContainerBuilder builder, IHostEnvironment hostEnvironment,
-            bool enableAggregates)
+        public static ContainerBuilder RegisterWorker(this ContainerBuilder builder, IHostEnvironment hostEnvironment)
         {
             if (hostEnvironment.IsContinuousIntegration()) return builder;
 
             builder.RegisterType<DataRefreshWorker>()
                 .As<IHostedService>()
                 .InstancePerDependency();
-
-            if (!enableAggregates)
-            {
-                return builder;
-            }
 
             builder.RegisterType<GlobalStatisticsAggregationWorker>()
                 .As<IHostedService>()

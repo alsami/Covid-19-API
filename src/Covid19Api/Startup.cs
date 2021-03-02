@@ -95,8 +95,7 @@ namespace Covid19Api
                 return;
             }
 
-            containerBuilder.RegisterWorker(this.hostEnvironment,
-                this.configuration.GetSection("EnableAggregates").Get<bool>());
+            containerBuilder.RegisterWorker(this.hostEnvironment);
         }
 
         // ReSharper disable once UnusedMember.Global

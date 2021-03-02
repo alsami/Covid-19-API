@@ -1,7 +1,6 @@
 using System;
 using System.Security.Cryptography;
 using System.Text;
-using Covid19Api.Domain.Constants;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Local
@@ -30,10 +29,6 @@ namespace Covid19Api.Domain
         public int ActiveCases { get; private set; }
 
         public DateTime FetchedAt { get; private set; }
-
-        // ReSharper disable once UnusedMember.Global
-        // This needs to be present for mongo-db!
-        public string Key { get; private set; } = EntityKeys.CountryStatistics;
 
         public CountryStatistic(string country, string? countryCode, int totalCases, int newCases, int totalDeaths,
             int newDeaths,

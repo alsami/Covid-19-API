@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Covid19Api.Domain;
-using Covid19Api.Domain.Constants;
 using Covid19Api.Mongo;
 using Covid19Api.Repositories.Abstractions;
 using MongoDB.Driver;
@@ -23,9 +21,7 @@ namespace Covid19Api.Repositories
         {
             var collection = this.GetCollection();
             
-            var keyFilter = Builders<GlobalStatistics>.Filter.Where(global => global.Key == EntityKeys.GlobalStatistics);
-
-            return collection.Find(keyFilter).SortByDescending(statistics => statistics.FetchedAt).Limit(1).SingleAsync();
+            return collection.Find(_ => true).SortByDescending(statistics => statistics.FetchedAt).Limit(1).SingleAsync();
         }
 
         public async Task<IEnumerable<GlobalStatistics>> HistoricalAsync(DateTime minFetchedAt)
@@ -37,12 +33,7 @@ namespace Covid19Api.Repositories
                 .Descending(nameof(GlobalStatistics.FetchedAt));
 
             var cursor = await collection.FindAsync(
-                globalStatistics => globalStatistics.FetchedAt >= minFetchedAt &&
-                                    globalStatistics.Key == EntityKeys.GlobalStatistics,
-                new FindOptions<GlobalStatistics>
-                {
-                    Sort = sort
-                });
+                globalStatistics => globalStatistics.FetchedAt >= minFetchedAt, new FindOptions<GlobalStatistics> {Sort = sort});
 
             return await cursor.ToListAsync();
         }
@@ -53,8 +44,7 @@ namespace Covid19Api.Repositories
 
             var leftFilter = Builders<GlobalStatistics>.Filter.Where(global => global.FetchedAt >= inclusiveStart);
             var rightFilter = Builders<GlobalStatistics>.Filter.Where(global => global.FetchedAt <= inclusiveEnd);
-            var keyFilter = Builders<GlobalStatistics>.Filter.Where(global => global.Key == EntityKeys.GlobalStatistics);
-            var combinedFilter = leftFilter & rightFilter & keyFilter;
+            var combinedFilter = leftFilter & rightFilter;
             var sort = Builders<GlobalStatistics>.Sort.Descending(global => global.FetchedAt);
 
             var cursor = await collection.FindAsync(combinedFilter, new FindOptions<GlobalStatistics>

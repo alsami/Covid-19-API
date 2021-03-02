@@ -56,7 +56,6 @@ namespace Covid19Api.Repositories
         }
         
         private IMongoCollection<CountryStatisticsAggregate> GetCollection()
-            => this.context.Database.GetCollection<CountryStatisticsAggregate>(CollectionNames
-                .CountryStatistics);
+            => this.context.Database.GetCollection<CountryStatisticsAggregate>(CollectionNames.CountryStatisticsAggregates);
     }
 }

@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using Covid19Api.Domain;
-using Covid19Api.Domain.Constants;
 using Covid19Api.Mongo.Scaffolder.Abstractions;
 using Covid19Api.Mongo.Scaffolder.Extensions;
 using Microsoft.Extensions.Logging;
@@ -24,10 +23,7 @@ namespace Covid19Api.Mongo.Scaffolder.Updates
 
         protected override async Task ExecuteAsync()
         {
-            await this.databaseContext.Database.CreateCollectionIfNotExistsAsync(CollectionNames
-                .CountryStatistics);
-
-
+            await this.databaseContext.Database.CreateCollectionIfNotExistsAsync(CollectionNames.CountryStatisticsAggregates);
 
             var countryIndex = Builders<CountryStatisticsAggregate>
                 .IndexKeys
@@ -36,7 +32,7 @@ namespace Covid19Api.Mongo.Scaffolder.Updates
             var countryIndexModel = new CreateIndexModel<CountryStatisticsAggregate>(countryIndex,
                 new CreateIndexOptions
                 {
-                    Name = $"{EntityKeys.CountryStatisticsAggregates}_country"
+                    Name = $"{nameof(CountryStatisticsAggregate)}_country"
                 });
 
             var monthIndex = Builders<CountryStatisticsAggregate>
@@ -45,7 +41,7 @@ namespace Covid19Api.Mongo.Scaffolder.Updates
 
             var monthIndexModel = new CreateIndexModel<CountryStatisticsAggregate>(monthIndex, new CreateIndexOptions
             {
-                Name = $"{EntityKeys.CountryStatisticsAggregates}_month_descending"
+                Name = $"{nameof(CountryStatisticsAggregate)}_month_descending"
             });
 
             var yearIndex = Builders<CountryStatisticsAggregate>
@@ -54,7 +50,7 @@ namespace Covid19Api.Mongo.Scaffolder.Updates
 
             var yearIndexModel = new CreateIndexModel<CountryStatisticsAggregate>(yearIndex, new CreateIndexOptions
             {
-                Name = $"{EntityKeys.CountryStatisticsAggregates}_year_descending"
+                Name = $"{nameof(CountryStatisticsAggregate)}_year_descending"
             });
 
             var yearMonthIndex = Builders<CountryStatisticsAggregate>
@@ -64,7 +60,7 @@ namespace Covid19Api.Mongo.Scaffolder.Updates
             var yearMonthIndexModel = new CreateIndexModel<CountryStatisticsAggregate>(yearMonthIndex,
                 new CreateIndexOptions
                 {
-                    Name = $"{EntityKeys.CountryStatisticsAggregates}_year_month",
+                    Name = $"{nameof(CountryStatisticsAggregate)}_year_month",
                 });
 
             var countryYearMonthIndex = Builders<CountryStatisticsAggregate>
@@ -74,12 +70,10 @@ namespace Covid19Api.Mongo.Scaffolder.Updates
             var countryYearMonthIndexModel = new CreateIndexModel<CountryStatisticsAggregate>(countryYearMonthIndex,
                 new CreateIndexOptions
                 {
-                    Name = $"{EntityKeys.CountryStatisticsAggregates}_country_year_month",
+                    Name = $"{nameof(CountryStatisticsAggregate)}_country_year_month",
                 });
             
-            var collection =
-                this.databaseContext.Database.GetCollection<CountryStatisticsAggregate>(CollectionNames
-                    .CountryStatistics);
+            var collection = this.databaseContext.Database.GetCollection<CountryStatisticsAggregate>(CollectionNames.CountryStatisticsAggregates);
 
             await collection.Indexes.CreateManyAsync(new[]
             {

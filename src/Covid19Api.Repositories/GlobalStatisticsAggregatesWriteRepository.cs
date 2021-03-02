@@ -30,7 +30,6 @@ namespace Covid19Api.Repositories
         }
         
         private IMongoCollection<GlobalStatisticsAggregate> GetCollection()
-            => this.context.Database.GetCollection<GlobalStatisticsAggregate>(CollectionNames
-                .GlobalStatistics);
+            => this.context.Database.GetCollection<GlobalStatisticsAggregate>(CollectionNames.GlobalStatisticAggregates);
     }
 }

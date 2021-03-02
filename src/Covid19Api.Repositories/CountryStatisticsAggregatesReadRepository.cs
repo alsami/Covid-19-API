@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Covid19Api.Domain;
-using Covid19Api.Domain.Constants;
 using Covid19Api.Mongo;
 using Covid19Api.Repositories.Abstractions;
 using Microsoft.Extensions.Logging;
@@ -34,10 +33,7 @@ namespace Covid19Api.Repositories
             var yearFilter =
                 Builders<CountryStatisticsAggregate>.Filter.Where(statistics => statistics.Year == year);
 
-            var keyFilter = Builders<CountryStatisticsAggregate>.Filter.Where(statistics =>
-                statistics.Key == EntityKeys.CountryStatisticsAggregates);
-
-            var filter = countryFilter & monthFilter & yearFilter & keyFilter;
+            var filter = countryFilter & monthFilter & yearFilter;
 
             var collection = this.GetCollection();
 
@@ -49,12 +45,11 @@ namespace Covid19Api.Repositories
         public async Task<IList<CountryStatisticsAggregate>> FindForCountryInYearAsync(string country, int year)
         {
             // ReSharper disable once SpecifyStringComparison
-            var countryFilter =
-                Builders<CountryStatisticsAggregate>.Filter.Where(statistics =>
-                    statistics.Country.ToLower() == country.ToLower());
+            var countryFilter = Builders<CountryStatisticsAggregate>
+                .Filter
+                .Where(statistics => statistics.Country.ToLower() == country.ToLower());
 
-            var yearFilter =
-                Builders<CountryStatisticsAggregate>.Filter.Where(statistics => statistics.Year == year && statistics.Key == EntityKeys.CountryStatistics);
+            var yearFilter = Builders<CountryStatisticsAggregate>.Filter.Where(statistics => statistics.Year == year);
 
             var filter = countryFilter & yearFilter;
 
@@ -66,7 +61,6 @@ namespace Covid19Api.Repositories
         }
 
         private IMongoCollection<CountryStatisticsAggregate> GetCollection()
-            => this.context.Database.GetCollection<CountryStatisticsAggregate>(CollectionNames
-                .CountryStatistics);
+            => this.context.Database.GetCollection<CountryStatisticsAggregate>(CollectionNames.CountryStatisticsAggregates);
     }
 }

@@ -2,8 +2,6 @@
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Local
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
-using System.ComponentModel;
-
 namespace Covid19Api.Domain
 {
     public class RequestInfo

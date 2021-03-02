@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Covid19Api.Domain;
-using Covid19Api.Domain.Constants;
 using Covid19Api.Mongo;
 using Covid19Api.Repositories.Abstractions;
 using MongoDB.Driver;
@@ -21,7 +20,7 @@ namespace Covid19Api.Repositories
         {
             var collection = this.GetCollection();
 
-            var cursor = await collection.FindAsync(aggregate => aggregate.Month == month && aggregate.Year == year && aggregate.Key == EntityKeys.CountryStatisticsAggregates);
+            var cursor = await collection.FindAsync(aggregate => aggregate.Month == month && aggregate.Year == year);
 
             return await cursor.SingleOrDefaultAsync();
         }
@@ -30,13 +29,12 @@ namespace Covid19Api.Repositories
         {
             var collection = this.GetCollection();
 
-            var cursor = await collection.FindAsync(aggregate => aggregate.Year == year && aggregate.Key == EntityKeys.CountryStatisticsAggregates);
+            var cursor = await collection.FindAsync(aggregate => aggregate.Year == year);
 
             return await cursor.ToListAsync();
         }
 
         private IMongoCollection<GlobalStatisticsAggregate> GetCollection()
-            => this.context.Database.GetCollection<GlobalStatisticsAggregate>(CollectionNames
-                .GlobalStatistics);
+            => this.context.Database.GetCollection<GlobalStatisticsAggregate>(CollectionNames.GlobalStatisticAggregates);
     }
 }

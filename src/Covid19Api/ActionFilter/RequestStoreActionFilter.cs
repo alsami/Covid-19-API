@@ -29,7 +29,7 @@ namespace Covid19Api.ActionFilter
                 context.HttpContext.Request.Protocol, 
                 context.HttpContext.Request.Method,
                 context.HttpContext.Request.Path, 
-                context.HttpContext.Connection.RemoteIpAddress!.ToString());
+                context.HttpContext.Connection.RemoteIpAddress?.ToString() ?? "::1");
 
             return new RequestLog(Guid.NewGuid(), DateTime.UtcNow, info);
         }
