@@ -47,11 +47,10 @@ namespace Covid19Api
             services.AddControllers(options =>
             {
                 options.Filters.Add<UnhandledExceptionFilter>();
-                options.Filters.Add<AzureCosmosDbThrottleExceptionFilter>();
                 options.Filters.Add<RequestStoreActionFilter>();
             }).AddJsonOptions(options =>
             {
-                options.JsonSerializerOptions.IgnoreNullValues = true;
+                options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
                 options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
             });

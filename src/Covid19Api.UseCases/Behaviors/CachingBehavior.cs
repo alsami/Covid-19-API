@@ -23,7 +23,7 @@ namespace Covid19Api.UseCases.Behaviors
             {
                 new JsonStringEnumConverter()
             },
-            IgnoreNullValues = true,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             PropertyNameCaseInsensitive = false
         };
