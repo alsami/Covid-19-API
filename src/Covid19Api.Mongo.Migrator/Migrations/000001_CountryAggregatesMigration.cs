@@ -30,12 +30,12 @@ namespace Covid19Api.Mongo.Migrator.Migrations
 
         protected override async Task ExecuteAsync()
         {
-            var next = new DateTime(this.options.YearEnd, this.options.MonthStart, 1, 0, 0, 0, DateTimeKind.Utc);
+            var next = new DateTime(2020, this.options.MonthStart, 1, 0, 0, 0, DateTimeKind.Utc);
             var end = DateTime.UtcNow.Date;
 
             while (true)
             {
-                if (end.Year < next.Year)
+                if (next > end)
                     break;
 
                 var loadCountriesStatisticsQuery = new LoadCurrentStatisticsForCountyQuery();
@@ -46,7 +46,6 @@ namespace Covid19Api.Mongo.Migrator.Migrations
                 await this.mediator.Send(command);
 
                 next = next.AddMonths(1);
-                await Task.Delay(TimeSpan.FromSeconds(1));
             }
         }
     }

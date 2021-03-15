@@ -32,7 +32,7 @@ namespace Covid19Api.UseCases.Commands
             var start = new DateTime(request.Year, request.Month, 1, 0, 0, 0, DateTimeKind.Utc);
             var end = start.MonthsEnd();
 
-            this.logger.LogInformation("Aggregating {entity} from {from} to {to}",
+            this.logger.LogInformation("Aggregating {Entity} from {From} to {To}",
                 nameof(GlobalStatistics),
                 start.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture),
                 end.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture));
@@ -46,7 +46,7 @@ namespace Covid19Api.UseCases.Commands
 
             await this.globalStatisticsAggregatesWriteRepository.StoreAsync(aggregate);
 
-            this.logger.LogInformation("Done aggregating {entity} from {from} to {to}",
+            this.logger.LogInformation("Done aggregating {Entity} from {From} to {To}",
                 nameof(GlobalStatistics),
                 start.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture),
                 end.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture));

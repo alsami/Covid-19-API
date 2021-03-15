@@ -2,7 +2,7 @@ os: linux
 dist: bionic
 language: csharp
 mono: none
-dotnet: 5.0.103
+dotnet: 5.0.200
 solution: Covid19Api.sln
 
 stages:

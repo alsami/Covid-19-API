@@ -47,12 +47,7 @@ namespace Covid19Api.Repositories
             var combinedFilter = leftFilter & rightFilter;
             var sort = Builders<GlobalStatistics>.Sort.Descending(global => global.FetchedAt);
 
-            var cursor = await collection.FindAsync(combinedFilter, new FindOptions<GlobalStatistics>
-            {
-                Sort = sort
-            });
-
-            return await cursor.FirstOrDefaultAsync();
+            return await collection.Find(combinedFilter).Sort(sort).Limit(1).FirstOrDefaultAsync();
         }
 
         private IMongoCollection<GlobalStatistics> GetCollection()

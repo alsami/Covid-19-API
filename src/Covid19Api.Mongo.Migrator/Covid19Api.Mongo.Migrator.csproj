@@ -3,6 +3,7 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net5.0</TargetFramework>
+        <UserSecretsId>Covid19Api.Mongo.Migrator</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
