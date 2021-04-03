@@ -2,44 +2,32 @@ os: linux
 dist: bionic
 language: csharp
 mono: none
-dotnet: 6.0.100-preview.2.21155.3
 solution: Covid19Api.sln
 
 stages:
   - build
-  - test
-  - publish
-  - deploy
+  - invoke-deployment
 
 jobs:
   include:
     - stage: build
       name: dotnet-build
+      addons:
+        snaps:
+          - name: dotnet-sdk
+            confinement: classic
+            channel: 6.0/beta
       if: tag IS NOT present
+      before_script:
+        - sudo snap alias dotnet-sdk.dotnet dotnet
       script:
         - dotnet build
-
-    - stage: test
-      name: dotnet-test
-      before_script:
-        - sudo apt-get update && sudo apt-get install curl -y
-      script:
-        - ./test.sh
-
-    - stage: publish
-      name: docker-container-publish
+          
+    - stage: invoke-deployment
+      name: Invoke Device Deployment
       if: tag IS present
-      services:
-        - docker
-      before_script:
-        - docker login -u ${REGISTRY_USER} -p ${REGISTRY_PASSWORD} ${REGISTRY}
-      script:
-        - ./publish-docker.sh
-
-    - stage: deploy
-      name: deploy
-      if: tag IS present
-      before_script:
+      before_script: 
         - curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+        - az config set extension.use_dynamic_install=yes_without_prompt
       script:
-        - ./deploy-app.sh
+        - ./invoke-deployment.sh
