@@ -1,13 +1,9 @@
-using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Covid19Api.Presentation.Response;
 using Covid19Api.Repositories.Abstractions;
-using Covid19Api.Services.Abstractions.Loader;
 using Covid19Api.UseCases.Abstractions.Queries.CountryStatistics;
-using Covid19Api.UseCases.Filter;
 using MediatR;
 
 namespace Covid19Api.UseCases.Queries.CountryStatistics
