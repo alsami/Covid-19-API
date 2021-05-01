@@ -13,8 +13,8 @@
 
     <ItemGroup>
       <PackageReference Include="AutoMapper" Version="10.1.1" />
-      <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="6.0.0-preview.2.21154.6" />
-      <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0-preview.2.21154.6" />
+      <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="6.0.0-preview.3.21201.4" />
+      <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0-preview.3.21201.4" />
     </ItemGroup>
 
     <ItemGroup>
