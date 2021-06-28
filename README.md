@@ -1,6 +1,6 @@
 # Covid-19-API
 
-[![Build Status](https://travis-ci.com/alsami/Covid-19-API.svg?branch=master)](https://travis-ci.com/alsami/Covid-19-API) [![codecov](https://codecov.io/gh/alsami/Covid-19-API/branch/master/graph/badge.svg?token=UDYQ2H8MV8)](master)
+[![Build Status](https://travis-ci.com/alsami/Covid-19-API.svg?branch=main)](https://travis-ci.com/alsami/Covid-19-API)
 
 Covid19Api serving most recent data related to corona virus based on the data available on [worldometers](https://www.worldometers.info/coronavirus/).
 
