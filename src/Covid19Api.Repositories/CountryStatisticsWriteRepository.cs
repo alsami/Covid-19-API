@@ -19,11 +19,11 @@ namespace Covid19Api.Repositories
             this.context = context;
         }
         
-        public async Task StoreManyAsync(IEnumerable<CountryStatistic> countryStats)
+        public async Task StoreManyAsync(IEnumerable<CountryStatistic> countryStatistics)
         {
             var collection = this.GetCollection();
 
-            var updates = countryStats.Select(currentStats =>
+            var updates = countryStatistics.Select(currentStats =>
                 {
                     var filterDefinition =
                         new FilterDefinitionBuilder<CountryStatistic>().Where(existingStats =>

@@ -8,4 +8,8 @@
         <PackageReference Include="MongoDB.Driver" Version="2.12.4" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Covid19Api.Domain\Covid19Api.Domain.csproj" />
+    </ItemGroup>
+
 </Project>

@@ -8,9 +8,7 @@ using MediatR;
 
 namespace Covid19Api.UseCases.Queries.CountryStatistics
 {
-    public class
-        LoadCurrentStatisticsForCountryQueryHandler : IRequestHandler<LoadCurrentStatisticsForCountryQuery,
-            CountryStatisticDto>
+    public class LoadCurrentStatisticsForCountryQueryHandler : IRequestHandler<LoadCurrentStatisticsForCountryQuery, CountryStatisticDto>
     {
         private readonly IMapper mapper;
         private readonly ICountryStatisticsReadRepository countryStatisticsReadRepository;
@@ -20,7 +18,6 @@ namespace Covid19Api.UseCases.Queries.CountryStatistics
             this.mapper = mapper;
             this.countryStatisticsReadRepository = countryStatisticsReadRepository;
         }
-
 
         public async Task<CountryStatisticDto> Handle(LoadCurrentStatisticsForCountryQuery request,
             CancellationToken cancellationToken)
