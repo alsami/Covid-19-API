@@ -1,4 +1,5 @@
 using System;
+using Covid19Api.Domain;
 using Covid19Api.Mongo.Conventions;
 using MongoDB.Driver;
 
@@ -16,7 +17,8 @@ namespace Covid19Api.Mongo
 
         private static void Configure()
         {
-            MongoDbConventions.UseGuidIdConvetion();
+            MongoDbConventions.UseGuidIdConvention(typeof(VaccinationStatistic));
+            MongoDbConventions.IgnoreNotMappedPropertiesConvention(typeof(VaccinationStatistic));
             MongoDbConventions.UseImmutableConvention();
             MongoDbConventions.UseCamelCaseConvention();
             MongoDbConventions.UseIgnoreNullValuesConvention();

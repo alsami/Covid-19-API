@@ -7,6 +7,7 @@ using MongoDB.Driver;
 
 namespace Covid19Api.Mongo.Scaffolder.Updates
 {
+    // ReSharper disable once UnusedType.Global
     public class GlobalStatisticsUpdateDefinition : DatabaseUpdateDefinition
     {
         private readonly Covid19ApiDbContext databaseContext;

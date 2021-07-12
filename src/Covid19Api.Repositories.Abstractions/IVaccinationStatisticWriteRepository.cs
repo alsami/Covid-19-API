@@ -4,8 +4,8 @@ using Covid19Api.Domain;
 
 namespace Covid19Api.Repositories.Abstractions
 {
-    public interface ICountryStatisticsWriteRepository
+    public interface IVaccinationStatisticWriteRepository
     {
-        Task StoreManyAsync(IEnumerable<CountryStatistic> countryStatistics);
+        Task StoreAsync(IEnumerable<VaccinationStatistic> vaccinationStatistics);
     }
 }

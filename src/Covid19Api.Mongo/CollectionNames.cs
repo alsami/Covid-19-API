@@ -8,5 +8,6 @@ namespace Covid19Api.Mongo
         public const string GlobalStatisticAggregates = "globalStatisticAggregates";
         public const string CountryStatistics = "countryStatistics";
         public const string CountryStatisticsAggregates = "countryStatisticAggregates";
+        public const string VaccinationStatistic = "vaccinationStatistics";
     }
 }

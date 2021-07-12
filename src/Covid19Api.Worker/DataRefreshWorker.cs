@@ -63,26 +63,35 @@ namespace Covid19Api.Worker
             var currentTime = DateTime.UtcNow;
             var fetchedAt = currentTime.AddSeconds(-currentTime.Second).AddMilliseconds(-currentTime.Millisecond);
 
-            await Task.WhenAll(this.RefreshGlobalStatistics(mediator, fetchedAt),
-                this.RefreshCountryStatistics(mediator, fetchedAt));
+            await Task.WhenAll(
+                this.RefreshGlobalStatistics(mediator, fetchedAt),
+                this.RefreshCountryStatistics(mediator, fetchedAt),
+                this.RefreshVaccinationStatistics(mediator));
         }
 
-        private async Task RefreshCountryStatistics(ISender mediator, DateTime fetchedAt)
+        private Task RefreshCountryStatistics(ISender mediator, DateTime fetchedAt)
         {
             this.logger.LogInformation("Refreshing countries-statistics");
 
             var refreshCountriesStatisticsCommand = new RefreshCountriesStatisticsCommand(fetchedAt);
 
-            await mediator.Send(refreshCountriesStatisticsCommand);
+            return mediator.Send(refreshCountriesStatisticsCommand);
         }
 
-        private async Task RefreshGlobalStatistics(ISender mediator, DateTime fetchedAt)
+        private Task RefreshGlobalStatistics(ISender mediator, DateTime fetchedAt)
         {
             this.logger.LogInformation("Refreshing global-statistics");
 
             var refreshGlobalStatisticsCommand = new RefreshGlobalStatisticsCommand(fetchedAt);
 
-            await mediator.Send(refreshGlobalStatisticsCommand);
+            return mediator.Send(refreshGlobalStatisticsCommand);
+        }
+
+        private Task RefreshVaccinationStatistics(ISender mediator)
+        {
+            this.logger.LogInformation("Refreshing vaccination-statistics");
+            
+            return mediator.Send(new RefreshVaccinationStatisticsCommand());
         }
     }
 }

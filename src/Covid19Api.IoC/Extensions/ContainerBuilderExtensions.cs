@@ -59,6 +59,14 @@ namespace Covid19Api.IoC.Extensions
                 .As<IRequestLogWriteRepository>()
                 .InstancePerLifetimeScope();
 
+            builder.RegisterType<VaccinationStatisticWriteRepository>()
+                .As<IVaccinationStatisticWriteRepository>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<VaccinationStatisticReadRepository>()
+                .As<IVaccinationStatisticReadRepository>()
+                .InstancePerLifetimeScope();
+
             builder.RegisterModule(new Covid19ApiDbContextModule(hostEnvironment, configuration));
 
             return builder;
@@ -96,6 +104,10 @@ namespace Covid19Api.IoC.Extensions
                 .As<ICountryMetaDataLoader>()
                 .SingleInstance();
 
+            builder.RegisterType<VaccinationStatisticsLoader>()
+                .As<IVaccinationStatisticsLoader>()
+                .SingleInstance();
+
             builder.RegisterDecorator<CountryMetaDataLoaderDecorator, ICountryMetaDataLoader>();
             builder.RegisterDecorator<HtmlDocumentLoaderDecorator, IHtmlDocumentLoader>();
 
@@ -104,7 +116,10 @@ namespace Covid19Api.IoC.Extensions
 
         public static ContainerBuilder RegisterWorker(this ContainerBuilder builder, IHostEnvironment hostEnvironment)
         {
-            if (hostEnvironment.IsContinuousIntegration()) return builder;
+            if (hostEnvironment.IsContinuousIntegration())
+            {
+                return builder;
+            }
 
             builder.RegisterType<DataRefreshWorker>()
                 .As<IHostedService>()

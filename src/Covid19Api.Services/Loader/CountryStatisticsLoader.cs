@@ -17,8 +17,7 @@ namespace Covid19Api.Services.Loader
 
         private readonly Func<CountryStatistic?, bool> defaultCountryStatisticsFilter = _ => true;
 
-        public CountryStatisticsLoader(ICountryMetaDataLoader countryMetaDataLoader,
-            IHtmlDocumentLoader htmlDocumentLoader)
+        public CountryStatisticsLoader(ICountryMetaDataLoader countryMetaDataLoader, IHtmlDocumentLoader htmlDocumentLoader)
         {
             this.countryMetaDataLoader = countryMetaDataLoader;
             this.htmlDocumentLoader = htmlDocumentLoader;

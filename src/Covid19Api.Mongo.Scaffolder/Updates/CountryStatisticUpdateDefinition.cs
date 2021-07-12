@@ -7,12 +7,13 @@ using MongoDB.Driver;
 
 namespace Covid19Api.Mongo.Scaffolder.Updates
 {
-    public class CountryStatisticsUpdateDefinition : DatabaseUpdateDefinition
+    // ReSharper disable once UnusedType.Global
+    public class CountryStatisticUpdateDefinition : DatabaseUpdateDefinition
     {
         private readonly Covid19ApiDbContext databaseContext;
 
         // ReSharper disable once SuggestBaseTypeForParameter
-        public CountryStatisticsUpdateDefinition(ILogger<CountryStatisticsUpdateDefinition> logger,
+        public CountryStatisticUpdateDefinition(ILogger<CountryStatisticUpdateDefinition> logger,
             Covid19ApiDbContext databaseContext) : base(logger)
         {
             this.databaseContext = databaseContext;

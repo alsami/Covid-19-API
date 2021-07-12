@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Conventions;
 
@@ -5,12 +7,21 @@ namespace Covid19Api.Mongo.Conventions
 {
     internal static class MongoDbConventions
     {
-        public static void UseGuidIdConvetion()
+        public static void UseGuidIdConvention(params Type[] typesToExclude)
         {
             ConventionRegistry.Register(nameof(GuidIdConvention), new ConventionPack
             {
                 new GuidIdConvention()
-            }, _ => true);
+            }, type => !typesToExclude.Contains(type));
+        }
+
+        public static void IgnoreNotMappedPropertiesConvention(params Type[] typesToIgnoreExtraElementsFor)
+        {
+            ConventionRegistry.Register(nameof(IgnoreExtraElementsConvention), new ConventionPack
+            {
+                new IgnoreExtraElementsConvention(true)
+                // ReSharper disable once ConvertClosureToMethodGroup
+            }, type => typesToIgnoreExtraElementsFor.Contains(type));
         }
 
         public static void UseImmutableConvention()
