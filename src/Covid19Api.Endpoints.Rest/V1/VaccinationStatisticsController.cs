@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Covid19Api.Presentation.Response;
 using Covid19Api.UseCases.Abstractions.Queries.Vaccinations;
@@ -17,10 +18,10 @@ namespace Covid19Api.Endpoints.Rest.V1
             this.mediator = mediator;
         }
 
-        [HttpGet("{countryOrCountryCode}")]
-        public Task<VaccinationStatisticDto> LoadVaccinationStatisticsForCountryAsync(string countryOrCountryCode)
+        [HttpGet]
+        public Task<IEnumerable<VaccinationStatisticForCountryDto>> LoadForCountriesAsync()
         {
-            var query = new LoadVaccinationStatisticsForCountryQuery(countryOrCountryCode);
+            var query = new LoadVaccinationStatisticsForCountriesQuery();
             return this.mediator.Send(query);
         }
     }

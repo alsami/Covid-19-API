@@ -11,7 +11,7 @@ namespace Covid19Api.Services.Loader
 {
     public class CountryMetaDataLoader : ICountryMetaDataLoader
     {
-        private static readonly JsonSerializerOptions SerializerOptions = new JsonSerializerOptions
+        private static readonly JsonSerializerOptions SerializerOptions = new()
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
