@@ -7,7 +7,7 @@ namespace Covid19Api.Domain
 {
     public class VaccinationStatisticValue
     {
-        public VaccinationStatisticValue(DateTime loggedAt, uint totalVaccinations, uint peopleVaccinated, uint peopleFullyVaccinated, double peopleFullyVaccinatedPerHundred, uint dailyVaccinations, double totalVaccinationsPerHundred, double peopleVaccinatedPerHundred, uint dailyVaccinationsPerMillion)
+        public VaccinationStatisticValue(DateTime loggedAt, ulong totalVaccinations, ulong peopleVaccinated, ulong peopleFullyVaccinated, double peopleFullyVaccinatedPerHundred, ulong dailyVaccinations, double totalVaccinationsPerHundred, double peopleVaccinatedPerHundred, uint dailyVaccinationsPerMillion)
         {
             this.LoggedAt = loggedAt;
             this.TotalVaccinations = totalVaccinations;
@@ -22,15 +22,15 @@ namespace Covid19Api.Domain
 
         public DateTime LoggedAt { get; private set; }
 
-        public uint TotalVaccinations { get; private set; }
+        public ulong TotalVaccinations { get; private set; }
         
-        public uint PeopleVaccinated { get; private set; }
+        public ulong PeopleVaccinated { get; private set; }
 
-        public uint PeopleFullyVaccinated { get; private set; }
+        public ulong PeopleFullyVaccinated { get; private set; }
 
         public double PeopleFullyVaccinatedPerHundred { get; private set; }
 
-        public uint DailyVaccinations { get; private set; }
+        public ulong DailyVaccinations { get; private set; }
 
         public double TotalVaccinationsPerHundred { get; private set; }
 

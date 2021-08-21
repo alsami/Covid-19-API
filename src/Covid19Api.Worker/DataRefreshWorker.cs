@@ -69,29 +69,29 @@ namespace Covid19Api.Worker
                 this.RefreshVaccinationStatistics(mediator));
         }
 
-        private Task RefreshCountryStatistics(ISender mediator, DateTime fetchedAt)
+        private async Task RefreshCountryStatistics(ISender mediator, DateTime fetchedAt)
         {
             this.logger.LogInformation("Refreshing countries-statistics");
 
             var refreshCountriesStatisticsCommand = new RefreshCountriesStatisticsCommand(fetchedAt);
 
-            return mediator.Send(refreshCountriesStatisticsCommand);
+            await mediator.Send(refreshCountriesStatisticsCommand);
         }
 
-        private Task RefreshGlobalStatistics(ISender mediator, DateTime fetchedAt)
+        private async Task RefreshGlobalStatistics(ISender mediator, DateTime fetchedAt)
         {
             this.logger.LogInformation("Refreshing global-statistics");
 
             var refreshGlobalStatisticsCommand = new RefreshGlobalStatisticsCommand(fetchedAt);
 
-            return mediator.Send(refreshGlobalStatisticsCommand);
+            await mediator.Send(refreshGlobalStatisticsCommand);
         }
 
-        private Task RefreshVaccinationStatistics(ISender mediator)
+        private async Task RefreshVaccinationStatistics(ISender mediator)
         {
             this.logger.LogInformation("Refreshing vaccination-statistics");
             
-            return mediator.Send(new RefreshVaccinationStatisticsCommand());
+            await mediator.Send(new RefreshVaccinationStatisticsCommand());
         }
     }
 }

@@ -9,19 +9,19 @@ namespace Covid19Api.Services.Models
         public DateTime LoggedAt { get; set; }
 
         [JsonPropertyName("total_vaccinations")] 
-        public uint? TotalVaccinations { get; set; }
+        public ulong? TotalVaccinations { get; set; }
         
         [JsonPropertyName("people_vaccinated")] 
-        public uint PeopleVaccinated { get; set; }
+        public ulong PeopleVaccinated { get; set; }
         
         [JsonPropertyName("people_fully_vaccinated")] 
-        public uint PeopleFullyVaccinated { get; set; }
+        public ulong PeopleFullyVaccinated { get; set; }
         
         [JsonPropertyName("people_fully_vaccinated_per_hundred")] 
         public double PeopleFullyVaccinatedPerHundred { get; set; }
 
         [JsonPropertyName("daily_vaccinations")] 
-        public uint DailyVaccinations { get; set; }
+        public ulong DailyVaccinations { get; set; }
 
         [JsonPropertyName("total_vaccinations_per_hundred")] 
         public double TotalVaccinationsPerHundred { get; set; }

@@ -6,11 +6,11 @@ namespace Covid19Api.Presentation.Response
         string Country, 
         string CountryCode,
         DateTime LoggedAt, 
-        uint TotalVaccinations, 
-        uint PeopleVaccinated,
-        uint PeopleFullyVaccinated, 
+        ulong TotalVaccinations, 
+        ulong PeopleVaccinated,
+        ulong PeopleFullyVaccinated, 
         double PeopleFullyVaccinatedPerHundred, 
-        uint DailyVaccinations,
+        ulong DailyVaccinations,
         double TotalVaccinationsPerHundred, 
-        double PeopleVaccinatedPerHundred, uint DailyVaccinationsPerMillion);
+        double PeopleVaccinatedPerHundred, ulong DailyVaccinationsPerMillion);
 }
