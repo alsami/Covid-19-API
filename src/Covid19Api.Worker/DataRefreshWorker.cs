@@ -65,8 +65,7 @@ namespace Covid19Api.Worker
 
             await Task.WhenAll(
                 this.RefreshGlobalStatistics(mediator, fetchedAt),
-                this.RefreshCountryStatistics(mediator, fetchedAt),
-                this.RefreshVaccinationStatistics(mediator));
+                this.RefreshCountryStatistics(mediator, fetchedAt));
         }
 
         private async Task RefreshCountryStatistics(ISender mediator, DateTime fetchedAt)
@@ -85,13 +84,6 @@ namespace Covid19Api.Worker
             var refreshGlobalStatisticsCommand = new RefreshGlobalStatisticsCommand(fetchedAt);
 
             await mediator.Send(refreshGlobalStatisticsCommand);
-        }
-
-        private async Task RefreshVaccinationStatistics(ISender mediator)
-        {
-            this.logger.LogInformation("Refreshing vaccination-statistics");
-            
-            await mediator.Send(new RefreshVaccinationStatisticsCommand());
         }
     }
 }
