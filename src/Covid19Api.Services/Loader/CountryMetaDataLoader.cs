@@ -2,10 +2,11 @@ using System;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Covid19Api.Constants;
 using Covid19Api.Services.Abstractions.Loader;
 using Covid19Api.Services.Abstractions.Models;
+using Covid19Api.Services.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Covid19Api.Services.Loader
 {
@@ -18,18 +19,20 @@ namespace Covid19Api.Services.Loader
 
         private readonly ILogger<CountryMetaDataLoader> logger;
         private readonly IHttpClientFactory httpClientFactory;
+        private readonly IOptions<CountryLayerConfiguration> countryLayerConfiguration;
 
-        public CountryMetaDataLoader(ILogger<CountryMetaDataLoader> logger, IHttpClientFactory httpClientFactory)
+        public CountryMetaDataLoader(ILogger<CountryMetaDataLoader> logger, IHttpClientFactory httpClientFactory, IOptions<CountryLayerConfiguration> countryLayerConfiguration)
         {
             this.logger = logger;
             this.httpClientFactory = httpClientFactory;
+            this.countryLayerConfiguration = countryLayerConfiguration;
         }
 
         public async Task<CountryMetaData[]> LoadCountryMetaDataAsync()
         {
             var client = this.httpClientFactory.CreateClient();
-
-            var response = await client.GetAsync(Urls.RestCountriesApiUrl);
+            var url = this.countryLayerConfiguration.Value.GetRequestUrl();
+            var response = await client.GetAsync(url);
 
             if (response.IsSuccessStatusCode)
             {
@@ -40,8 +43,7 @@ namespace Covid19Api.Services.Loader
             }
 
             var error = await response.Content.ReadAsStringAsync();
-            this.logger.LogError("Failed load country meta-data from {url}! Status-Code: {statusCode} Error:\n{error}",
-                Urls.RestCountriesApiUrl, response.StatusCode, error);
+            this.logger.LogError("Failed load country meta-data from {Url}! Status-Code: {StatusCode} Error:\n{Error}", url, response.StatusCode, error);
 
             return Array.Empty<CountryMetaData>();
         }

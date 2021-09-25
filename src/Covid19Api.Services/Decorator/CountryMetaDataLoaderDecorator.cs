@@ -15,7 +15,7 @@ namespace Covid19Api.Services.Decorator
     {
         private const string CacheKey = "CountryMetaData";
 
-        private readonly SemaphoreSlim mutex = new SemaphoreSlim(1);
+        private readonly SemaphoreSlim mutex = new(1);
 
         private readonly IDistributedCache distributedCache;
         private readonly ICountryMetaDataLoader countryMetaDataLoader;
@@ -72,7 +72,7 @@ namespace Covid19Api.Services.Decorator
 
             await this.distributedCache.SetAsync(CacheKey, compressed, new DistributedCacheEntryOptions
             {
-                AbsoluteExpiration = DateTime.UtcNow.AddDays(10)
+                AbsoluteExpiration = DateTime.UtcNow.AddDays(1)
             });
         }
     }

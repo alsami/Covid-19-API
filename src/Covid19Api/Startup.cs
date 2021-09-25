@@ -8,6 +8,7 @@ using Covid19Api.AutoMapper;
 using Covid19Api.ExceptionFilter;
 using Covid19Api.IoC.Extensions;
 using Covid19Api.Middleware;
+using Covid19Api.Services.Configuration;
 using Covid19Api.UseCases.Behaviors;
 using Covid19Api.UseCases.Queries.GlobalStatistics;
 using MediatR.Extensions.Autofac.DependencyInjection;
@@ -60,6 +61,9 @@ namespace Covid19Api
                 Title = $"{ApiName} - {ApiVersion}",
                 Version = ApiVersion
             }));
+
+            services.AddOptions<CountryLayerConfiguration>()
+                .BindConfiguration(nameof(CountryLayerConfiguration));
 
             services.AddHttpClient();
 
