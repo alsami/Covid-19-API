@@ -14,9 +14,10 @@
     <ItemGroup>
       <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
       <PackageReference Include="MediatR.Extensions.Autofac.DependencyInjection" Version="7.3.0" />
-      <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.0-preview.5.21301.5" />
-      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0-preview.5.21301.5" />
-      <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0-preview.5.21301.5" />
+      <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.0-rc.2.21480.5" />
+      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0-rc.2.21480.5" />
+      <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0-rc.2.21480.5" />
+      
     </ItemGroup>
 
 </Project>

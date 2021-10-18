@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Covid19Api.Domain;
 using Covid19Api.Mongo;
@@ -19,8 +20,13 @@ namespace Covid19Api.Repositories
         public async Task StoreAsync(IEnumerable<VaccinationStatistic> vaccinationStatistics)
         {
             var collection = this.GetCollection();
-            await collection.DeleteManyAsync(_ => true);
-            await collection.InsertManyAsync(vaccinationStatistics);
+            var replaceModels = vaccinationStatistics
+                .Select(vaccinationStatistic => new ReplaceOneModel<VaccinationStatistic>(
+                    new ExpressionFilterDefinition<VaccinationStatistic>(v => v.Country == vaccinationStatistic.Country), 
+                    vaccinationStatistic))
+                .ToList();
+
+            await collection.BulkWriteAsync(replaceModels);
         }
         
         private IMongoCollection<VaccinationStatistic> GetCollection()

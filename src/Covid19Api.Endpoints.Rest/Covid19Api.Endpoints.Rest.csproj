@@ -12,5 +12,7 @@
       <ProjectReference Include="..\Covid19Api.Presentation\Covid19Api.Presentation.csproj" />
       <ProjectReference Include="..\Covid19Api.UseCases.Abstractions\Covid19Api.UseCases.Abstractions.csproj" />
     </ItemGroup>
+    
+
 
 </Project>

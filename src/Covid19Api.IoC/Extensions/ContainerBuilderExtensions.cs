@@ -121,10 +121,18 @@ namespace Covid19Api.IoC.Extensions
                 return builder;
             }
 
-            builder.RegisterType<DataRefreshWorker>()
+            builder.RegisterType<GlobalStatisticsRefreshWorker>()
+                .As<IHostedService>()
+                .InstancePerDependency();
+            
+            builder.RegisterType<CountryStatisticsRefreshWorker>()
                 .As<IHostedService>()
                 .InstancePerDependency();
 
+            builder.RegisterType<VaccinationStatisticsRefreshWorker>()
+                .As<IHostedService>()
+                .InstancePerDependency();
+            
             builder.RegisterType<GlobalStatisticsAggregationWorker>()
                 .As<IHostedService>()
                 .InstancePerDependency();
