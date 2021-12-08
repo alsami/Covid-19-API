@@ -15,9 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Covid19Api.Domain", "src\Co
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{74A4D6BD-D911-40B5-8997-0BC559C31210}"
 ProjectSection(SolutionItems) = preProject
-	deploy-app.sh = deploy-app.sh
 	LICENSE = LICENSE
-	publish-docker.sh = publish-docker.sh
 	README.md = README.md
 	.gitignore = .gitignore
 	global.json = global.json
@@ -25,7 +23,6 @@ ProjectSection(SolutionItems) = preProject
 	Directory.Build.props = Directory.Build.props
 	test.sh = test.sh
 	execute-database-updates.sh = execute-database-updates.sh
-	execute-database-migrations.sh = execute-database-migrations.sh
 	invoke-deployment.sh = invoke-deployment.sh
 EndProjectSection
 EndProject
