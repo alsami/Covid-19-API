@@ -1,0 +1,30 @@
+on:
+  push:
+    tags:
+      - '*'
+name: Build and deploy
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          allow-no-subscriptions: true
+
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Azure CLI script
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.30.0
+          inlineScript: |
+            export TAG=${{github.ref_name}}
+            az config set extension.use_dynamic_install=yes_without_prompt
+            export IOT_HUB_NAME=${{secrets.AZURE_IOT_HUB_NAME}}
+            export IOT_DEVICE_NAME=${{secrets.AZURE_IOT_DEVICE_NAME}}
+            export IOT_DEVICE_METHOD_NAME=${{secrets.AZURE_IOT_DEVICE_METHOD_NAME}}
+            chmod +x ./invoke-deployment.sh
+            ./invoke-deployment.sh

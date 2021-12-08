@@ -9,8 +9,8 @@ function authenticate() {
 
 
 function set_container() {
-    echo updating container to version ${TRAVIS_TAG}
-    az webapp config container set -c "${REGISTRY}/covid-19-api:${TRAVIS_TAG}" -r https://${REGISTRY} -u ${REGISTRY_USER} -p "${REGISTRY_PASSWORD}" -n ${COVID19API_SERVICE_NAME} -g ${COVID19API_RESOURCE_NAME}
+    echo updating container to version ${TAG}
+    az webapp config container set -c "${REGISTRY}/covid-19-api:${TAG}" -r https://${REGISTRY} -u ${REGISTRY_USER} -p "${REGISTRY_PASSWORD}" -n ${COVID19API_SERVICE_NAME} -g ${COVID19API_RESOURCE_NAME}
 }
 
 function restart_app() {
