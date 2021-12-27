@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.IO.Compression;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -87,9 +89,16 @@ namespace Covid19Api
         // ReSharper disable once UnusedMember.Global
         public void ConfigureContainer(ContainerBuilder containerBuilder)
         {
+            var behaviors = new List<Type>();
+
+            if (!this.configuration.GetSection("DisableCachingBehavior").Get<bool>())
+            {
+                behaviors.Add(typeof(CachingBehavior<,>));
+            }
+            
             containerBuilder
                 .RegisterAutoMapper(typeof(CountryStatisticsProfile).Assembly)
-                .RegisterMediatR(typeof(LoadLatestGlobalStatisticsQueryHandler).Assembly, typeof(CachingBehavior<,>))
+                .RegisterMediatR(typeof(LoadLatestGlobalStatisticsQueryHandler).Assembly, behaviors.ToArray())
                 .RegisterServices()
                 .RegisterRepositories(this.hostEnvironment, this.configuration);
 
