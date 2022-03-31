@@ -1,6 +1,3 @@
-using System.Collections.Generic;
+namespace Covid19Api.Presentation.Response;
 
-namespace Covid19Api.Presentation.Response
-{
-    public record VaccinationStatisticDto(string Country, string CountryCode, IEnumerable<VaccinationStatisticValueDto> Values);
-}
+public record VaccinationStatisticDto(string Country, string CountryCode, IEnumerable<VaccinationStatisticValueDto> Values);

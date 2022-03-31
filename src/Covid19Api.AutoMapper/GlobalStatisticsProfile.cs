@@ -5,15 +5,14 @@ using Covid19Api.Presentation.Response;
 // ReSharper disable UnusedType.Global
 
 // ReSharper disable UnusedMember.Global
-namespace Covid19Api.AutoMapper
+namespace Covid19Api.AutoMapper;
+
+public class GlobalStatisticsProfile : Profile
 {
-    public class GlobalStatisticsProfile : Profile
+    public GlobalStatisticsProfile()
     {
-        public GlobalStatisticsProfile()
-        {
-            this.CreateMap<GlobalStatistics, GlobalStatisticDto>()
-                .ConvertUsing(src =>
-                    new GlobalStatisticDto(src.Total, src.Recovered, src.Deaths, src.FetchedAt));
-        }
+        this.CreateMap<GlobalStatistics, GlobalStatisticDto>()
+            .ConvertUsing(src =>
+                new GlobalStatisticDto(src.Total, src.Recovered, src.Deaths, src.FetchedAt));
     }
 }

@@ -1,13 +1,10 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Covid19Api.Domain;
 
-namespace Covid19Api.Repositories.Abstractions
-{
-    public interface IGlobalStatisticsAggregatesReadRepository
-    {
-        Task<GlobalStatisticsAggregate?> FindAsync(int month, int year);
+namespace Covid19Api.Repositories.Abstractions;
 
-        Task<IList<GlobalStatisticsAggregate>> FindInYearAsync(int year);
-    }
+public interface IGlobalStatisticsAggregatesReadRepository
+{
+    Task<GlobalStatisticsAggregate?> FindAsync(int month, int year);
+
+    Task<IList<GlobalStatisticsAggregate>> FindInYearAsync(int year);
 }

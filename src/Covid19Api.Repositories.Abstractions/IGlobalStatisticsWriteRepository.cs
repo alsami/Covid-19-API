@@ -1,10 +1,8 @@
-using System.Threading.Tasks;
 using Covid19Api.Domain;
 
-namespace Covid19Api.Repositories.Abstractions
+namespace Covid19Api.Repositories.Abstractions;
+
+public interface IGlobalStatisticsWriteRepository
 {
-    public interface IGlobalStatisticsWriteRepository
-    {
-        Task StoreAsync(GlobalStatistics globalStatistics);
-    }
+    Task StoreAsync(GlobalStatistics globalStatistics);
 }

@@ -7,4 +7,8 @@
     <ItemGroup>
       <ProjectReference Include="..\Covid19Api.Domain\Covid19Api.Domain.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Update="SonarAnalyzer.CSharp" Version="8.37.0.45539" />
+    </ItemGroup>
 </Project>
