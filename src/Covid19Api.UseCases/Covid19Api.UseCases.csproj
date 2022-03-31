@@ -12,9 +12,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="AutoMapper" Version="10.1.1" />
+      <PackageReference Include="AutoMapper" Version="11.0.1" />
       <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="6.0.0" />
       <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+      <PackageReference Update="SonarAnalyzer.CSharp" Version="8.37.0.45539" />
       
     </ItemGroup>
 

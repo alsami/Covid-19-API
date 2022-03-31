@@ -1,9 +1,10 @@
 <Project>
     <PropertyGroup>
-        <LangVersion>9.0</LangVersion>
+        <LangVersion>10.0</LangVersion>
         <Nullable>Enable</Nullable>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
+        <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
     
     <ItemGroup>

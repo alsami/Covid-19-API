@@ -1,31 +1,28 @@
-using System.Threading;
-using System.Threading.Tasks;
 using Covid19Api.Repositories.Abstractions;
 using Covid19Api.Services.Abstractions.Loader;
 using Covid19Api.UseCases.Abstractions.Commands;
 using MediatR;
 
-namespace Covid19Api.UseCases.Commands
+namespace Covid19Api.UseCases.Commands;
+
+public class RefreshGlobalStatisticsCommandHandler : IRequestHandler<RefreshGlobalStatisticsCommand>
 {
-    public class RefreshGlobalStatisticsCommandHandler : IRequestHandler<RefreshGlobalStatisticsCommand>
+    private readonly IGlobalStatisticsWriteRepository globalStatisticsWriteRepository;
+    private readonly IGlobalStatisticsLoader globalStatisticsLoader;
+
+    public RefreshGlobalStatisticsCommandHandler(IGlobalStatisticsWriteRepository globalStatisticsWriteRepository,
+        IGlobalStatisticsLoader globalStatisticsLoader)
     {
-        private readonly IGlobalStatisticsWriteRepository globalStatisticsWriteRepository;
-        private readonly IGlobalStatisticsLoader globalStatisticsLoader;
+        this.globalStatisticsWriteRepository = globalStatisticsWriteRepository;
+        this.globalStatisticsLoader = globalStatisticsLoader;
+    }
 
-        public RefreshGlobalStatisticsCommandHandler(IGlobalStatisticsWriteRepository globalStatisticsWriteRepository,
-            IGlobalStatisticsLoader globalStatisticsLoader)
-        {
-            this.globalStatisticsWriteRepository = globalStatisticsWriteRepository;
-            this.globalStatisticsLoader = globalStatisticsLoader;
-        }
+    public async Task<Unit> Handle(RefreshGlobalStatisticsCommand request, CancellationToken cancellationToken)
+    {
+        var globalStatistics = await this.globalStatisticsLoader.ParseAsync(request.FetchedAt);
 
-        public async Task<Unit> Handle(RefreshGlobalStatisticsCommand request, CancellationToken cancellationToken)
-        {
-            var globalStatistics = await this.globalStatisticsLoader.ParseAsync(request.FetchedAt);
+        await this.globalStatisticsWriteRepository.StoreAsync(globalStatistics);
 
-            await this.globalStatisticsWriteRepository.StoreAsync(globalStatistics);
-
-            return Unit.Value;
-        }
+        return Unit.Value;
     }
 }

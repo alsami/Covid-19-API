@@ -1,4 +1,3 @@
-using System;
 using System.Security.Authentication;
 using Autofac;
 using Covid19Api.IoC.Extensions;
@@ -8,52 +7,51 @@ using Microsoft.Extensions.Hosting;
 using MongoDB.Driver;
 using Module = Autofac.Module;
 
-namespace Covid19Api.IoC.Modules
+namespace Covid19Api.IoC.Modules;
+
+public class Covid19ApiDbContextModule : Module
 {
-    public class Covid19ApiDbContextModule : Module
+    private const string DatabaseName = "Covid19Api";
+
+    private readonly IHostEnvironment hostEnvironment;
+    private readonly IConfiguration configuration;
+
+    public Covid19ApiDbContextModule(IHostEnvironment hostEnvironment, IConfiguration configuration)
     {
-        private const string DatabaseName = "Covid19Api";
+        this.hostEnvironment = hostEnvironment;
+        this.configuration = configuration;
+    }
 
-        private readonly IHostEnvironment hostEnvironment;
-        private readonly IConfiguration configuration;
+    protected override void Load(ContainerBuilder builder)
+    {
+        builder.RegisterType<Covid19ApiDbContext>()
+            .AsSelf()
+            .InstancePerLifetimeScope();
 
-        public Covid19ApiDbContextModule(IHostEnvironment hostEnvironment, IConfiguration configuration)
-        {
-            this.hostEnvironment = hostEnvironment;
-            this.configuration = configuration;
-        }
-
-        protected override void Load(ContainerBuilder builder)
-        {
-            builder.RegisterType<Covid19ApiDbContext>()
-                .AsSelf()
-                .InstancePerLifetimeScope();
-
-            builder.Register<Func<IMongoDatabase>>(_ =>
+        builder.Register<Func<IMongoDatabase>>(_ =>
+            {
+                return () =>
                 {
-                    return () =>
+                    var connectionString = this.configuration.GetConnectionString("MongoDb");
+
+                    if (string.IsNullOrWhiteSpace(connectionString))
+                        throw new InvalidOperationException("Database connection-string is invalid!");
+
+                    var settings = MongoClientSettings.FromUrl(new MongoUrl(connectionString));
+
+                    if (this.hostEnvironment.IsAzure())
                     {
-                        var connectionString = this.configuration.GetConnectionString("MongoDb");
-
-                        if (string.IsNullOrWhiteSpace(connectionString))
-                            throw new InvalidOperationException("Database connection-string is invalid!");
-
-                        var settings = MongoClientSettings.FromUrl(new MongoUrl(connectionString));
-
-                        if (this.hostEnvironment.IsAzure())
+                        settings.SslSettings = new SslSettings
                         {
-                            settings.SslSettings = new SslSettings
-                            {
-                                EnabledSslProtocols = SslProtocols.Tls12
-                            };
-                        }
+                            EnabledSslProtocols = SslProtocols.Tls12
+                        };
+                    }
 
-                        var client = new MongoClient(settings);
+                    var client = new MongoClient(settings);
 
-                        return client.GetDatabase(DatabaseName);
-                    };
-                })
-                .InstancePerLifetimeScope();
-        }
+                    return client.GetDatabase(DatabaseName);
+                };
+            })
+            .InstancePerLifetimeScope();
     }
 }

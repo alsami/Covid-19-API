@@ -1,7 +1,4 @@
-using System;
 using System.Globalization;
-using System.Threading;
-using System.Threading.Tasks;
 using Covid19Api.Domain;
 using Covid19Api.Repositories.Abstractions;
 using Covid19Api.UseCases.Abstractions.Commands;
@@ -9,49 +6,48 @@ using Covid19Api.UseCases.Extensions;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Covid19Api.UseCases.Commands
+namespace Covid19Api.UseCases.Commands;
+
+public class AggregateGlobalStatisticsCommandHandler : IRequestHandler<AggregateGlobalStatisticsCommand>
 {
-    public class AggregateGlobalStatisticsCommandHandler : IRequestHandler<AggregateGlobalStatisticsCommand>
+    private readonly ILogger<AggregateGlobalStatisticsCommandHandler> logger;
+    private readonly IGlobalStatisticsReadRepository globalStatisticsReadRepository;
+    private readonly IGlobalStatisticsAggregatesWriteRepository globalStatisticsAggregatesWriteRepository;
+
+
+    public AggregateGlobalStatisticsCommandHandler(ILogger<AggregateGlobalStatisticsCommandHandler> logger,
+        IGlobalStatisticsReadRepository globalStatisticsReadRepository,
+        IGlobalStatisticsAggregatesWriteRepository globalStatisticsAggregatesWriteRepository)
     {
-        private readonly ILogger<AggregateGlobalStatisticsCommandHandler> logger;
-        private readonly IGlobalStatisticsReadRepository globalStatisticsReadRepository;
-        private readonly IGlobalStatisticsAggregatesWriteRepository globalStatisticsAggregatesWriteRepository;
+        this.logger = logger;
+        this.globalStatisticsReadRepository = globalStatisticsReadRepository;
+        this.globalStatisticsAggregatesWriteRepository = globalStatisticsAggregatesWriteRepository;
+    }
 
+    public async Task<Unit> Handle(AggregateGlobalStatisticsCommand request, CancellationToken cancellationToken)
+    {
+        var start = new DateTime(request.Year, request.Month, 1, 0, 0, 0, DateTimeKind.Utc);
+        var end = start.MonthsEnd();
 
-        public AggregateGlobalStatisticsCommandHandler(ILogger<AggregateGlobalStatisticsCommandHandler> logger,
-            IGlobalStatisticsReadRepository globalStatisticsReadRepository,
-            IGlobalStatisticsAggregatesWriteRepository globalStatisticsAggregatesWriteRepository)
-        {
-            this.logger = logger;
-            this.globalStatisticsReadRepository = globalStatisticsReadRepository;
-            this.globalStatisticsAggregatesWriteRepository = globalStatisticsAggregatesWriteRepository;
-        }
+        this.logger.LogInformation("Aggregating {Entity} from {From} to {To}",
+            nameof(GlobalStatistics),
+            start.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture),
+            end.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture));
 
-        public async Task<Unit> Handle(AggregateGlobalStatisticsCommand request, CancellationToken cancellationToken)
-        {
-            var start = new DateTime(request.Year, request.Month, 1, 0, 0, 0, DateTimeKind.Utc);
-            var end = start.MonthsEnd();
+        var globalStatisticsInRange = await this.globalStatisticsReadRepository.FindInRangeAsync(start, end);
 
-            this.logger.LogInformation("Aggregating {Entity} from {From} to {To}",
-                nameof(GlobalStatistics),
-                start.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture),
-                end.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture));
+        if (globalStatisticsInRange is null) return Unit.Value;
 
-            var globalStatisticsInRange = await this.globalStatisticsReadRepository.FindInRangeAsync(start, end);
+        var aggregate = new GlobalStatisticsAggregate(globalStatisticsInRange.Total,
+            globalStatisticsInRange.Recovered, globalStatisticsInRange.Deaths, request.Month, request.Year);
 
-            if (globalStatisticsInRange is null) return Unit.Value;
+        await this.globalStatisticsAggregatesWriteRepository.StoreAsync(aggregate);
 
-            var aggregate = new GlobalStatisticsAggregate(globalStatisticsInRange.Total,
-                globalStatisticsInRange.Recovered, globalStatisticsInRange.Deaths, request.Month, request.Year);
+        this.logger.LogInformation("Done aggregating {Entity} from {From} to {To}",
+            nameof(GlobalStatistics),
+            start.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture),
+            end.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture));
 
-            await this.globalStatisticsAggregatesWriteRepository.StoreAsync(aggregate);
-
-            this.logger.LogInformation("Done aggregating {Entity} from {From} to {To}",
-                nameof(GlobalStatistics),
-                start.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture),
-                end.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture));
-
-            return Unit.Value;
-        }
+        return Unit.Value;
     }
 }

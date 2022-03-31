@@ -1,33 +1,30 @@
-using System.Threading;
-using System.Threading.Tasks;
 using Covid19Api.Repositories.Abstractions;
 using Covid19Api.Services.Abstractions.Loader;
 using Covid19Api.UseCases.Abstractions.Commands;
 using MediatR;
 
-namespace Covid19Api.UseCases.Commands
+namespace Covid19Api.UseCases.Commands;
+
+public class RefreshVaccinationStatisticsCommandHandler : IRequestHandler<RefreshVaccinationStatisticsCommand>
 {
-    public class RefreshVaccinationStatisticsCommandHandler : IRequestHandler<RefreshVaccinationStatisticsCommand>
+    private readonly IVaccinationStatisticsLoader vaccinationStatisticsLoader;
+    private readonly IVaccinationStatisticWriteRepository vaccinationStatisticWriteRepository;
+
+    public RefreshVaccinationStatisticsCommandHandler(IVaccinationStatisticsLoader vaccinationStatisticsLoader, IVaccinationStatisticWriteRepository vaccinationStatisticWriteRepository)
     {
-        private readonly IVaccinationStatisticsLoader vaccinationStatisticsLoader;
-        private readonly IVaccinationStatisticWriteRepository vaccinationStatisticWriteRepository;
+        this.vaccinationStatisticsLoader = vaccinationStatisticsLoader;
+        this.vaccinationStatisticWriteRepository = vaccinationStatisticWriteRepository;
+    }
 
-        public RefreshVaccinationStatisticsCommandHandler(IVaccinationStatisticsLoader vaccinationStatisticsLoader, IVaccinationStatisticWriteRepository vaccinationStatisticWriteRepository)
+    public async Task<Unit> Handle(RefreshVaccinationStatisticsCommand request, CancellationToken cancellationToken)
+    {
+        var vaccinationStatistics = await this.vaccinationStatisticsLoader.LoadAsync();
+        if (vaccinationStatistics.Length == 0)
         {
-            this.vaccinationStatisticsLoader = vaccinationStatisticsLoader;
-            this.vaccinationStatisticWriteRepository = vaccinationStatisticWriteRepository;
+            return Unit.Value;    
         }
-
-        public async Task<Unit> Handle(RefreshVaccinationStatisticsCommand request, CancellationToken cancellationToken)
-        {
-            var vaccinationStatistics = await this.vaccinationStatisticsLoader.LoadAsync();
-            if (vaccinationStatistics.Length == 0)
-            {
-                return Unit.Value;    
-            }
             
-            await this.vaccinationStatisticWriteRepository.StoreAsync(vaccinationStatistics);
-            return Unit.Value;
-        }
+        await this.vaccinationStatisticWriteRepository.StoreAsync(vaccinationStatistics);
+        return Unit.Value;
     }
 }

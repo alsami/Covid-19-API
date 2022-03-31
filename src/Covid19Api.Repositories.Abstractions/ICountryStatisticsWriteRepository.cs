@@ -1,11 +1,8 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Covid19Api.Domain;
 
-namespace Covid19Api.Repositories.Abstractions
+namespace Covid19Api.Repositories.Abstractions;
+
+public interface ICountryStatisticsWriteRepository
 {
-    public interface ICountryStatisticsWriteRepository
-    {
-        Task StoreManyAsync(IEnumerable<CountryStatistic> countryStatistics);
-    }
+    Task StoreManyAsync(IEnumerable<CountryStatistic> countryStatistics);
 }
