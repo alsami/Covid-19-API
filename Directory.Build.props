@@ -3,12 +3,11 @@
         <LangVersion>10.0</LangVersion>
         <Nullable>Enable</Nullable>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
     
     <ItemGroup>
-        <PackageReference Include="SonarAnalyzer.CSharp" Version="8.33.0.40503">
+        <PackageReference Include="SonarAnalyzer.CSharp" Version="8.39.0.47922">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
     </ItemGroup>

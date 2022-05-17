@@ -5,8 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="MongoDB.Driver" Version="2.15.0" />
-        <PackageReference Update="SonarAnalyzer.CSharp" Version="8.37.0.45539" />
+        <PackageReference Include="MongoDB.Driver" Version="2.15.1" />
         
     </ItemGroup>
 

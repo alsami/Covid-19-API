@@ -4,10 +4,6 @@
         <TargetFramework>net6.0</TargetFramework>
     </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Update="SonarAnalyzer.CSharp" Version="8.37.0.45539" />
-    </ItemGroup>
-
 
 
 </Project>

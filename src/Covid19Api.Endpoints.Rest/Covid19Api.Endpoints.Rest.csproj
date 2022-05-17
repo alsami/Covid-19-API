@@ -12,11 +12,6 @@
       <ProjectReference Include="..\Covid19Api.Presentation\Covid19Api.Presentation.csproj" />
       <ProjectReference Include="..\Covid19Api.UseCases.Abstractions\Covid19Api.UseCases.Abstractions.csproj" />
     </ItemGroup>
-    
-    <ItemGroup>
-      <PackageReference Update="SonarAnalyzer.CSharp" Version="8.37.0.45539" />
-    </ItemGroup>
-    
 
 
 </Project>
