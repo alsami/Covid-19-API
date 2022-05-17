@@ -39,7 +39,7 @@ public class GlobalStatisticsAggregationWorker : BackgroundService
     {
         try
         {
-            using var scope = this.serviceProvider.CreateScope();
+            await using var scope = this.serviceProvider.CreateAsyncScope();
             var command = new AggregateGlobalStatisticsCommand(nextRun.Month, nextRun.Year);
             var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
             await mediator.Send(command, stoppingToken);

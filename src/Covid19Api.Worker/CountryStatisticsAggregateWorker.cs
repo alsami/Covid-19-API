@@ -40,7 +40,7 @@ public class CountryStatisticsAggregateWorker : BackgroundService
     {
         try
         {
-            using var scope = this.serviceProvider.CreateScope();
+            await using var scope = this.serviceProvider.CreateAsyncScope();
             var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
             var query = new LoadCurrentStatisticsForCountyQuery();
             var countries = (await mediator.Send(query, stoppingToken)).Select(country => country.Country);

@@ -54,10 +54,8 @@ public abstract class AbstractHourlyDataRefreshWorker : BackgroundService
 
     private async Task ProcessAsync()
     {
-        using var scope = this.serviceProvider.CreateScope();
-
+        await using var scope = this.serviceProvider.CreateAsyncScope();
         var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-
         await mediator.Send(CreateCommand());
     }
 }
