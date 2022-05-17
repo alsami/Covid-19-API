@@ -1,31 +1,11 @@
 using System.Security.Cryptography;
 using System.Text;
 
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Local
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-
 namespace Covid19Api.Domain;
 
-public class GlobalStatistics
+public record GlobalStatistics(int Total, int Recovered, int Deaths, DateTime FetchedAt)
 {
-    public Guid Id { get; private set; }
-
-    public int Total { get; private set; }
-
-    public int Recovered { get; private set; }
-
-    public int Deaths { get; private set; }
-
-    public DateTime FetchedAt { get; private set; }
-
-    public GlobalStatistics(int total, int recovered, int deaths, DateTime fetchedAt)
-    {
-        this.Total = total;
-        this.Recovered = recovered;
-        this.Deaths = deaths;
-        this.FetchedAt = fetchedAt;
-        this.Id = this.Generate();
-    }
+    public Guid Id => this.Generate();
 
     private Guid Generate()
     {

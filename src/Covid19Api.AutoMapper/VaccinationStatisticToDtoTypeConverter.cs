@@ -4,6 +4,7 @@ using Covid19Api.Presentation.Response;
 
 namespace Covid19Api.AutoMapper;
 
+// ReSharper disable once ClassNeverInstantiated.Global
 public class VaccinationStatisticToDtoTypeConverter : ITypeConverter<VaccinationStatistic, VaccinationStatisticDto>
 {
     public VaccinationStatisticDto Convert(VaccinationStatistic source, VaccinationStatisticDto destination,

@@ -5,6 +5,8 @@ namespace Covid19Api.Mongo.Conventions;
 
 internal static class MongoDbConventions
 {
+    private static readonly ConventionPack ConventionPack = new();
+    
     public static void UseGuidIdConvention(params Type[] typesToExclude)
     {
         ConventionRegistry.Register(nameof(GuidIdConvention), new ConventionPack
@@ -32,9 +34,11 @@ internal static class MongoDbConventions
 
     public static void UseCamelCaseConvention()
     {
-        ConventionRegistry.Register(nameof(CamelCaseElementNameConvention),
-            new ConventionPack {new CamelCaseElementNameConvention()},
-            type => true);
+        ConventionPack.Add(new CamelCaseElementNameConvention());
+        ConventionRegistry.Register(
+            nameof(CamelCaseElementNameConvention),
+            ConventionPack,
+            _ => true);
     }
 
     public static void UseIgnoreNullValuesConvention()
@@ -45,9 +49,7 @@ internal static class MongoDbConventions
 
     public static void UseEnumStringRepresentation()
     {
-        ConventionRegistry.Register(nameof(EnumRepresentationConvention), new ConventionPack
-        {
-            new EnumRepresentationConvention(BsonType.String)
-        }, _ => true);
+        ConventionPack.Add(new EnumRepresentationConvention(BsonType.String));
+        ConventionRegistry.Register(nameof(EnumRepresentationConvention), ConventionPack, _ => true);
     }
 }

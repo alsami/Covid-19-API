@@ -8,8 +8,8 @@ public class Covid19ApiDbContext
 {
     public Covid19ApiDbContext(Func<IMongoDatabase> databaseComposer)
     {
-        this.Database = databaseComposer();
         Configure();
+        this.Database = databaseComposer();
     }
 
     public IMongoDatabase Database { get; }
@@ -17,8 +17,7 @@ public class Covid19ApiDbContext
     private static void Configure()
     {
         MongoDbConventions.UseGuidIdConvention(typeof(VaccinationStatistic));
-        MongoDbConventions.IgnoreNotMappedPropertiesConvention(typeof(VaccinationStatistic));
-        MongoDbConventions.UseImmutableConvention();
+        MongoDbConventions.IgnoreNotMappedPropertiesConvention(typeof(VaccinationStatistic), typeof(CountryStatistic));
         MongoDbConventions.UseCamelCaseConvention();
         MongoDbConventions.UseIgnoreNullValuesConvention();
         MongoDbConventions.UseEnumStringRepresentation();

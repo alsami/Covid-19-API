@@ -7,43 +7,12 @@ using System.Text;
 
 namespace Covid19Api.Domain;
 
-public class CountryStatistic
+public record CountryStatistic(string Country, string? CountryCode, int TotalCases, int NewCases, int TotalDeaths,
+    int NewDeaths,
+    int RecoveredCases, int ActiveCases, DateTime FetchedAt)
 {
-    public Guid Id { get; private set; }
 
-    public string Country { get; private set; }
-
-    public string? CountryCode { get; private set; }
-
-    public int TotalCases { get; private set; }
-
-    public int NewCases { get; private set; }
-
-    public int TotalDeaths { get; private set; }
-
-    public int NewDeaths { get; private set; }
-
-    public int RecoveredCases { get; private set; }
-
-    public int ActiveCases { get; private set; }
-
-    public DateTime FetchedAt { get; private set; }
-
-    public CountryStatistic(string country, string? countryCode, int totalCases, int newCases, int totalDeaths,
-        int newDeaths,
-        int recoveredCases, int activeCases, DateTime fetchedAt)
-    {
-        this.Country = country;
-        this.CountryCode = countryCode;
-        this.TotalCases = totalCases;
-        this.NewCases = newCases;
-        this.TotalDeaths = totalDeaths;
-        this.NewDeaths = newDeaths;
-        this.RecoveredCases = recoveredCases;
-        this.ActiveCases = activeCases;
-        this.FetchedAt = fetchedAt;
-        this.Id = this.Generate();
-    }
+    public Guid Id => this.Generate();
 
     public bool Empty()
     {

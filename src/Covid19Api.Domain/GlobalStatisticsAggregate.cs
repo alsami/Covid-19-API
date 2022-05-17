@@ -5,25 +5,9 @@ namespace Covid19Api.Domain;
 
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Local
 // ReSharper disable UnusedAutoPropertyAccessor.Global
-public class GlobalStatisticsAggregate
+public record GlobalStatisticsAggregate(int Total, int Recovered, int Deaths, int Month, int Year)
 {
-    public GlobalStatisticsAggregate(int total, int recovered, int deaths, int month, int year)
-    {
-        this.Total = total;
-        this.Recovered = recovered;
-        this.Deaths = deaths;
-        this.Month = month;
-        this.Year = year;
-        this.Id = this.Generate();
-    }
-
-    public Guid Id { get; private set; }
-    public int Total { get; private set; }
-    public int Recovered { get; private set; }
-    public int Deaths { get; private set; }
-    public int Month { get; private set; }
-    public int Year { get; private set; }
-
+    public Guid Id => this.Generate();
     private Guid Generate()
     {
         using var hasher = MD5.Create();
