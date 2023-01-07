@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
     </PropertyGroup>
     
     <ItemGroup>
@@ -11,6 +11,10 @@
     <ItemGroup>
       <ProjectReference Include="..\Covid19Api.Presentation\Covid19Api.Presentation.csproj" />
       <ProjectReference Include="..\Covid19Api.UseCases.Abstractions\Covid19Api.UseCases.Abstractions.csproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <PackageReference Update="SonarAnalyzer.CSharp" Version="8.51.0.59060" />
     </ItemGroup>
 
 

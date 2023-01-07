@@ -32,10 +32,9 @@ public class CachingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
         this.compressionService = compressionService;
     }
 
-    public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken,
-        RequestHandlerDelegate<TResponse> next)
+    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
-        if (!(request is ICacheableRequest cacheableRequest))
+        if (request is not ICacheableRequest cacheableRequest)
         {
             return await next();
         }
