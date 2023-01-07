@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <UserSecretsId>Covid19Api.Mongo.Scaffolder</UserSecretsId>
     </PropertyGroup>
 
@@ -25,10 +25,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
         <PackageReference Include="Serilog.Extensions.Hosting" Version="5.0.1" />
-        <PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
-        <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
+        <PackageReference Include="Serilog.Settings.Configuration" Version="3.4.0" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
+        <PackageReference Update="SonarAnalyzer.CSharp" Version="8.51.0.59060" />
     </ItemGroup>
 
 </Project>

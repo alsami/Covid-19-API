@@ -5,9 +5,9 @@ namespace Covid19Api.Endpoints.Rest.Tests.Fixtures;
 
 public class WebApplicationFactoryFixture : WebApplicationFactory<Startup>
 {
-    protected override IHostBuilder CreateHostBuilder()
+    protected override IHostBuilder? CreateHostBuilder()
     {
-        return base.CreateHostBuilder()
+        return base.CreateHostBuilder()?
             .UseEnvironment("CI");
     }
 }
